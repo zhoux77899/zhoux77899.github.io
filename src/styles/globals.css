@@ -1,0 +1,109 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+:root,
+[data-theme="light"] {
+  --background: #eeefe9;
+  --foreground: #2c2c2c;
+  --surface: #f5f5f0;
+  --surface-foreground: #2c2c2c;
+  --overlay: rgba(0, 0, 0, 0.5);
+  --overlay-foreground: #ffffff;
+  --accent: #ff6b35;
+  --accent-foreground: #ffffff;
+  --accent-soft: #fff0eb;
+  --accent-soft-foreground: #ff6b35;
+  --sage: #5a6b5c;
+  --sage-foreground: #ffffff;
+  --sage-soft: #eef1ee;
+  --sage-soft-foreground: #5a6b5c;
+  --success: #5a6b5c;
+  --success-foreground: #ffffff;
+  --warning: #d4a574;
+  --warning-foreground: #1a1a1a;
+  --danger: #c97b7b;
+  --danger-foreground: #ffffff;
+  --field-background: #ffffff;
+  --field-foreground: #2c2c2c;
+  --field-placeholder: #9b9b9b;
+  --field-border: #d4d4d4;
+  --default: #f5f5f0;
+  --default-foreground: #2c2c2c;
+  --muted: #6b6b6b;
+  --border: #d4d4d4;
+  --focus: #ff6b35;
+  --link: #ff6b35;
+  --scrollbar: #d4d4d4;
+}
+
+[data-theme="dark"] {
+  --background: #1a1a1a;
+  --foreground: #f5f5f5;
+  --surface: #2a2a2a;
+  --surface-foreground: #f5f5f5;
+  --overlay: rgba(0, 0, 0, 0.8);
+  --overlay-foreground: #ffffff;
+  --accent: #ff8c5a;
+  --accent-foreground: #1a1a1a;
+  --accent-soft: #3d281e;
+  --accent-soft-foreground: #ff8c5a;
+  --sage: #7a8b7c;
+  --sage-foreground: #1a1a1a;
+  --sage-soft: #2a332b;
+  --sage-soft-foreground: #7a8b7c;
+  --success: #7a8b7c;
+  --success-foreground: #1a1a1a;
+  --warning: #e4b584;
+  --warning-foreground: #1a1a1a;
+  --danger: #d98b8b;
+  --danger-foreground: #1a1a1a;
+  --field-background: #2a2a2a;
+  --field-foreground: #f5f5f5;
+  --field-placeholder: #6b6b6b;
+  --field-border: #3a3a3a;
+  --default: #2a2a2a;
+  --default-foreground: #f5f5f5;
+  --muted: #9b9b9b;
+  --border: #3a3a3a;
+  --focus: #ff8c5a;
+  --link: #ff8c5a;
+  --scrollbar: #3a3a3a;
+}
+
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+img,
+video,
+canvas,
+svg {
+  transition-property: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
+  --color-sage-soft-foreground: var(--sage-soft-foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+}
