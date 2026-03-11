@@ -1,90 +1,207 @@
-import { useState } from "react";
-import { Chip, Modal } from "@heroui/react";
-import { ExternalLink, Github } from "lucide-react";
-import { projects } from "@/lib/data";
-import { ProjectCard } from "@/components/common/ProjectCard";
-import { Container } from "@/components/layout/Container";
-import { AnimatedSection } from "@/components/common/AnimatedSection";
-import type { Project } from "@/types";
+import { Card, Chip, Modal } from '@heroui/react';
+import { ExternalLink, Github } from 'lucide-react';
+import { useState } from 'react';
+import { AnimatedSection } from '@/components/common/AnimatedSection';
+import { projects } from '@/lib/data';
+import type { Project } from '@/types';
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <AnimatedSection id="projects" className="py-16 sm:py-24 bg-surface">
-      <Container>
-        <h2 className="text-3xl font-bold text-foreground mb-12">项目作品</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onSelect={setSelectedProject}
-            />
-          ))}
-        </div>
-      </Container>
+    <section
+      id="projects"
+      className="py-24"
+      style={{ backgroundColor: 'var(--surface)' }}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection>
+          <h2
+            className="text-3xl md:text-4xl font-bold text-center mb-4"
+            style={{ color: 'var(--foreground)' }}
+          >
+            项目作品
+          </h2>
+          <p
+            className="text-center mb-12 max-w-2xl mx-auto"
+            style={{ color: 'var(--muted)' }}
+          >
+            精选近期完成的项目，展示技术能力和创新思维
+          </p>
+        </AnimatedSection>
 
-      <Modal.Backdrop
-        isOpen={!!selectedProject}
-        onOpenChange={(open) => !open && setSelectedProject(null)}
-      >
-        <Modal.Container>
-          <Modal.Dialog className="sm:max-w-lg bg-surface">
-            <Modal.CloseTrigger />
-            {selectedProject && (
-              <>
-                <Modal.Header>
-                  <Modal.Heading className="text-foreground">
-                    {selectedProject.title}
-                  </Modal.Heading>
-                </Modal.Header>
-                <Modal.Body className="text-foreground">
-                  <p className="text-muted mb-4">
-                    {selectedProject.longDescription ?? selectedProject.description}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project, index) => (
+            <AnimatedSection key={project.id} delay={index * 0.1}>
+              <Card
+                className="overflow-hidden h-full cursor-pointer group"
+                style={{ backgroundColor: 'var(--background)' }}
+              >
+                {/* Project Image */}
+                <div className="relative overflow-hidden aspect-video">
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--sage-soft)' }}
+                  >
+                    <span
+                      className="text-4xl font-bold"
+                      style={{ color: 'var(--sage)' }}
+                    >
+                      {project.title.slice(0, 1)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Content */}
+                <div className="p-6">
+                  <h3
+                    className="text-xl font-semibold mb-2"
+                    style={{ color: 'var(--foreground)' }}
+                  >
+                    {project.title}
+                  </h3>
+                  <p
+                    className="text-sm mb-4 line-clamp-2"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    {project.description}
                   </p>
+
+                  {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {selectedProject.tags.map((tag) => (
+                    {project.tags.slice(0, 3).map((tag) => (
                       <Chip
                         key={tag}
                         size="sm"
-                        className="bg-[var(--sage-soft)] text-[var(--sage-soft-foreground)]"
-                        variant="soft"
+                        style={{
+                          backgroundColor: 'var(--sage-soft)',
+                          color: 'var(--sage-soft-foreground)',
+                        }}
                       >
                         {tag}
                       </Chip>
                     ))}
                   </div>
+
+                  {/* Links */}
                   <div className="flex gap-2">
-                    {selectedProject.demoUrl && (
+                    {project.demoUrl && (
                       <a
-                        href={selectedProject.demoUrl}
+                        href={project.demoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-sm bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90"
+                        className="inline-flex items-center text-sm hover:underline"
+                        style={{ color: 'var(--link)' }}
                       >
-                        <ExternalLink className="h-4 w-4" />
+                        <ExternalLink className="h-4 w-4 mr-1" />
                         Demo
                       </a>
                     )}
-                    {selectedProject.githubUrl && (
+                    {project.githubUrl && (
                       <a
-                        href={selectedProject.githubUrl}
+                        href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-sm bg-surface border border-border text-foreground hover:bg-default"
+                        className="inline-flex items-center text-sm hover:underline"
+                        style={{ color: 'var(--muted)' }}
                       >
-                        <Github className="h-4 w-4" />
-                        GitHub
+                        <Github className="h-4 w-4 mr-1" />
+                        Code
                       </a>
                     )}
                   </div>
-                </Modal.Body>
-              </>
-            )}
-          </Modal.Dialog>
-        </Modal.Container>
-      </Modal.Backdrop>
-    </AnimatedSection>
+                </div>
+              </Card>
+            </AnimatedSection>
+          ))}
+        </div>
+
+        {/* Project Detail Modal */}
+        <Modal
+          isOpen={selectedProject !== null}
+          onOpenChange={() => setSelectedProject(null)}
+        >
+          {selectedProject && (
+            <div style={{ backgroundColor: 'var(--background)' }}>
+              <Modal.Header>
+                <h3
+                  className="text-2xl font-bold"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  {selectedProject.title}
+                </h3>
+              </Modal.Header>
+              <Modal.Body>
+                <div
+                  className="w-full h-48 rounded-lg flex items-center justify-center mb-4"
+                  style={{ backgroundColor: 'var(--sage-soft)' }}
+                >
+                  <span
+                    className="text-6xl font-bold"
+                    style={{ color: 'var(--sage)' }}
+                  >
+                    {selectedProject.title.slice(0, 1)}
+                  </span>
+                </div>
+                <p
+                  className="mb-4"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  {selectedProject.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.tags.map((tag) => (
+                    <Chip
+                      key={tag}
+                      size="sm"
+                      style={{
+                        backgroundColor: 'var(--sage-soft)',
+                        color: 'var(--sage-soft-foreground)',
+                      }}
+                    >
+                      {tag}
+                    </Chip>
+                  ))}
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <div className="flex gap-2">
+                  {selectedProject.demoUrl && (
+                    <a
+                      href={selectedProject.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 rounded-lg font-medium"
+                      style={{
+                        backgroundColor: 'var(--accent)',
+                        color: 'var(--accent-foreground)',
+                      }}
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      查看 Demo
+                    </a>
+                  )}
+                  {selectedProject.githubUrl && (
+                    <a
+                      href={selectedProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 rounded-lg font-medium border"
+                      style={{
+                        borderColor: 'var(--border)',
+                        color: 'var(--foreground)',
+                      }}
+                    >
+                      <Github className="h-4 w-4 mr-2" />
+                      查看代码
+                    </a>
+                  )}
+                </div>
+              </Modal.Footer>
+            </div>
+          )}
+        </Modal>
+      </div>
+    </section>
   );
 }

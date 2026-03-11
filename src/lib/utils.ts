@@ -1,8 +1,22 @@
-export function cn(...classes: (string | undefined | false)[]): string {
-  return classes.filter(Boolean).join(" ");
+import { type ClassValue } from 'clsx';
+
+export function cn(...inputs: ClassValue[]) {
+  return inputs.filter(Boolean).join(' ');
 }
 
-export function scrollToSection(id: string): void {
-  const el = document.getElementById(id);
-  el?.scrollIntoView({ behavior: "smooth" });
+export function formatDate(date: string): string {
+  return new Date(date).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+  });
+}
+
+export function getSkillCategoryLabel(category: string): string {
+  const labels: Record<string, string> = {
+    frontend: '前端开发',
+    backend: '后端开发',
+    tools: '工具',
+    other: '其他',
+  };
+  return labels[category] || category;
 }

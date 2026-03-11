@@ -1,82 +1,125 @@
-import { useState } from "react";
-import { Button } from "@heroui/react";
-import { Menu, X } from "lucide-react";
-import { scrollToSection } from "@/lib/utils";
-import { ThemeToggle } from "@/components/common/ThemeToggle";
-const navItems = [
-  { id: "hero", label: "首页" },
-  { id: "skills", label: "技能" },
-  { id: "projects", label: "项目" },
-  { id: "travel", label: "旅行" },
-  { id: "experience", label: "经历" },
-  { id: "contact", label: "联系" },
+import { useState, useEffect } from 'react';
+import { Button } from '@heroui/react';
+import { Menu, X } from 'lucide-react';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
+
+const navLinks = [
+  { name: '首页', href: '#hero' },
+  { name: '技能', href: '#skills' },
+  { name: '项目', href: '#projects' },
+  { name: '旅行', href: '#travel' },
+  { name: '经历', href: '#experience' },
+  { name: '联系', href: '#contact' },
 ];
 
 export function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNavClick = (href: string) => {
+    setIsMobileMenuOpen(false);
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur border-b border-border">
-      <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
-        <a
-          href="#hero"
-          className="text-foreground font-semibold"
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("hero");
-            setMobileOpen(false);
-          }}
-        >
-          Portfolio
-        </a>
-
-        <div className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
+    <>
+      <nav
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        style={{
+          backgroundColor: isScrolled ? 'var(--surface)' : 'transparent',
+          backdropFilter: isScrolled ? 'blur(10px)' : 'none',
+          borderBottom: isScrolled ? '1px solid var(--border)' : 'none',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
             <Button
-              key={item.id}
               variant="ghost"
-              size="sm"
-              className="text-foreground hover:bg-surface"
-              onPress={() => scrollToSection(item.id)}
+              className="text-xl font-bold p-0"
+              style={{ color: 'var(--foreground)' }}
+              onPress={() => handleNavClick('#hero')}
             >
-              {item.label}
+              Portfolio
             </Button>
-          ))}
-        </div>
 
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <Button
-            variant="ghost"
-            isIconOnly
-            className="md:hidden min-w-10 w-10 h-10"
-            aria-label={mobileOpen ? "关闭菜单" : "打开菜单"}
-            onPress={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
+              {navLinks.map((link) => (
+                <Button
+                  key={link.name}
+                  variant="ghost"
+                  size="sm"
+                  onPress={() => handleNavClick(link.href)}
+                  className="font-medium"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  {link.name}
+                </Button>
+              ))}
+              <div className="ml-2">
+                <ThemeToggle />
+              </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="flex items-center gap-2 md:hidden">
+              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="sm"
+                onPress={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="rounded-full w-10 h-10 p-0 min-w-0"
+                aria-label={isMobileMenuOpen ? '关闭菜单' : '打开菜单'}
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
+                ) : (
+                  <Menu className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
       </nav>
 
-      {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="px-4 py-3 flex flex-col gap-1">
-            {navItems.map((item) => (
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-40 md:hidden"
+          style={{
+            backgroundColor: 'var(--background)',
+            paddingTop: '4rem',
+          }}
+        >
+          <div className="flex flex-col items-center gap-4 p-8">
+            {navLinks.map((link) => (
               <Button
-                key={item.id}
+                key={link.name}
                 variant="ghost"
-                className="justify-start text-foreground"
-                onPress={() => {
-                  scrollToSection(item.id);
-                  setMobileOpen(false);
-                }}
+                size="lg"
+                onPress={() => handleNavClick(link.href)}
+                className="text-lg font-medium w-full"
+                style={{ color: 'var(--foreground)' }}
               >
-                {item.label}
+                {link.name}
               </Button>
             ))}
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

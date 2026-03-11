@@ -1,6 +1,6 @@
-import { Button } from "@heroui/react";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/hooks/useTheme";
+import { Button } from '@heroui/react';
+import { Sun, Moon } from 'lucide-react';
+import { useTheme } from '@/providers/ThemeProvider';
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
@@ -8,15 +8,15 @@ export function ThemeToggle() {
   return (
     <Button
       variant="ghost"
-      isIconOnly
+      size="sm"
       onPress={toggleTheme}
-      className="rounded-full min-w-10 w-10 h-10"
-      aria-label={theme === "light" ? "切换到深色模式" : "切换到浅色模式"}
+      className="rounded-full w-10 h-10 p-0 min-w-0"
+      aria-label={theme === 'light' ? '切换到深色模式' : '切换到浅色模式'}
     >
-      {theme === "light" ? (
-        <Moon className="h-5 w-5" />
+      {theme === 'light' ? (
+        <Moon className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
       ) : (
-        <Sun className="h-5 w-5" />
+        <Sun className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
       )}
     </Button>
   );

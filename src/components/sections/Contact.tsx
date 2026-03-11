@@ -1,81 +1,225 @@
-import { useState } from "react";
-import { Button, Form, Input, Label, TextField } from "@heroui/react";
-import { personalInfo } from "@/lib/data";
-import { SocialLinks } from "@/components/common/SocialLinks";
-import { Container } from "@/components/layout/Container";
-import { AnimatedSection } from "@/components/common/AnimatedSection";
+import { useState } from 'react';
+import { Button } from '@heroui/react';
+import { Mail, MapPin, Send } from 'lucide-react';
+import { AnimatedSection } from '@/components/common/AnimatedSection';
+import { SocialLinks } from '@/components/common/SocialLinks';
+import { personalInfo } from '@/lib/data';
 
 export function Contact() {
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setSubmitted(true);
-    }, 800);
+    setIsSubmitting(true);
+
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    setFormData({ name: '', email: '', message: '' });
+
+    // Reset success message after 3 seconds
+    setTimeout(() => setIsSubmitted(false), 3000);
   };
 
   return (
-    <AnimatedSection id="contact" className="py-16 sm:py-24 bg-background">
-      <Container className="max-w-4xl">
-        <h2 className="text-3xl font-bold text-foreground mb-12">联系我</h2>
+    <section
+      id="contact"
+      className="py-24"
+      style={{ backgroundColor: 'var(--background)' }}
+    >
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection>
+          <h2
+            className="text-3xl md:text-4xl font-bold text-center mb-4"
+            style={{ color: 'var(--foreground)' }}
+          >
+            联系我
+          </h2>
+          <p
+            className="text-center mb-12 max-w-2xl mx-auto"
+            style={{ color: 'var(--muted)' }}
+          >
+            欢迎讨论技术、项目合作或只是打个招呼！
+          </p>
+        </AnimatedSection>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <h3 className="text-xl font-semibold text-foreground mb-4">
-              联系信息
-            </h3>
-            <p className="text-muted mb-6">
-              欢迎讨论技术、项目合作或只是打个招呼！
-            </p>
-            <p className="text-muted mb-2">
-              <a
-                href={`mailto:${personalInfo.email}`}
-                className="text-[var(--link)] hover:underline"
+          {/* Contact Info */}
+          <AnimatedSection delay={0.1}>
+            <div>
+              <h3
+                className="text-xl font-semibold mb-6"
+                style={{ color: 'var(--foreground)' }}
               >
-                {personalInfo.email}
-              </a>
-            </p>
-            <div className="flex gap-2 mt-4">
-              <SocialLinks />
+                联系信息
+              </h3>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="p-2 rounded-lg"
+                    style={{ backgroundColor: 'var(--accent-soft)' }}
+                  >
+                    <Mail
+                      className="h-5 w-5"
+                      style={{ color: 'var(--accent)' }}
+                    />
+                  </div>
+                  <div>
+                    <p
+                      className="text-sm"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      邮箱
+                    </p>
+                    <a
+                      href={`mailto:${personalInfo.email}`}
+                      className="font-medium hover:underline"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      {personalInfo.email}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div
+                    className="p-2 rounded-lg"
+                    style={{ backgroundColor: 'var(--accent-soft)' }}
+                  >
+                    <MapPin
+                      className="h-5 w-5"
+                      style={{ color: 'var(--accent)' }}
+                    />
+                  </div>
+                  <div>
+                    <p
+                      className="text-sm"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      位置
+                    </p>
+                    <p
+                      className="font-medium"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      {personalInfo.location}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4
+                  className="text-sm font-semibold mb-4"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  社交媒体
+                </h4>
+                <SocialLinks />
+              </div>
             </div>
-          </div>
-          <Form onSubmit={handleSubmit} className="space-y-4">
-            <TextField name="name" className="w-full" isRequired>
-              <Label>姓名</Label>
-              <Input placeholder="请输入您的姓名" />
-            </TextField>
-            <TextField name="email" type="email" className="w-full" isRequired>
-              <Label>邮箱</Label>
-              <Input placeholder="your@email.com" />
-            </TextField>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="contact-message">消息</Label>
-              <textarea
-                id="contact-message"
-                name="message"
-                required
-                rows={4}
-                placeholder="请输入消息内容..."
-                className="w-full rounded-lg border border-[var(--field-border)] bg-[var(--field-background)] px-3 py-2 text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[var(--focus)]"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90"
-              isDisabled={submitted}
-              isPending={submitting}
-            >
-              {({ isPending }) => (isPending ? "发送中..." : submitted ? "已发送" : "发送消息")}
-            </Button>
-            {submitted && (
-              <p className="text-sm text-[var(--success)]">感谢您的留言，我会尽快回复。</p>
-            )}
-          </Form>
+          </AnimatedSection>
+
+          {/* Contact Form */}
+          <AnimatedSection delay={0.2}>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  姓名
+                </label>
+                <input
+                  type="text"
+                  placeholder="请输入您的姓名"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                  className="w-full px-4 py-2 rounded-lg border"
+                  style={{
+                    backgroundColor: 'var(--field-background)',
+                    borderColor: 'var(--field-border)',
+                    color: 'var(--field-foreground)',
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  邮箱
+                </label>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
+                  className="w-full px-4 py-2 rounded-lg border"
+                  style={{
+                    backgroundColor: 'var(--field-background)',
+                    borderColor: 'var(--field-border)',
+                    color: 'var(--field-foreground)',
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  消息
+                </label>
+                <textarea
+                  placeholder="请输入消息内容..."
+                  value={formData.message}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
+                  required
+                  rows={4}
+                  className="w-full px-4 py-2 rounded-lg border resize-none"
+                  style={{
+                    backgroundColor: 'var(--field-background)',
+                    borderColor: 'var(--field-border)',
+                    color: 'var(--field-foreground)',
+                  }}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                style={{
+                  backgroundColor: 'var(--accent)',
+                  color: 'var(--accent-foreground)',
+                }}
+              >
+                <Send className="h-4 w-4 mr-2" />
+                {isSubmitted ? '发送成功！' : isSubmitting ? '发送中...' : '发送消息'}
+              </Button>
+            </form>
+          </AnimatedSection>
         </div>
-      </Container>
-    </AnimatedSection>
+      </div>
+    </section>
   );
 }
