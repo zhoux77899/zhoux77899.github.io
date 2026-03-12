@@ -16,13 +16,13 @@ export function Travel() {
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
           >
-            旅行足迹
+            Travel
           </h2>
           <p
             className="text-center mb-4"
             style={{ color: 'var(--muted)' }}
           >
-            已探索 {travelStats.countries} 个国家 · {travelStats.cities} 个城市 · 收藏 {travelStats.moments} 个瞬间
+            {travelStats.countries} countries · {travelStats.cities} cities · {travelStats.moments} moments
           </p>
         </AnimatedSection>
 

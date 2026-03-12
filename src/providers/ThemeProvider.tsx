@@ -41,13 +41,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(newTheme);
   };
 
-  // Prevent hydration mismatch
-  if (!mounted) {
-    return <>{children}</>;
-  }
+  // Always provide context so useTheme() never throws (e.g. when !mounted before useEffect).
+  // When !mounted use a default value; after mount we use real theme from localStorage/system.
+  const value: ThemeContextType = mounted
+    ? { theme, toggleTheme, setTheme }
+    : { theme: 'light', toggleTheme: () => {}, setTheme: () => {} };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

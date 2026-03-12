@@ -36,7 +36,7 @@ export function ScrollToTop() {
         backgroundColor: 'var(--accent)',
         color: 'var(--accent-foreground)',
       }}
-      aria-label="返回顶部"
+      aria-label="Back to top"
     >
       <ArrowUp className="h-5 w-5" />
     </Button>

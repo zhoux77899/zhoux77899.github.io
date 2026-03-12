@@ -1,8 +1,9 @@
-@import "tailwindcss";
-@import "@heroui/styles";
-
-/* Font imports */
+/* Font imports must come first (before Tailwind expands to @layer etc.) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@import "tailwindcss";
+@source "../**/*.{tsx,jsx,ts,js}";
+@import "@heroui/styles";
 
 /* Light theme (default) */
 :root,
@@ -97,11 +98,15 @@
   --scrollbar: #3a3a3a;
 }
 
-/* Base styles */
+/* Base styles - avoid * { margin: 0 } so Tailwind utilities like mx-auto are not overridden */
 * {
-  margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
 }
 
 html {

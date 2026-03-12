@@ -16,13 +16,13 @@ export function Experience() {
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
           >
-            工作经历
+            Experience
           </h2>
           <p
             className="text-center mb-12 max-w-2xl mx-auto"
             style={{ color: 'var(--muted)' }}
           >
-            多年软件开发经验，从创业公司到知名科技企业的成长历程
+            Years of software development, from startups to leading tech companies
           </p>
         </AnimatedSection>
 

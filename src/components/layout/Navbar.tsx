@@ -4,12 +4,12 @@ import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 const navLinks = [
-  { name: '首页', href: '#hero' },
-  { name: '技能', href: '#skills' },
-  { name: '项目', href: '#projects' },
-  { name: '旅行', href: '#travel' },
-  { name: '经历', href: '#experience' },
-  { name: '联系', href: '#contact' },
+  { name: 'Home', href: '#hero' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Travel', href: '#travel' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Contact', href: '#contact' },
 ];
 
 export function Navbar() {
@@ -82,7 +82,7 @@ export function Navbar() {
                 size="sm"
                 onPress={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="rounded-full w-10 h-10 p-0 min-w-0"
-                aria-label={isMobileMenuOpen ? '关闭菜单' : '打开菜单'}
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               >
                 {isMobileMenuOpen ? (
                   <X className="h-5 w-5" style={{ color: 'var(--foreground)' }} />

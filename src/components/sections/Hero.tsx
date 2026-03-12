@@ -58,7 +58,7 @@ export function Hero() {
           className="text-4xl md:text-5xl font-bold mb-4"
           style={{ color: 'var(--foreground)' }}
         >
-          你好，我是 {personalInfo.name}
+          Hi, I'm {personalInfo.name}
         </motion.h1>
 
         {/* Title */}
@@ -108,7 +108,7 @@ export function Hero() {
               color: 'var(--accent-foreground)',
             }}
           >
-            查看作品
+            View Work
           </Button>
           <Button
             size="lg"
@@ -119,7 +119,7 @@ export function Hero() {
               color: 'var(--foreground)',
             }}
           >
-            联系我
+            Contact Me
           </Button>
         </motion.div>
       </div>

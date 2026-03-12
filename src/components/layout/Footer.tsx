@@ -2,10 +2,10 @@ import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react';
 import { Separator } from '@heroui/react';
 
 const footerLinks = [
-  { name: '首页', href: '#hero' },
-  { name: '技能', href: '#skills' },
-  { name: '项目', href: '#projects' },
-  { name: '联系', href: '#contact' },
+  { name: 'Home', href: '#hero' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Contact', href: '#contact' },
 ];
 
 const socialLinks = [
@@ -36,7 +36,7 @@ export function Footer() {
               Portfolio
             </h3>
             <p className="text-sm" style={{ color: 'var(--muted)' }}>
-              热爱技术，专注于创造简洁优雅的数字体验。
+              Passionate about technology, focused on creating clean and elegant digital experiences.
             </p>
           </div>
 
@@ -46,7 +46,7 @@ export function Footer() {
               className="text-sm font-semibold mb-4"
               style={{ color: 'var(--foreground)' }}
             >
-              快速导航
+              Quick Links
             </h4>
             <ul className="space-y-2">
               {footerLinks.map((link) => (
@@ -69,7 +69,7 @@ export function Footer() {
               className="text-sm font-semibold mb-4"
               style={{ color: 'var(--foreground)' }}
             >
-              社交媒体
+              Social
             </h4>
             <div className="flex gap-2">
               {socialLinks.map((link) => {
@@ -97,7 +97,7 @@ export function Footer() {
         {/* Copyright */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm" style={{ color: 'var(--muted)' }}>
-            &copy; {new Date().getFullYear()} 张明远. All rights reserved.
+            &copy; {new Date().getFullYear()} Mingyuan Zhang. All rights reserved.
           </p>
           <p
             className="text-sm flex items-center gap-1"

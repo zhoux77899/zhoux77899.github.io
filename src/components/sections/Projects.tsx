@@ -20,13 +20,13 @@ export function Projects() {
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
           >
-            项目作品
+            Projects
           </h2>
           <p
             className="text-center mb-12 max-w-2xl mx-auto"
             style={{ color: 'var(--muted)' }}
           >
-            精选近期完成的项目，展示技术能力和创新思维
+            Selected recent work showcasing technical skills and innovation
           </p>
         </AnimatedSection>
 
@@ -178,7 +178,7 @@ export function Projects() {
                       }}
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
-                      查看 Demo
+                      View Demo
                     </a>
                   )}
                   {selectedProject.githubUrl && (
@@ -193,7 +193,7 @@ export function Projects() {
                       }}
                     >
                       <Github className="h-4 w-4 mr-2" />
-                      查看代码
+                      View Code
                     </a>
                   )}
                 </div>

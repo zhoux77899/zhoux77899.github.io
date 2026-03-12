@@ -62,7 +62,7 @@ export function ProjectCard({ project, onSelect }: ProjectCardProps) {
             className="bg-[var(--accent)] text-[var(--accent-foreground)]"
             onPress={() => onSelect?.(project)}
           >
-            详情
+            Details
           </Button>
         </div>
       </Card.Footer>

@@ -25,13 +25,13 @@ export function Skills() {
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
           >
-            技术栈
+            Tech Stack
           </h2>
           <p
             className="text-center mb-12 max-w-2xl mx-auto"
             style={{ color: 'var(--muted)' }}
           >
-            熟练掌握多种前端、后端技术，以及现代开发工具
+            Proficient in frontend, backend and modern development tools
           </p>
         </AnimatedSection>
 

@@ -19,8 +19,8 @@ describe("Navbar", () => {
 
   it("renders navigation items", () => {
     renderNavbar();
-    expect(screen.getByText("技能")).toBeInTheDocument();
-    expect(screen.getByText("项目")).toBeInTheDocument();
-    expect(screen.getByText("联系")).toBeInTheDocument();
+    expect(screen.getByText("Skills")).toBeInTheDocument();
+    expect(screen.getByText("Projects")).toBeInTheDocument();
+    expect(screen.getByText("Contact")).toBeInTheDocument();
   });
 });

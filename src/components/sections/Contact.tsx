@@ -41,13 +41,13 @@ export function Contact() {
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
           >
-            联系我
+            Contact Me
           </h2>
           <p
             className="text-center mb-12 max-w-2xl mx-auto"
             style={{ color: 'var(--muted)' }}
           >
-            欢迎讨论技术、项目合作或只是打个招呼！
+            Open to tech discussions, collaboration or just saying hello!
           </p>
         </AnimatedSection>
 
@@ -59,7 +59,7 @@ export function Contact() {
                 className="text-xl font-semibold mb-6"
                 style={{ color: 'var(--foreground)' }}
               >
-                联系信息
+                Contact Info
               </h3>
 
               <div className="space-y-4 mb-8">
@@ -78,7 +78,7 @@ export function Contact() {
                       className="text-sm"
                       style={{ color: 'var(--muted)' }}
                     >
-                      邮箱
+                      Email
                     </p>
                     <a
                       href={`mailto:${personalInfo.email}`}
@@ -105,7 +105,7 @@ export function Contact() {
                       className="text-sm"
                       style={{ color: 'var(--muted)' }}
                     >
-                      位置
+                      Location
                     </p>
                     <p
                       className="font-medium"
@@ -122,7 +122,7 @@ export function Contact() {
                   className="text-sm font-semibold mb-4"
                   style={{ color: 'var(--foreground)' }}
                 >
-                  社交媒体
+                  Social
                 </h4>
                 <SocialLinks />
               </div>
@@ -137,11 +137,11 @@ export function Contact() {
                   className="block text-sm font-medium mb-1"
                   style={{ color: 'var(--foreground)' }}
                 >
-                  姓名
+                  Name
                 </label>
                 <input
                   type="text"
-                  placeholder="请输入您的姓名"
+                  placeholder="Enter your name"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
@@ -161,7 +161,7 @@ export function Contact() {
                   className="block text-sm font-medium mb-1"
                   style={{ color: 'var(--foreground)' }}
                 >
-                  邮箱
+                  Email
                 </label>
                 <input
                   type="email"
@@ -185,10 +185,10 @@ export function Contact() {
                   className="block text-sm font-medium mb-1"
                   style={{ color: 'var(--foreground)' }}
                 >
-                  消息
+                  Message
                 </label>
                 <textarea
-                  placeholder="请输入消息内容..."
+                  placeholder="Enter your message..."
                   value={formData.message}
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
@@ -214,7 +214,7 @@ export function Contact() {
                 }}
               >
                 <Send className="h-4 w-4 mr-2" />
-                {isSubmitted ? '发送成功！' : isSubmitting ? '发送中...' : '发送消息'}
+                {isSubmitted ? 'Sent!' : isSubmitting ? 'Sending...' : 'Send Message'}
               </Button>
             </form>
           </AnimatedSection>
