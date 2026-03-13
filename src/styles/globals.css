@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @import "tailwindcss";
+/* Tailwind v4 content path - @source is valid in Tailwind CSS v4 */
 @source "../**/*.{tsx,jsx,ts,js}";
 @import "@heroui/styles";
 
@@ -50,6 +51,10 @@
   --focus: #FF6B35;
   --link: #FF6B35;
   --scrollbar: #D4D4D4;
+
+  /* Border Radius */
+  --radius: 0.5rem;
+  --field-radius: 0.75rem;
 }
 
 /* Dark theme */
@@ -96,12 +101,6 @@
   --focus: #FF8C5A;
   --link: #FF8C5A;
   --scrollbar: #3a3a3a;
-}
-
-/* Base styles - avoid * { margin: 0 } so Tailwind utilities like mx-auto are not overridden */
-* {
-  padding: 0;
-  box-sizing: border-box;
 }
 
 html,

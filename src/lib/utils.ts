@@ -20,3 +20,8 @@ export function getSkillCategoryLabel(category: string): string {
   };
   return labels[category] || category;
 }
+
+export function scrollToSection(sectionId: string): void {
+  const el = document.getElementById(sectionId);
+  el?.scrollIntoView({ behavior: 'smooth' });
+}

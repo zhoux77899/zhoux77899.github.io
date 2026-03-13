@@ -11,13 +11,13 @@ export function TravelCard({ item }: TravelCardProps) {
       <div className="overflow-hidden aspect-[4/3]">
         <img
           src={item.image}
-          alt={item.title}
+          alt={item.location}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
       <Card.Header>
         <div className="flex items-center gap-2 mb-1">
-          <Card.Title className="text-foreground">{item.title}</Card.Title>
+          <Card.Title className="text-foreground">{item.location}</Card.Title>
         </div>
         <Card.Description className="text-muted">{item.description}</Card.Description>
       </Card.Header>
