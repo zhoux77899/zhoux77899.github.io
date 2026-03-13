@@ -1,5 +1,6 @@
 import { Card, Chip, Modal } from '@heroui/react';
-import { ExternalLink, Github } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { LinkSquare01Icon, Github01Icon } from '@hugeicons/core-free-icons';
 import { useState } from 'react';
 import { AnimatedSection } from '@/components/common/AnimatedSection';
 import { projects } from '@/lib/data';
@@ -93,7 +94,7 @@ export function Projects() {
                         className="inline-flex items-center text-sm hover:underline"
                         style={{ color: 'var(--link)' }}
                       >
-                        <ExternalLink className="h-4 w-4 mr-1" />
+                        <HugeiconsIcon icon={LinkSquare01Icon} className="h-4 w-4 mr-1" />
                         Demo
                       </a>
                     )}
@@ -105,7 +106,7 @@ export function Projects() {
                         className="inline-flex items-center text-sm hover:underline"
                         style={{ color: 'var(--muted)' }}
                       >
-                        <Github className="h-4 w-4 mr-1" />
+                        <HugeiconsIcon icon={Github01Icon} className="h-4 w-4 mr-1" />
                         Code
                       </a>
                     )}
@@ -177,7 +178,7 @@ export function Projects() {
                         color: 'var(--accent-foreground)',
                       }}
                     >
-                      <ExternalLink className="h-4 w-4 mr-2" />
+                      <HugeiconsIcon icon={LinkSquare01Icon} className="h-4 w-4 mr-2" />
                       View Demo
                     </a>
                   )}
@@ -192,7 +193,7 @@ export function Projects() {
                         color: 'var(--foreground)',
                       }}
                     >
-                      <Github className="h-4 w-4 mr-2" />
+                      <HugeiconsIcon icon={Github01Icon} className="h-4 w-4 mr-2" />
                       View Code
                     </a>
                   )}

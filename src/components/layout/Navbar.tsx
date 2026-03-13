@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@heroui/react';
-import { Menu, X } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Menu01Icon, Cancel01Icon } from '@hugeicons/core-free-icons';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 const navLinks = [
@@ -85,9 +86,9 @@ export function Navbar() {
                 aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
+                  <HugeiconsIcon icon={Cancel01Icon} className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
                 ) : (
-                  <Menu className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
+                  <HugeiconsIcon icon={Menu01Icon} className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
                 )}
               </Button>
             </div>

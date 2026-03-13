@@ -1,6 +1,7 @@
 import { Button, Avatar } from '@heroui/react';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowDown01Icon } from '@hugeicons/core-free-icons';
 import { SocialLinks } from '@/components/common/SocialLinks';
 import { personalInfo } from '@/lib/data';
 
@@ -135,7 +136,8 @@ export function Hero() {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          <ChevronDown
+          <HugeiconsIcon
+            icon={ArrowDown01Icon}
             className="w-8 h-8"
             style={{ color: 'var(--muted)' }}
           />

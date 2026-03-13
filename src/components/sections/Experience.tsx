@@ -1,5 +1,6 @@
 import { Card, Chip } from '@heroui/react';
-import { Briefcase, GraduationCap } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Briefcase01Icon, Mortarboard01Icon } from '@hugeicons/core-free-icons';
 import { AnimatedSection } from '@/components/common/AnimatedSection';
 import { experienceItems } from '@/lib/data';
 
@@ -45,12 +46,14 @@ export function Experience() {
                         style={{ backgroundColor: 'var(--accent-soft)' }}
                       >
                         {item.type === 'work' ? (
-                          <Briefcase
+                          <HugeiconsIcon
+                            icon={Briefcase01Icon}
                             className="h-5 w-5"
                             style={{ color: 'var(--accent)' }}
                           />
                         ) : (
-                          <GraduationCap
+                          <HugeiconsIcon
+                            icon={Mortarboard01Icon}
                             className="h-5 w-5"
                             style={{ color: 'var(--accent)' }}
                           />

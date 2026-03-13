@@ -1,14 +1,16 @@
-import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Github01Icon, Linkedin01Icon, TwitterIcon, Mail01Icon } from '@hugeicons/core-free-icons';
+import type { IconSvgElement } from '@hugeicons/react';
 
 interface SocialLinksProps {
   className?: string;
 }
 
-const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
-  github: Github,
-  linkedin: Linkedin,
-  twitter: Twitter,
-  email: Mail,
+const iconMap: Record<string, IconSvgElement> = {
+  github: Github01Icon,
+  linkedin: Linkedin01Icon,
+  twitter: TwitterIcon,
+  email: Mail01Icon,
 };
 
 const socialLinks = [
@@ -32,7 +34,7 @@ export function SocialLinks({ className = '' }: SocialLinksProps) {
             style={{ color: 'var(--foreground)' }}
             aria-label={link.name}
           >
-            <Icon className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
+            <HugeiconsIcon icon={Icon} className="h-5 w-5" style={{ color: 'var(--foreground)' }} />
           </a>
         );
       })}

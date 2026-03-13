@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@heroui/react';
-import { Mail, MapPin, Send } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Mail01Icon, Location01Icon, SentIcon } from '@hugeicons/core-free-icons';
 import { AnimatedSection } from '@/components/common/AnimatedSection';
 import { SocialLinks } from '@/components/common/SocialLinks';
 import { personalInfo } from '@/lib/data';
@@ -68,7 +69,8 @@ export function Contact() {
                     className="p-2 rounded-lg"
                     style={{ backgroundColor: 'var(--accent-soft)' }}
                   >
-                    <Mail
+                    <HugeiconsIcon
+                      icon={Mail01Icon}
                       className="h-5 w-5"
                       style={{ color: 'var(--accent)' }}
                     />
@@ -95,7 +97,8 @@ export function Contact() {
                     className="p-2 rounded-lg"
                     style={{ backgroundColor: 'var(--accent-soft)' }}
                   >
-                    <MapPin
+                    <HugeiconsIcon
+                      icon={Location01Icon}
                       className="h-5 w-5"
                       style={{ color: 'var(--accent)' }}
                     />
@@ -213,7 +216,7 @@ export function Contact() {
                   color: 'var(--accent-foreground)',
                 }}
               >
-                <Send className="h-4 w-4 mr-2" />
+                <HugeiconsIcon icon={SentIcon} className="h-4 w-4 mr-2" />
                 {isSubmitted ? 'Sent!' : isSubmitting ? 'Sending...' : 'Send Message'}
               </Button>
             </form>

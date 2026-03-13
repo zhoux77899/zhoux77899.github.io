@@ -1,4 +1,6 @@
-import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Github01Icon, Linkedin01Icon, TwitterIcon, Mail01Icon, FavouriteIcon } from '@hugeicons/core-free-icons';
+import type { IconSvgElement } from '@hugeicons/react';
 import { Separator } from '@heroui/react';
 
 const footerLinks = [
@@ -9,10 +11,10 @@ const footerLinks = [
 ];
 
 const socialLinks = [
-  { name: 'GitHub', url: 'https://github.com', icon: Github },
-  { name: 'LinkedIn', url: 'https://linkedin.com', icon: Linkedin },
-  { name: 'Twitter', url: 'https://twitter.com', icon: Twitter },
-  { name: 'Email', url: 'mailto:zhangmingyuan@example.com', icon: Mail },
+  { name: 'GitHub', url: 'https://github.com', icon: Github01Icon },
+  { name: 'LinkedIn', url: 'https://linkedin.com', icon: Linkedin01Icon },
+  { name: 'Twitter', url: 'https://twitter.com', icon: TwitterIcon },
+  { name: 'Email', url: 'mailto:zhangmingyuan@example.com', icon: Mail01Icon },
 ];
 
 export function Footer() {
@@ -73,7 +75,7 @@ export function Footer() {
             </h4>
             <div className="flex gap-2">
               {socialLinks.map((link) => {
-                const Icon = link.icon;
+                const Icon: IconSvgElement = link.icon;
                 return (
                   <a
                     key={link.name}
@@ -84,7 +86,7 @@ export function Footer() {
                     style={{ color: 'var(--muted)' }}
                     aria-label={link.name}
                   >
-                    <Icon className="h-4 w-4" />
+                    <HugeiconsIcon icon={Icon} className="h-4 w-4" />
                   </a>
                 );
               })}
@@ -103,7 +105,7 @@ export function Footer() {
             className="text-sm flex items-center gap-1"
             style={{ color: 'var(--muted)' }}
           >
-            Made with <Heart className="h-4 w-4 text-red-500" /> using React & HeroUI
+            Made with <HugeiconsIcon icon={FavouriteIcon} className="h-4 w-4" style={{ color: '#ef4444' }} /> using React & HeroUI
           </p>
         </div>
       </div>

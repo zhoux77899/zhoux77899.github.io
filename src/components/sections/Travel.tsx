@@ -1,5 +1,6 @@
 import { Card, Chip } from '@heroui/react';
-import { MapPin } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Location01Icon } from '@hugeicons/core-free-icons';
 import { AnimatedSection } from '@/components/common/AnimatedSection';
 import { travelItems, travelStats } from '@/lib/data';
 
@@ -46,7 +47,8 @@ export function Travel() {
                 {/* Content */}
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-2">
-                    <MapPin
+                    <HugeiconsIcon
+                      icon={Location01Icon}
                       className="h-4 w-4"
                       style={{ color: 'var(--accent)' }}
                     />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@heroui/react';
-import { ArrowUp } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowUp01Icon } from '@hugeicons/core-free-icons';
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -38,7 +39,7 @@ export function ScrollToTop() {
       }}
       aria-label="Back to top"
     >
-      <ArrowUp className="h-5 w-5" />
+      <HugeiconsIcon icon={ArrowUp01Icon} className="h-5 w-5" />
     </Button>
   );
 }

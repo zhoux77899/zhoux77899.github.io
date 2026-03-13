@@ -1,5 +1,6 @@
 import { Button, Card, Chip } from "@heroui/react";
-import { ExternalLink, Github } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LinkSquare01Icon, Github01Icon } from "@hugeicons/core-free-icons";
 import type { Project } from "@/types";
 
 interface ProjectCardProps {
@@ -43,7 +44,7 @@ export function ProjectCard({ project, onSelect }: ProjectCardProps) {
               aria-label="Demo"
               className="inline-flex items-center justify-center min-w-8 h-8 rounded-md text-foreground hover:bg-default"
             >
-              <ExternalLink className="h-4 w-4" />
+              <HugeiconsIcon icon={LinkSquare01Icon} className="h-4 w-4" />
             </a>
           )}
           {project.githubUrl && (
@@ -54,7 +55,7 @@ export function ProjectCard({ project, onSelect }: ProjectCardProps) {
               aria-label="GitHub"
               className="inline-flex items-center justify-center min-w-8 h-8 rounded-md text-foreground hover:bg-default"
             >
-              <Github className="h-4 w-4" />
+              <HugeiconsIcon icon={Github01Icon} className="h-4 w-4" />
             </a>
           )}
           <Button
