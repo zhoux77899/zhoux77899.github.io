@@ -55,6 +55,10 @@
   /* Border Radius */
   --radius: 0.5rem;
   --field-radius: 0.75rem;
+
+  /* Navbar glass (semi-transparent frosted) */
+  --navbar-glass: rgba(245, 245, 240, 0.42);
+  --navbar-glass-border: rgba(212, 212, 212, 0.6);
 }
 
 /* Dark theme */
@@ -101,6 +105,10 @@
   --focus: #FF8C5A;
   --link: #FF8C5A;
   --scrollbar: #3a3a3a;
+
+  /* Navbar glass (semi-transparent frosted) */
+  --navbar-glass: rgba(42, 42, 42, 0.42);
+  --navbar-glass-border: rgba(58, 58, 58, 0.6);
 }
 
 html,

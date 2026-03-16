@@ -64,60 +64,94 @@ export function Contact() {
               </h3>
 
               <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="p-2 rounded-lg"
-                    style={{ backgroundColor: 'var(--accent-soft)' }}
-                  >
-                    <HugeiconsIcon
-                      icon={Mail01Icon}
-                      className="h-5 w-5"
-                      style={{ color: 'var(--accent)' }}
-                    />
-                  </div>
-                  <div>
-                    <p
-                      className="text-sm"
-                      style={{ color: 'var(--muted)' }}
+                {personalInfo.email ? (
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="p-2 rounded-lg"
+                      style={{ backgroundColor: 'var(--accent-soft)' }}
                     >
-                      Email
-                    </p>
-                    <a
-                      href={`mailto:${personalInfo.email}`}
-                      className="font-medium hover:underline"
-                      style={{ color: 'var(--foreground)' }}
-                    >
-                      {personalInfo.email}
-                    </a>
+                      <HugeiconsIcon
+                        icon={Mail01Icon}
+                        className="h-5 w-5"
+                        style={{ color: 'var(--accent)' }}
+                      />
+                    </div>
+                    <div>
+                      <p
+                        className="text-sm"
+                        style={{ color: 'var(--muted)' }}
+                      >
+                        Email
+                      </p>
+                      <a
+                        href={`mailto:${personalInfo.email}`}
+                        className="font-medium hover:underline"
+                        style={{ color: 'var(--foreground)' }}
+                      >
+                        {personalInfo.email}
+                      </a>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="p-2 rounded-lg"
+                      style={{ backgroundColor: 'var(--accent-soft)' }}
+                    >
+                      <HugeiconsIcon
+                        icon={Mail01Icon}
+                        className="h-5 w-5"
+                        style={{ color: 'var(--accent)' }}
+                      />
+                    </div>
+                    <div>
+                      <p
+                        className="text-sm"
+                        style={{ color: 'var(--muted)' }}
+                      >
+                        Get in touch
+                      </p>
+                      <a
+                        href={personalInfo.socialLinks.find((l) => l.icon === 'github')?.url ?? 'https://github.com/zhoux77899'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium hover:underline"
+                        style={{ color: 'var(--foreground)' }}
+                      >
+                        Contact via GitHub
+                      </a>
+                    </div>
+                  </div>
+                )}
 
-                <div className="flex items-center gap-3">
-                  <div
-                    className="p-2 rounded-lg"
-                    style={{ backgroundColor: 'var(--accent-soft)' }}
-                  >
-                    <HugeiconsIcon
-                      icon={Location01Icon}
-                      className="h-5 w-5"
-                      style={{ color: 'var(--accent)' }}
-                    />
-                  </div>
-                  <div>
-                    <p
-                      className="text-sm"
-                      style={{ color: 'var(--muted)' }}
+                {personalInfo.location ? (
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="p-2 rounded-lg"
+                      style={{ backgroundColor: 'var(--accent-soft)' }}
                     >
-                      Location
-                    </p>
-                    <p
-                      className="font-medium"
-                      style={{ color: 'var(--foreground)' }}
-                    >
-                      {personalInfo.location}
-                    </p>
+                      <HugeiconsIcon
+                        icon={Location01Icon}
+                        className="h-5 w-5"
+                        style={{ color: 'var(--accent)' }}
+                      />
+                    </div>
+                    <div>
+                      <p
+                        className="text-sm"
+                        style={{ color: 'var(--muted)' }}
+                      >
+                        Location
+                      </p>
+                      <p
+                        className="font-medium"
+                        style={{ color: 'var(--foreground)' }}
+                      >
+                        {personalInfo.location}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </div>
 
               <div>

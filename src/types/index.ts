@@ -6,6 +6,7 @@ export interface Project {
   tags: string[];
   demoUrl?: string;
   githubUrl?: string;
+  stars?: number;
 }
 
 export interface TravelItem {

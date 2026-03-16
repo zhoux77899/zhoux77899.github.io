@@ -2,6 +2,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { Github01Icon, Linkedin01Icon, TwitterIcon, Mail01Icon, FavouriteIcon } from '@hugeicons/core-free-icons';
 import type { IconSvgElement } from '@hugeicons/react';
 import { Separator } from '@heroui/react';
+import { personalInfo } from '@/lib/data';
 
 const footerLinks = [
   { name: 'Home', href: '#hero' },
@@ -10,12 +11,12 @@ const footerLinks = [
   { name: 'Contact', href: '#contact' },
 ];
 
-const socialLinks = [
-  { name: 'GitHub', url: 'https://github.com', icon: Github01Icon },
-  { name: 'LinkedIn', url: 'https://linkedin.com', icon: Linkedin01Icon },
-  { name: 'Twitter', url: 'https://twitter.com', icon: TwitterIcon },
-  { name: 'Email', url: 'mailto:zhangmingyuan@example.com', icon: Mail01Icon },
-];
+const iconMap: Record<string, IconSvgElement> = {
+  github: Github01Icon,
+  linkedin: Linkedin01Icon,
+  twitter: TwitterIcon,
+  email: Mail01Icon,
+};
 
 export function Footer() {
   const handleNavClick = (href: string) => {
@@ -35,10 +36,10 @@ export function Footer() {
               className="text-xl font-bold mb-4"
               style={{ color: 'var(--foreground)' }}
             >
-              Portfolio
+              {personalInfo.name}
             </h3>
             <p className="text-sm" style={{ color: 'var(--muted)' }}>
-              Passionate about technology, focused on creating clean and elegant digital experiences.
+              {personalInfo.bio}
             </p>
           </div>
 
@@ -74,8 +75,8 @@ export function Footer() {
               Social
             </h4>
             <div className="flex gap-2">
-              {socialLinks.map((link) => {
-                const Icon: IconSvgElement = link.icon;
+              {personalInfo.socialLinks.map((link) => {
+                const Icon = iconMap[link.icon];
                 return (
                   <a
                     key={link.name}
@@ -90,6 +91,16 @@ export function Footer() {
                   </a>
                 );
               })}
+              {personalInfo.email ? (
+                <a
+                  href={`mailto:${personalInfo.email}`}
+                  className="inline-flex items-center justify-center rounded-full w-10 h-10 transition-colors hover:bg-[var(--background)]"
+                  style={{ color: 'var(--muted)' }}
+                  aria-label="Email"
+                >
+                  <HugeiconsIcon icon={Mail01Icon} className="h-4 w-4" />
+                </a>
+              ) : null}
             </div>
           </div>
         </div>
@@ -99,7 +110,7 @@ export function Footer() {
         {/* Copyright */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm" style={{ color: 'var(--muted)' }}>
-            &copy; {new Date().getFullYear()} Mingyuan Zhang. All rights reserved.
+            &copy; {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
           </p>
           <p
             className="text-sm flex items-center gap-1"

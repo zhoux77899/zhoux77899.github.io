@@ -55,12 +55,23 @@ export function Projects() {
 
                 {/* Card Content */}
                 <div className="p-6">
-                  <h3
-                    className="text-xl font-semibold mb-2"
-                    style={{ color: 'var(--foreground)' }}
-                  >
-                    {project.title}
-                  </h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3
+                      className="text-xl font-semibold"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      {project.title}
+                    </h3>
+                    {project.stars != null && (
+                      <span
+                        className="text-sm"
+                        style={{ color: 'var(--muted)' }}
+                        title="Stars"
+                      >
+                        ★ {project.stars}
+                      </span>
+                    )}
+                  </div>
                   <p
                     className="text-sm mb-4 line-clamp-2"
                     style={{ color: 'var(--muted)' }}
