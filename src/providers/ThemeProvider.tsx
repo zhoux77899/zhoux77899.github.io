@@ -1,51 +1,72 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
-type Theme = 'light' | 'dark';
+type Theme = 'light' | 'dark' | 'system';
 
 interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void;
+  resolvedTheme: 'light' | 'dark';
   setTheme: (theme: Theme) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+function getSystemTheme(): 'light' | 'dark' {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function resolveTheme(theme: Theme): 'light' | 'dark' {
+  if (theme === 'system') {
+    return getSystemTheme();
+  }
+  return theme;
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light');
+  const [theme, setThemeState] = useState<Theme>('system');
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     // Read theme preference from localStorage
     const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme) {
-      setThemeState(savedTheme);
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    } else {
-      // Detect system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme = prefersDark ? 'dark' : 'light';
-      setThemeState(initialTheme);
-      document.documentElement.setAttribute('data-theme', initialTheme);
-    }
+    const initialTheme = savedTheme || 'system';
+    setThemeState(initialTheme);
+    
+    const resolved = resolveTheme(initialTheme);
+    setResolvedTheme(resolved);
+    document.documentElement.setAttribute('data-theme', resolved);
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      if (theme === 'system') {
+        const resolved = getSystemTheme();
+        setResolvedTheme(resolved);
+        document.documentElement.setAttribute('data-theme', resolved);
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [mounted, theme]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    
+    const resolved = resolveTheme(newTheme);
+    setResolvedTheme(resolved);
+    document.documentElement.setAttribute('data-theme', resolved);
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-  };
-
-  // Always provide context so useTheme() never throws (e.g. when !mounted before useEffect).
-  // When !mounted use a default value; after mount we use real theme from localStorage/system.
   const value: ThemeContextType = mounted
-    ? { theme, toggleTheme, setTheme }
-    : { theme: 'light', toggleTheme: () => {}, setTheme: () => {} };
+    ? { theme, resolvedTheme, setTheme }
+    : { theme: 'system', resolvedTheme: 'light', setTheme: () => {} };
 
   return (
     <ThemeContext.Provider value={value}>
