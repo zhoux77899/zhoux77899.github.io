@@ -1,7 +1,7 @@
 import { Card, Chip } from '@heroui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Briefcase01Icon, Mortarboard01Icon } from '@hugeicons/core-free-icons';
-import { AnimatedSection } from '@/components/common/AnimatedSection';
+import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
 import { experienceItems } from '@/lib/data';
 
 export function Experience() {
@@ -12,7 +12,7 @@ export function Experience() {
       style={{ backgroundColor: 'var(--surface)' }}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection>
+        <AnimatedSection animation="fade-up">
           <h2
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
@@ -27,9 +27,13 @@ export function Experience() {
           </p>
         </AnimatedSection>
 
-        <div className="space-y-6">
-          {experienceItems.map((item, index) => (
-            <AnimatedSection key={item.id} delay={index * 0.1}>
+        <StaggerContainer
+          className="space-y-6"
+          staggerDelay={0.15}
+          threshold={0.1}
+        >
+          {experienceItems.map((item) => (
+            <StaggerItem key={item.id} animation="slide-right">
               <Card
                 className="overflow-hidden"
                 style={{
@@ -92,9 +96,9 @@ export function Experience() {
                   </p>
                 </div>
               </Card>
-            </AnimatedSection>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@heroui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Mail01Icon, Location01Icon, SentIcon } from '@hugeicons/core-free-icons';
-import { AnimatedSection } from '@/components/common/AnimatedSection';
+import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
 import { SocialLinks } from '@/components/common/SocialLinks';
 import { personalInfo } from '@/lib/data';
 
@@ -37,7 +37,7 @@ export function Contact() {
       style={{ backgroundColor: 'var(--background)' }}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection>
+        <AnimatedSection animation="fade-up">
           <h2
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
@@ -54,7 +54,7 @@ export function Contact() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Contact Info */}
-          <AnimatedSection delay={0.1}>
+          <AnimatedSection animation="slide-right" delay={0.1}>
             <div>
               <h3
                 className="text-xl font-semibold mb-6"
@@ -63,111 +63,119 @@ export function Contact() {
                 Contact Info
               </h3>
 
-              <div className="space-y-4 mb-8">
+              <StaggerContainer className="space-y-4 mb-8" staggerDelay={0.1}>
                 {personalInfo.email ? (
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="p-2 rounded-lg"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
-                    >
-                      <HugeiconsIcon
-                        icon={Mail01Icon}
-                        className="h-5 w-5"
-                        style={{ color: 'var(--accent)' }}
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="text-sm"
-                        style={{ color: 'var(--muted)' }}
+                  <StaggerItem animation="fade-up">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="p-2 rounded-lg"
+                        style={{ backgroundColor: 'var(--accent-soft)' }}
                       >
-                        Email
-                      </p>
-                      <a
-                        href={`mailto:${personalInfo.email}`}
-                        className="font-medium hover:underline"
-                        style={{ color: 'var(--foreground)' }}
-                      >
-                        {personalInfo.email}
-                      </a>
+                        <HugeiconsIcon
+                          icon={Mail01Icon}
+                          className="h-5 w-5"
+                          style={{ color: 'var(--accent)' }}
+                        />
+                      </div>
+                      <div>
+                        <p
+                          className="text-sm"
+                          style={{ color: 'var(--muted)' }}
+                        >
+                          Email
+                        </p>
+                        <a
+                          href={`mailto:${personalInfo.email}`}
+                          className="font-medium hover:underline"
+                          style={{ color: 'var(--foreground)' }}
+                        >
+                          {personalInfo.email}
+                        </a>
+                      </div>
                     </div>
-                  </div>
+                  </StaggerItem>
                 ) : (
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="p-2 rounded-lg"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
-                    >
-                      <HugeiconsIcon
-                        icon={Mail01Icon}
-                        className="h-5 w-5"
-                        style={{ color: 'var(--accent)' }}
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="text-sm"
-                        style={{ color: 'var(--muted)' }}
+                  <StaggerItem animation="fade-up">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="p-2 rounded-lg"
+                        style={{ backgroundColor: 'var(--accent-soft)' }}
                       >
-                        Get in touch
-                      </p>
-                      <a
-                        href={personalInfo.socialLinks.find((l) => l.icon === 'github')?.url ?? 'https://github.com/zhoux77899'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium hover:underline"
-                        style={{ color: 'var(--foreground)' }}
-                      >
-                        Contact via GitHub
-                      </a>
+                        <HugeiconsIcon
+                          icon={Mail01Icon}
+                          className="h-5 w-5"
+                          style={{ color: 'var(--accent)' }}
+                        />
+                      </div>
+                      <div>
+                        <p
+                          className="text-sm"
+                          style={{ color: 'var(--muted)' }}
+                        >
+                          Get in touch
+                        </p>
+                        <a
+                          href={personalInfo.socialLinks.find((l) => l.icon === 'github')?.url ?? 'https://github.com/zhoux77899'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium hover:underline"
+                          style={{ color: 'var(--foreground)' }}
+                        >
+                          Contact via GitHub
+                        </a>
+                      </div>
                     </div>
-                  </div>
+                  </StaggerItem>
                 )}
 
                 {personalInfo.location ? (
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="p-2 rounded-lg"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
-                    >
-                      <HugeiconsIcon
-                        icon={Location01Icon}
-                        className="h-5 w-5"
-                        style={{ color: 'var(--accent)' }}
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="text-sm"
-                        style={{ color: 'var(--muted)' }}
+                  <StaggerItem animation="fade-up">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="p-2 rounded-lg"
+                        style={{ backgroundColor: 'var(--accent-soft)' }}
                       >
-                        Location
-                      </p>
-                      <p
-                        className="font-medium"
-                        style={{ color: 'var(--foreground)' }}
-                      >
-                        {personalInfo.location}
-                      </p>
+                        <HugeiconsIcon
+                          icon={Location01Icon}
+                          className="h-5 w-5"
+                          style={{ color: 'var(--accent)' }}
+                        />
+                      </div>
+                      <div>
+                        <p
+                          className="text-sm"
+                          style={{ color: 'var(--muted)' }}
+                        >
+                          Location
+                        </p>
+                        <p
+                          className="font-medium"
+                          style={{ color: 'var(--foreground)' }}
+                        >
+                          {personalInfo.location}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </StaggerItem>
                 ) : null}
-              </div>
+              </StaggerContainer>
 
-              <div>
-                <h4
-                  className="text-sm font-semibold mb-4"
-                  style={{ color: 'var(--foreground)' }}
-                >
-                  Social
-                </h4>
-                <SocialLinks />
-              </div>
+              <AnimatedSection animation="fade-in" delay={0.3}>
+                <div>
+                  <h4
+                    className="text-sm font-semibold mb-4"
+                    style={{ color: 'var(--foreground)' }}
+                  >
+                    Social
+                  </h4>
+                  <SocialLinks />
+                </div>
+              </AnimatedSection>
             </div>
           </AnimatedSection>
 
           {/* Contact Form */}
-          <AnimatedSection delay={0.2}>
+          <AnimatedSection animation="slide-left" delay={0.2}>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
@@ -244,7 +252,7 @@ export function Contact() {
               <Button
                 type="submit"
                 size="lg"
-                className="w-full"
+                className="w-full cursor-pointer"
                 style={{
                   backgroundColor: 'var(--accent)',
                   color: 'var(--accent-foreground)',

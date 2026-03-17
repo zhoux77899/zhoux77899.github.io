@@ -2,7 +2,7 @@ import { Card, Chip, Modal } from '@heroui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { LinkSquare01Icon, Github01Icon } from '@hugeicons/core-free-icons';
 import { useState } from 'react';
-import { AnimatedSection } from '@/components/common/AnimatedSection';
+import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
 import { projects } from '@/lib/data';
 import type { Project } from '@/types';
 
@@ -16,7 +16,7 @@ export function Projects() {
       style={{ backgroundColor: 'var(--surface)' }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection>
+        <AnimatedSection animation="fade-up">
           <h2
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
@@ -31,9 +31,13 @@ export function Projects() {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
-            <AnimatedSection key={project.id} delay={index * 0.1}>
+        <StaggerContainer
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          staggerDelay={0.1}
+          threshold={0.05}
+        >
+          {projects.map((project) => (
+            <StaggerItem key={project.id} animation="scale-up">
               <Card
                 className="overflow-hidden h-full cursor-pointer group"
                 style={{ backgroundColor: 'var(--background)' }}
@@ -124,9 +128,9 @@ export function Projects() {
                   </div>
                 </div>
               </Card>
-            </AnimatedSection>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Project Detail Modal */}
         <Modal

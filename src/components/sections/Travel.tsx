@@ -1,7 +1,7 @@
 import { Card, Chip } from '@heroui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Location01Icon } from '@hugeicons/core-free-icons';
-import { AnimatedSection } from '@/components/common/AnimatedSection';
+import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
 import { travelItems, travelStats } from '@/lib/data';
 
 export function Travel() {
@@ -12,7 +12,7 @@ export function Travel() {
       style={{ backgroundColor: 'var(--background)' }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection>
+        <AnimatedSection animation="fade-up">
           <h2
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
@@ -27,9 +27,13 @@ export function Travel() {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-          {travelItems.map((item, index) => (
-            <AnimatedSection key={item.id} delay={index * 0.1}>
+        <StaggerContainer
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12"
+          staggerDelay={0.1}
+          threshold={0.05}
+        >
+          {travelItems.map((item) => (
+            <StaggerItem key={item.id} animation="fade-up">
               <Card
                 className="overflow-hidden group cursor-pointer"
                 style={{ backgroundColor: 'var(--surface)' }}
@@ -89,9 +93,9 @@ export function Travel() {
                   </div>
                 </div>
               </Card>
-            </AnimatedSection>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

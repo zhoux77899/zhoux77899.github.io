@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Chip } from '@heroui/react';
 import { motion } from 'framer-motion';
-import { AnimatedSection } from '@/components/common/AnimatedSection';
+import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
 import { skills, getSkillCategoryLabel } from '@/lib/data';
 
 const categories = ['frontend', 'backend', 'tools'] as const;
@@ -20,7 +20,7 @@ export function Skills() {
       style={{ backgroundColor: 'var(--background)' }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection>
+        <AnimatedSection animation="fade-up">
           <h2
             className="text-3xl md:text-4xl font-bold text-center mb-4"
             style={{ color: 'var(--foreground)' }}
@@ -35,13 +35,13 @@ export function Skills() {
           </p>
         </AnimatedSection>
 
-        <AnimatedSection delay={0.1}>
+        <AnimatedSection animation="fade-up" delay={0.1}>
           <div className="flex justify-center gap-2 mb-12">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className="px-4 py-2 rounded-lg font-medium transition-colors"
+                className="px-4 py-2 rounded-lg font-medium transition-colors cursor-pointer"
                 style={{
                   backgroundColor: activeCategory === category ? 'var(--accent)' : 'var(--surface)',
                   color: activeCategory === category ? 'var(--accent-foreground)' : 'var(--foreground)',
@@ -53,28 +53,31 @@ export function Skills() {
           </div>
         </AnimatedSection>
 
-        <AnimatedSection delay={0.2}>
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+        <motion.div
+          key={activeCategory}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <StaggerContainer
             className="flex flex-wrap justify-center gap-3"
+            staggerDelay={0.05}
           >
             {filteredSkills.map((skill) => (
-              <Chip
-                key={skill.name}
-                size="lg"
-                style={{
-                  backgroundColor: 'var(--sage-soft)',
-                  color: 'var(--sage-soft-foreground)',
-                }}
-              >
-                {skill.name}
-              </Chip>
+              <StaggerItem key={skill.name} animation="scale-up">
+                <Chip
+                  size="lg"
+                  style={{
+                    backgroundColor: 'var(--sage-soft)',
+                    color: 'var(--sage-soft-foreground)',
+                  }}
+                >
+                  {skill.name}
+                </Chip>
+              </StaggerItem>
             ))}
-          </motion.div>
-        </AnimatedSection>
+          </StaggerContainer>
+        </motion.div>
       </div>
     </section>
   );
