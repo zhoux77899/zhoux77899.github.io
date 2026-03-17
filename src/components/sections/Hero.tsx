@@ -31,7 +31,7 @@ export function Hero() {
     <section
       id="hero"
       className="min-h-screen relative pt-16"
-      style={{ backgroundColor: 'var(--background)' }}
+      style={{ backgroundColor: 'var(--surface)' }}
     >
       {/* Content Area */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-20 min-h-[calc(100vh-4rem)] flex items-center">

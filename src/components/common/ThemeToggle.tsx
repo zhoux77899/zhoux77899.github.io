@@ -11,7 +11,7 @@ export function ThemeToggle() {
   const TAB_CLASSNAME = classnames(
     "flex items-center justify-center",
     "rounded-full w-6 h-6 p-0 min-w-0",
-    "data-[selected=true]:bg-[var(--accent)] transition-colors"
+    "data-[selected=true]:bg-[var(--accent)] data-[selected=true]:text-[var(--accent-foreground)] dark:data-[selected=true]:text-[var(--foreground)] transition-colors"
   );
   const ICON_CLASSNAME = "h-4 w-4";
 

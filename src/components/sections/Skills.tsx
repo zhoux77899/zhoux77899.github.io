@@ -17,7 +17,7 @@ export function Skills() {
     <section
       id="skills"
       className="py-24"
-      style={{ backgroundColor: 'var(--background)' }}
+      style={{ backgroundColor: 'var(--surface)' }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection animation="fade-up">
@@ -43,7 +43,7 @@ export function Skills() {
                 onClick={() => setActiveCategory(category)}
                 className="px-4 py-2 rounded-lg font-medium transition-colors cursor-pointer"
                 style={{
-                  backgroundColor: activeCategory === category ? 'var(--accent)' : 'var(--surface)',
+                  backgroundColor: activeCategory === category ? 'var(--accent)' : 'var(--background)',
                   color: activeCategory === category ? 'var(--accent-foreground)' : 'var(--foreground)',
                 }}
               >

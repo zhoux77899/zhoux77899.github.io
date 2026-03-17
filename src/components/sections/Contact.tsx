@@ -34,7 +34,7 @@ export function Contact() {
     <section
       id="contact"
       className="py-24"
-      style={{ backgroundColor: 'var(--background)' }}
+      style={{ backgroundColor: 'var(--surface)' }}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection animation="fade-up">

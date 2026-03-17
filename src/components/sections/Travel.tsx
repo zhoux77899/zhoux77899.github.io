@@ -9,7 +9,7 @@ export function Travel() {
     <section
       id="travel"
       className="py-24"
-      style={{ backgroundColor: 'var(--background)' }}
+      style={{ backgroundColor: 'var(--surface)' }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection animation="fade-up">
@@ -36,7 +36,7 @@ export function Travel() {
             <StaggerItem key={item.id} animation="fade-up">
               <Card
                 className="overflow-hidden group cursor-pointer"
-                style={{ backgroundColor: 'var(--surface)' }}
+                style={{ backgroundColor: 'var(--background)' }}
               >
                 {/* Image Container */}
                 <div className="relative overflow-hidden aspect-[4/3]">

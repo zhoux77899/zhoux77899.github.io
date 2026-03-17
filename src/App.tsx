@@ -12,7 +12,7 @@ import { Contact } from '@/components/sections/Contact';
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--surface)' }}>
         <Navbar />
         <main>
           <Hero />
