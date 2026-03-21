@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button } from '@heroui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Mail01Icon, Location01Icon, SentIcon } from '@hugeicons/core-free-icons';
+import { Mail01Icon, Location01Icon, SentIcon, CheckmarkCircle01Icon } from '@hugeicons/core-free-icons';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
 import { SocialLinks } from '@/components/common/SocialLinks';
 import { personalInfo } from '@/lib/data';
@@ -14,6 +15,7 @@ export function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,117 +35,144 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="py-24"
+      className="py-32 relative overflow-hidden"
       style={{ backgroundColor: 'var(--surface)' }}
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Decorative Elements */}
+      <div className="absolute top-20 right-20 w-64 h-64 rounded-full opacity-5 hidden lg:block"
+        style={{ background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)' }}
+      />
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <AnimatedSection animation="fade-up">
-          <h2
-            className="text-3xl md:text-4xl font-bold text-center mb-4"
-            style={{ color: 'var(--foreground)' }}
-          >
-            Contact Me
-          </h2>
-          <p
-            className="text-center mb-12 max-w-2xl mx-auto"
-            style={{ color: 'var(--muted)' }}
-          >
-            Open to tech discussions, collaboration or just saying hello!
-          </p>
+          <div className="text-center mb-16">
+            <span
+              className="inline-block px-4 py-1 rounded-full text-sm font-medium mb-4"
+              style={{
+                backgroundColor: 'var(--accent-soft)',
+                color: 'var(--accent)',
+              }}
+            >
+              Get in Touch
+            </span>
+            <h2
+              className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ color: 'var(--foreground)' }}
+            >
+              Contact Me
+            </h2>
+            <p
+              className="text-lg max-w-2xl mx-auto"
+              style={{ color: 'var(--muted)' }}
+            >
+              Open to tech discussions, collaboration or just saying hello!
+            </p>
+          </div>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Info */}
           <AnimatedSection animation="slide-right" delay={0.1}>
             <div>
               <h3
-                className="text-xl font-semibold mb-6"
+                className="font-display text-2xl font-semibold mb-8"
                 style={{ color: 'var(--foreground)' }}
               >
-                Contact Info
+                Let's Connect
               </h3>
 
-              <StaggerContainer className="space-y-4 mb-8" staggerDelay={0.1}>
+              <StaggerContainer className="space-y-6 mb-10" staggerDelay={0.1}>
                 {personalInfo.email ? (
                   <StaggerItem animation="fade-up">
-                    <div className="flex items-center gap-3">
+                    <motion.a
+                      href={`mailto:${personalInfo.email}`}
+                      className="flex items-center gap-4 p-4 rounded-xl transition-colors group"
+                      style={{ backgroundColor: 'var(--background)' }}
+                      whileHover={{ x: 4 }}
+                    >
                       <div
-                        className="p-2 rounded-lg"
+                        className="p-3 rounded-xl transition-colors"
                         style={{ backgroundColor: 'var(--accent-soft)' }}
                       >
                         <HugeiconsIcon
                           icon={Mail01Icon}
-                          className="h-5 w-5"
+                          className="h-6 w-6"
                           style={{ color: 'var(--accent)' }}
                         />
                       </div>
                       <div>
                         <p
-                          className="text-sm"
+                          className="text-sm mb-1"
                           style={{ color: 'var(--muted)' }}
                         >
                           Email
                         </p>
-                        <a
-                          href={`mailto:${personalInfo.email}`}
-                          className="font-medium hover:underline"
+                        <p
+                          className="font-medium group-hover:text-[var(--accent)] transition-colors"
                           style={{ color: 'var(--foreground)' }}
                         >
                           {personalInfo.email}
-                        </a>
+                        </p>
                       </div>
-                    </div>
+                    </motion.a>
                   </StaggerItem>
                 ) : (
                   <StaggerItem animation="fade-up">
-                    <div className="flex items-center gap-3">
+                    <motion.a
+                      href={personalInfo.socialLinks.find((l) => l.icon === 'github')?.url ?? 'https://github.com/zhoux77899'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 p-4 rounded-xl transition-colors group"
+                      style={{ backgroundColor: 'var(--background)' }}
+                      whileHover={{ x: 4 }}
+                    >
                       <div
-                        className="p-2 rounded-lg"
+                        className="p-3 rounded-xl"
                         style={{ backgroundColor: 'var(--accent-soft)' }}
                       >
                         <HugeiconsIcon
                           icon={Mail01Icon}
-                          className="h-5 w-5"
+                          className="h-6 w-6"
                           style={{ color: 'var(--accent)' }}
                         />
                       </div>
                       <div>
                         <p
-                          className="text-sm"
+                          className="text-sm mb-1"
                           style={{ color: 'var(--muted)' }}
                         >
                           Get in touch
                         </p>
-                        <a
-                          href={personalInfo.socialLinks.find((l) => l.icon === 'github')?.url ?? 'https://github.com/zhoux77899'}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-medium hover:underline"
+                        <p
+                          className="font-medium group-hover:text-[var(--accent)] transition-colors"
                           style={{ color: 'var(--foreground)' }}
                         >
                           Contact via GitHub
-                        </a>
+                        </p>
                       </div>
-                    </div>
+                    </motion.a>
                   </StaggerItem>
                 )}
 
                 {personalInfo.location ? (
                   <StaggerItem animation="fade-up">
-                    <div className="flex items-center gap-3">
+                    <div
+                      className="flex items-center gap-4 p-4 rounded-xl"
+                      style={{ backgroundColor: 'var(--background)' }}
+                    >
                       <div
-                        className="p-2 rounded-lg"
+                        className="p-3 rounded-xl"
                         style={{ backgroundColor: 'var(--accent-soft)' }}
                       >
                         <HugeiconsIcon
                           icon={Location01Icon}
-                          className="h-5 w-5"
+                          className="h-6 w-6"
                           style={{ color: 'var(--accent)' }}
                         />
                       </div>
                       <div>
                         <p
-                          className="text-sm"
+                          className="text-sm mb-1"
                           style={{ color: 'var(--muted)' }}
                         >
                           Location
@@ -163,10 +192,10 @@ export function Contact() {
               <AnimatedSection animation="fade-in" delay={0.3}>
                 <div>
                   <h4
-                    className="text-sm font-semibold mb-4"
-                    style={{ color: 'var(--foreground)' }}
+                    className="text-sm font-semibold mb-4 uppercase tracking-wider"
+                    style={{ color: 'var(--muted)' }}
                   >
-                    Social
+                    Follow Me
                   </h4>
                   <SocialLinks />
                 </div>
@@ -176,91 +205,144 @@ export function Contact() {
 
           {/* Contact Form */}
           <AnimatedSection animation="slide-left" delay={0.2}>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium mb-2"
                   style={{ color: 'var(--foreground)' }}
                 >
                   Name
                 </label>
-                <input
+                <motion.input
                   type="text"
                   placeholder="Enter your name"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
+                  onFocus={() => setFocusedField('name')}
+                  onBlur={() => setFocusedField(null)}
                   required
-                  className="w-full px-4 py-2 rounded-lg border"
+                  className="w-full px-4 py-3 rounded-xl border-2 outline-none transition-all"
                   style={{
                     backgroundColor: 'var(--field-background)',
-                    borderColor: 'var(--field-border)',
+                    borderColor: focusedField === 'name' ? 'var(--accent)' : 'var(--field-border)',
                     color: 'var(--field-foreground)',
                   }}
+                  whileFocus={{ scale: 1.01 }}
                 />
               </div>
 
               <div>
                 <label
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium mb-2"
                   style={{ color: 'var(--foreground)' }}
                 >
                   Email
                 </label>
-                <input
+                <motion.input
                   type="email"
                   placeholder="your@email.com"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField(null)}
                   required
-                  className="w-full px-4 py-2 rounded-lg border"
+                  className="w-full px-4 py-3 rounded-xl border-2 outline-none transition-all"
                   style={{
                     backgroundColor: 'var(--field-background)',
-                    borderColor: 'var(--field-border)',
+                    borderColor: focusedField === 'email' ? 'var(--accent)' : 'var(--field-border)',
                     color: 'var(--field-foreground)',
                   }}
+                  whileFocus={{ scale: 1.01 }}
                 />
               </div>
 
               <div>
                 <label
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium mb-2"
                   style={{ color: 'var(--foreground)' }}
                 >
                   Message
                 </label>
-                <textarea
+                <motion.textarea
                   placeholder="Enter your message..."
                   value={formData.message}
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
+                  onFocus={() => setFocusedField('message')}
+                  onBlur={() => setFocusedField(null)}
                   required
-                  rows={4}
-                  className="w-full px-4 py-2 rounded-lg border resize-none"
+                  rows={5}
+                  className="w-full px-4 py-3 rounded-xl border-2 outline-none transition-all resize-none"
                   style={{
                     backgroundColor: 'var(--field-background)',
-                    borderColor: 'var(--field-border)',
+                    borderColor: focusedField === 'message' ? 'var(--accent)' : 'var(--field-border)',
                     color: 'var(--field-foreground)',
                   }}
+                  whileFocus={{ scale: 1.01 }}
                 />
               </div>
 
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full cursor-pointer"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'var(--accent-foreground)',
-                }}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <HugeiconsIcon icon={SentIcon} className="h-4 w-4 mr-2" />
-                {isSubmitted ? 'Sent!' : isSubmitting ? 'Sending...' : 'Send Message'}
-              </Button>
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full cursor-pointer font-semibold py-6 text-lg"
+                  disabled={isSubmitting || isSubmitted}
+                  style={{
+                    backgroundColor: isSubmitted ? 'var(--sage)' : 'var(--accent)',
+                    color: 'var(--accent-foreground)',
+                  }}
+                >
+                  <AnimatePresence mode="wait">
+                    {isSubmitted ? (
+                      <motion.span
+                        key="success"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center"
+                      >
+                        <HugeiconsIcon icon={CheckmarkCircle01Icon} className="h-5 w-5 mr-2" />
+                        Message Sent!
+                      </motion.span>
+                    ) : isSubmitting ? (
+                      <motion.span
+                        key="submitting"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center"
+                      >
+                        <motion.span
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                          className="inline-block w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full"
+                        />
+                        Sending...
+                      </motion.span>
+                    ) : (
+                      <motion.span
+                        key="send"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="flex items-center"
+                      >
+                        <HugeiconsIcon icon={SentIcon} className="h-5 w-5 mr-2" />
+                        Send Message
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Button>
+              </motion.div>
             </form>
           </AnimatedSection>
         </div>

@@ -1,104 +1,167 @@
-import { Card, Chip } from '@heroui/react';
+import { Chip } from '@heroui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Briefcase01Icon, Mortarboard01Icon } from '@hugeicons/core-free-icons';
-import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
+import { motion } from 'framer-motion';
+import { AnimatedSection } from '@/components/common/AnimatedSection';
 import { experienceItems } from '@/lib/data';
 
 export function Experience() {
   return (
     <section
       id="experience"
-      className="py-24"
+      className="py-32 relative overflow-hidden"
       style={{ backgroundColor: 'var(--surface)' }}
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection animation="fade-up">
-          <h2
-            className="text-3xl md:text-4xl font-bold text-center mb-4"
-            style={{ color: 'var(--foreground)' }}
-          >
-            Experience
-          </h2>
-          <p
-            className="text-center mb-12 max-w-2xl mx-auto"
-            style={{ color: 'var(--muted)' }}
-          >
-            Years of software development, from startups to leading tech companies
-          </p>
+          <div className="text-center mb-16">
+            <span
+              className="inline-block px-4 py-1 rounded-full text-sm font-medium mb-4"
+              style={{
+                backgroundColor: 'var(--accent-soft)',
+                color: 'var(--accent)',
+              }}
+            >
+              Journey
+            </span>
+            <h2
+              className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ color: 'var(--foreground)' }}
+            >
+              Experience
+            </h2>
+            <p
+              className="text-lg max-w-2xl mx-auto"
+              style={{ color: 'var(--muted)' }}
+            >
+              Years of software development, from startups to leading tech companies
+            </p>
+          </div>
         </AnimatedSection>
 
-        <StaggerContainer
-          className="space-y-6"
-          staggerDelay={0.15}
-          threshold={0.1}
-        >
-          {experienceItems.map((item) => (
-            <StaggerItem key={item.id} animation="slide-right">
-              <Card
-                className="overflow-hidden"
-                style={{
-                  backgroundColor: 'var(--background)',
-                  borderLeftWidth: '4px',
-                  borderLeftColor: 'var(--accent)',
-                }}
-              >
-                <div className="p-6">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="p-2 rounded-lg"
-                        style={{ backgroundColor: 'var(--accent-soft)' }}
-                      >
-                        {item.type === 'work' ? (
-                          <HugeiconsIcon
-                            icon={Briefcase01Icon}
-                            className="h-5 w-5"
-                            style={{ color: 'var(--accent)' }}
-                          />
-                        ) : (
-                          <HugeiconsIcon
-                            icon={Mortarboard01Icon}
-                            className="h-5 w-5"
-                            style={{ color: 'var(--accent)' }}
-                          />
-                        )}
-                      </div>
-                      <div>
-                        <h3
-                          className="text-lg font-semibold"
-                          style={{ color: 'var(--foreground)' }}
-                        >
-                          {item.title}
-                        </h3>
-                        <p
-                          className="text-sm"
-                          style={{ color: 'var(--muted)' }}
-                        >
-                          {item.company}
-                        </p>
-                      </div>
-                    </div>
-                    <Chip
-                      size="sm"
+        {/* Timeline */}
+        <div className="relative">
+          {/* Timeline Line */}
+          <div
+            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 hidden sm:block"
+            style={{
+              background: `linear-gradient(to bottom, var(--accent), var(--sage))`,
+            }}
+          />
+
+          {/* Experience Items */}
+          <div className="space-y-12">
+            {experienceItems.map((item, index) => {
+              const isEven = index % 2 === 0;
+              const Icon = item.type === 'work' ? Briefcase01Icon : Mortarboard01Icon;
+
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: isEven ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true, margin: '-50px' }}
+                  className={`relative flex flex-col sm:flex-row items-start gap-4 sm:gap-8 ${
+                    isEven ? 'sm:flex-row' : 'sm:flex-row-reverse'
+                  }`}
+                >
+                  {/* Timeline Node */}
+                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 hidden sm:flex items-center justify-center z-10">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
+                      viewport={{ once: true }}
+                      className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
                       style={{
-                        backgroundColor: 'var(--sage-soft)',
-                        color: 'var(--sage-soft-foreground)',
+                        backgroundColor: 'var(--accent)',
+                        boxShadow: '0 0 20px var(--accent-soft)',
                       }}
                     >
-                      {item.period}
-                    </Chip>
+                      <HugeiconsIcon
+                        icon={Icon}
+                        className="w-5 h-5"
+                        style={{ color: 'var(--accent-foreground)' }}
+                      />
+                    </motion.div>
                   </div>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: 'var(--foreground)' }}
-                  >
-                    {item.description}
-                  </p>
-                </div>
-              </Card>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
+
+                  {/* Content Card */}
+                  <div className={`sm:w-1/2 ${isEven ? 'sm:pr-12 sm:text-right' : 'sm:pl-12'}`}>
+                    <motion.div
+                      whileHover={{ y: -4 }}
+                      transition={{ duration: 0.2 }}
+                      className="p-6 rounded-2xl"
+                      style={{
+                        backgroundColor: 'var(--background)',
+                        border: '1px solid var(--border)',
+                      }}
+                    >
+                      {/* Mobile Icon */}
+                      <div className="flex sm:hidden items-center gap-3 mb-4">
+                        <div
+                          className="w-10 h-10 rounded-full flex items-center justify-center"
+                          style={{ backgroundColor: 'var(--accent-soft)' }}
+                        >
+                          <HugeiconsIcon
+                            icon={Icon}
+                            className="w-5 h-5"
+                            style={{ color: 'var(--accent)' }}
+                          />
+                        </div>
+                        <Chip
+                          size="sm"
+                          style={{
+                            backgroundColor: 'var(--sage-soft)',
+                            color: 'var(--sage-soft-foreground)',
+                          }}
+                        >
+                          {item.period}
+                        </Chip>
+                      </div>
+
+                      {/* Desktop Period Badge */}
+                      <div className={`hidden sm:flex mb-3 ${isEven ? 'justify-end' : 'justify-start'}`}>
+                        <Chip
+                          size="sm"
+                          style={{
+                            backgroundColor: 'var(--sage-soft)',
+                            color: 'var(--sage-soft-foreground)',
+                          }}
+                        >
+                          {item.period}
+                        </Chip>
+                      </div>
+
+                      <h3
+                        className="text-xl font-semibold font-display mb-1"
+                        style={{ color: 'var(--foreground)' }}
+                      >
+                        {item.title}
+                      </h3>
+                      <p
+                        className="text-sm font-medium mb-4"
+                        style={{ color: 'var(--accent)' }}
+                      >
+                        {item.company}
+                      </p>
+                      <p
+                        className="text-sm leading-relaxed"
+                        style={{ color: 'var(--muted)' }}
+                      >
+                        {item.description}
+                      </p>
+                    </motion.div>
+                  </div>
+
+                  {/* Spacer for alternating layout */}
+                  <div className="hidden sm:block sm:w-1/2" />
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
