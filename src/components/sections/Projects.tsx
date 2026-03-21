@@ -34,10 +34,10 @@ export function Projects() {
               whileHover={{ y: -8 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
               onClick={() => setSelectedProject(project)}
-              className="cursor-pointer"
+              className="cursor-pointer h-full"
             >
               <Card
-                className="overflow-hidden h-full group relative"
+                className="overflow-hidden h-full group relative flex flex-col"
                 style={{ backgroundColor: 'var(--background)' }}
               >
                 {/* Project Number Badge */}
@@ -98,7 +98,7 @@ export function Projects() {
                 </div>
 
                 {/* Card Content */}
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <h3
                       className="text-xl font-semibold font-display group-hover:text-[var(--accent)] transition-colors"
@@ -153,7 +153,7 @@ export function Projects() {
                   </div>
 
                   {/* Links */}
-                  <div className="flex gap-4 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
+                  <div className="flex gap-4 pt-4 border-t mt-auto" style={{ borderColor: 'var(--border)' }}>
                     {project.demoUrl && (
                       <motion.a
                         href={project.demoUrl}

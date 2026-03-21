@@ -26,13 +26,14 @@ export function Travel() {
             <motion.div
               whileHover={{ y: -8 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="h-full"
             >
               <Card
-                className="overflow-hidden group cursor-pointer h-full"
+                className="overflow-hidden group cursor-pointer h-full flex flex-col"
                 style={{ backgroundColor: 'var(--background)' }}
               >
                 {/* Image Container */}
-                <div className="relative overflow-hidden aspect-[4/3]">
+                <div className="relative overflow-hidden aspect-video">
                   <motion.div
                     className="w-full h-full flex items-center justify-center"
                     style={{ backgroundColor: 'var(--sage-soft)' }}
@@ -55,7 +56,7 @@ export function Travel() {
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-2 mb-3">
                     <div
                       className="p-1.5 rounded-lg"
@@ -75,14 +76,14 @@ export function Travel() {
                     </h3>
                   </div>
                   <p
-                    className="text-sm mb-5 leading-relaxed"
+                    className="text-sm mb-5 leading-relaxed line-clamp-2"
                     style={{ color: 'var(--muted)' }}
                   >
                     {item.description}
                   </p>
 
                   {/* Tags */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mt-auto">
                     <Chip
                       size="sm"
                       className="border"
