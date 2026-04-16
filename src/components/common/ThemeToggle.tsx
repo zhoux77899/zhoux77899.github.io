@@ -24,7 +24,7 @@ export function ThemeToggle() {
       <Tabs.ListContainer>
         <Tabs.List
           aria-label="Theme selection"
-          className="w-fit gap-2 p-1"
+          className="w-fit gap-2 p-1 bg-[var(--accent-soft)]"
         >
           <Tabs.Tab
             id="light"

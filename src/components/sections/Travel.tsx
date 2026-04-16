@@ -33,14 +33,26 @@ export function Travel() {
                 style={{ backgroundColor: 'var(--background)' }}
               >
                 {/* Image Container */}
-                <div className="relative overflow-hidden aspect-video">
+                <div className="relative overflow-hidden aspect-video rounded-xl">
                   <motion.div
-                    className="w-full h-full flex items-center justify-center"
-                    style={{ backgroundColor: 'var(--sage-soft)' }}
+                    className="w-full h-full flex items-center justify-center overflow-hidden"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.4 }}
                   >
-                    <span className="text-7xl">{item.flag}</span>
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.location}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ backgroundColor: 'var(--sage-soft)' }}
+                      >
+                        <span className="text-7xl">{item.flag}</span>
+                      </div>
+                    )}
                   </motion.div>
 
                   {/* Year Badge */}
