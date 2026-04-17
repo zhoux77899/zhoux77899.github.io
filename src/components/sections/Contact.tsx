@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { Button } from '@heroui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Mail01Icon, Location01Icon, SentIcon, CheckmarkCircle01Icon } from '@hugeicons/core-free-icons';
+import { SentIcon, CheckmarkCircle01Icon } from '@hugeicons/core-free-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Section } from '@/components/layout/Section';
 import { SectionHeader } from '@/components/common/SectionHeader';
-import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/common/AnimatedSection';
+import { AnimatedSection } from '@/components/common/AnimatedSection';
 import { FormField } from '@/components/common/FormField';
-import { SocialLinks } from '@/components/common/SocialLinks';
-import { personalInfo } from '@/lib/data';
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -23,14 +21,12 @@ export function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setIsSubmitting(false);
     setIsSubmitted(true);
     setFormData({ name: '', email: '', message: '' });
 
-    // Reset success message after 3 seconds
     setTimeout(() => setIsSubmitted(false), 3000);
   };
 
@@ -42,141 +38,14 @@ export function Contact() {
         description="Open to tech discussions, collaboration or just saying hello!"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 max-w-5xl mx-auto">
-        {/* Contact Info */}
-        <AnimatedSection animation="slide-right" delay={0.1}>
-          <div>
-            <h3
-              className="font-display text-2xl font-semibold mb-8"
-              style={{ color: 'var(--foreground)' }}
-            >
-              Let&apos;s Connect
-            </h3>
-
-            <StaggerContainer className="space-y-6 mb-10" staggerDelay={0.1}>
-              {personalInfo.email ? (
-                <StaggerItem animation="fade-up">
-                  <motion.a
-                    href={`mailto:${personalInfo.email}`}
-                    className="flex items-center gap-4 p-4 rounded-xl transition-colors group"
-                    style={{ backgroundColor: 'var(--background)' }}
-                    whileHover={{ x: 4 }}
-                  >
-                    <div
-                      className="p-3 rounded-xl transition-colors"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
-                    >
-                      <HugeiconsIcon
-                        icon={Mail01Icon}
-                        className="h-6 w-6"
-                        style={{ color: 'var(--accent)' }}
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="text-sm mb-1"
-                        style={{ color: 'var(--muted)' }}
-                      >
-                        Email
-                      </p>
-                      <p
-                        className="font-medium group-hover:text-[var(--accent)] transition-colors"
-                        style={{ color: 'var(--foreground)' }}
-                      >
-                        {personalInfo.email}
-                      </p>
-                    </div>
-                  </motion.a>
-                </StaggerItem>
-              ) : (
-                <StaggerItem animation="fade-up">
-                  <motion.a
-                    href={personalInfo.socialLinks.find((l) => l.icon === 'github')?.url ?? 'https://github.com/zhoux77899'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-4 p-4 rounded-xl transition-colors group"
-                    style={{ backgroundColor: 'var(--background)' }}
-                    whileHover={{ x: 4 }}
-                  >
-                    <div
-                      className="p-3 rounded-xl"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
-                    >
-                      <HugeiconsIcon
-                        icon={Mail01Icon}
-                        className="h-6 w-6"
-                        style={{ color: 'var(--accent)' }}
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="text-sm mb-1"
-                        style={{ color: 'var(--muted)' }}
-                      >
-                        Get in touch
-                      </p>
-                      <p
-                        className="font-medium group-hover:text-[var(--accent)] transition-colors"
-                        style={{ color: 'var(--foreground)' }}
-                      >
-                        Contact via GitHub
-                      </p>
-                    </div>
-                  </motion.a>
-                </StaggerItem>
-              )}
-
-              {personalInfo.location ? (
-                <StaggerItem animation="fade-up">
-                  <div
-                    className="flex items-center gap-4 p-4 rounded-xl"
-                    style={{ backgroundColor: 'var(--background)' }}
-                  >
-                    <div
-                      className="p-3 rounded-xl"
-                      style={{ backgroundColor: 'var(--accent-soft)' }}
-                    >
-                      <HugeiconsIcon
-                        icon={Location01Icon}
-                        className="h-6 w-6"
-                        style={{ color: 'var(--accent)' }}
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="text-sm mb-1"
-                        style={{ color: 'var(--muted)' }}
-                      >
-                        Location
-                      </p>
-                      <p
-                        className="font-medium"
-                        style={{ color: 'var(--foreground)' }}
-                      >
-                        {personalInfo.location}
-                      </p>
-                    </div>
-                  </div>
-                </StaggerItem>
-              ) : null}
-            </StaggerContainer>
-
-            <AnimatedSection animation="fade-in" delay={0.3}>
-              <div>
-                <h4
-                  className="text-sm font-semibold mb-4 uppercase tracking-wider"
-                  style={{ color: 'var(--muted)' }}
-                >
-                  Follow Me
-                </h4>
-                <SocialLinks />
-              </div>
-            </AnimatedSection>
-          </div>
-        </AnimatedSection>
-
-        {/* Contact Form */}
-        <AnimatedSection animation="slide-left" delay={0.2}>
+      <AnimatedSection animation="fade-up" delay={0.1}>
+        <div
+          className="p-6 md:p-8 rounded-2xl max-w-2xl mx-auto"
+          style={{
+            backgroundColor: 'var(--background)',
+            border: '1px solid var(--border)',
+          }}
+        >
           <form onSubmit={handleSubmit} className="space-y-5">
             <FormField
               label="Name"
@@ -266,8 +135,8 @@ export function Contact() {
               </Button>
             </motion.div>
           </form>
-        </AnimatedSection>
-      </div>
+        </div>
+      </AnimatedSection>
     </Section>
   );
 }

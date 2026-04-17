@@ -1,5 +1,5 @@
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Github01Icon, Linkedin01Icon, TwitterIcon, Mail01Icon, FavouriteIcon, ArrowUp01Icon } from '@hugeicons/core-free-icons';
+import { Github01Icon, Linkedin01Icon, TwitterIcon, Mail01Icon, FavouriteIcon } from '@hugeicons/core-free-icons';
 import type { IconSvgElement } from '@hugeicons/react';
 import { Separator } from '@heroui/react';
 import { personalInfo } from '@/lib/data';
@@ -9,6 +9,8 @@ const footerLinks = [
   { name: 'Home', href: '#hero' },
   { name: 'Skills', href: '#skills' },
   { name: 'Projects', href: '#projects' },
+  { name: 'Travel', href: '#travel' },
+  { name: 'Experience', href: '#experience' },
   { name: 'Contact', href: '#contact' },
 ];
 
@@ -27,32 +29,10 @@ export function Footer() {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
-    <footer className="relative" style={{ backgroundColor: 'var(--surface)' }}>
-      {/* Back to Top Button */}
-      <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-        <motion.button
-          onClick={scrollToTop}
-          className="p-3 rounded-full shadow-lg"
-          style={{
-            backgroundColor: 'var(--accent)',
-            color: 'var(--accent-foreground)',
-          }}
-          whileHover={{ y: -4, scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          aria-label="Back to top"
-        >
-          <HugeiconsIcon icon={ArrowUp01Icon} className="h-5 w-5" />
-        </motion.button>
-      </div>
-
+    <footer style={{ backgroundColor: 'var(--surface)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Brand */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
           <div>
             <h3
               className="font-display text-2xl font-bold mb-4"
@@ -109,60 +89,68 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4
-              className="text-sm font-semibold mb-4 uppercase tracking-wider"
-              style={{ color: 'var(--foreground)' }}
-            >
-              Quick Links
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.map((link) => (
-                <li key={link.name}>
+          <div className="flex flex-col justify-between">
+            <div>
+              <h4
+                className="text-sm font-semibold mb-4 uppercase tracking-wider"
+                style={{ color: 'var(--foreground)' }}
+              >
+                Quick Links
+              </h4>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {footerLinks.map((link) => (
                   <motion.button
+                    key={link.name}
                     onClick={() => handleNavClick(link.href)}
                     className="text-sm transition-colors"
                     style={{ color: 'var(--muted)' }}
-                    whileHover={{ x: 4, color: 'var(--accent)' }}
+                    whileHover={{ color: 'var(--accent)' }}
                   >
                     {link.name}
                   </motion.button>
-                </li>
-              ))}
-            </ul>
-          </div>
+                ))}
+              </div>
+            </div>
 
-          {/* Contact Info */}
-          <div>
-            <h4
-              className="text-sm font-semibold mb-4 uppercase tracking-wider"
-              style={{ color: 'var(--foreground)' }}
-            >
-              Contact
-            </h4>
-            <div className="space-y-3">
-              {personalInfo.email && (
-                <a
-                  href={`mailto:${personalInfo.email}`}
-                  className="text-sm block transition-colors hover:text-[var(--accent)]"
-                  style={{ color: 'var(--muted)' }}
-                >
-                  {personalInfo.email}
-                </a>
-              )}
-              {personalInfo.location && (
-                <p className="text-sm" style={{ color: 'var(--muted)' }}>
-                  {personalInfo.location}
-                </p>
-              )}
+            <div className="mt-6 md:mt-8">
+              <h4
+                className="text-sm font-semibold mb-4 uppercase tracking-wider"
+                style={{ color: 'var(--foreground)' }}
+              >
+                Contact
+              </h4>
+              <div className="space-y-2">
+                {personalInfo.email ? (
+                  <a
+                    href={`mailto:${personalInfo.email}`}
+                    className="text-sm block transition-colors hover:text-[var(--accent)]"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    {personalInfo.email}
+                  </a>
+                ) : (
+                  <a
+                    href={personalInfo.socialLinks.find((l) => l.icon === 'github')?.url ?? '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm block transition-colors hover:text-[var(--accent)]"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    GitHub
+                  </a>
+                )}
+                {personalInfo.location ? (
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>
+                    {personalInfo.location}
+                  </p>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
 
         <Separator className="my-8" style={{ backgroundColor: 'var(--border)' }} />
 
-        {/* Copyright */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm" style={{ color: 'var(--muted)' }}>
             &copy; {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
