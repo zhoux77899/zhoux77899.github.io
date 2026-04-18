@@ -12,7 +12,7 @@ export function Experience() {
       <SectionHeader
         label="Journey"
         title="Experience"
-        description="Years of software development, from startups to leading tech companies"
+        description="From optical engineering through life science research to AI infrastructure"
       />
 
       {/* Timeline */}

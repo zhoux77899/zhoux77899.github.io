@@ -2,8 +2,8 @@ import type { Project, TravelItem, ExperienceItem, Skill, PersonalInfo } from '@
 
 export const personalInfo: PersonalInfo = {
   name: 'Ruri',
-  title: 'Developer at Huawei',
-  bio: 'Developer at Huawei. Public repos on GitHub.',
+  title: 'AI Infrastructure & Agent Engineer',
+  bio: 'Building LLM inference infrastructure and AI agent systems. From optical engineering through life science research to AI — bridging disciplines to solve complex problems.',
   avatar: 'https://avatars.githubusercontent.com/u/33858552?v=4',
   email: '',
   location: '',
@@ -13,27 +13,26 @@ export const personalInfo: PersonalInfo = {
 };
 
 export const skills: Skill[] = [
-  // Frontend
-  { name: 'React', category: 'frontend' },
-  { name: 'TypeScript', category: 'frontend' },
-  { name: 'Next.js', category: 'frontend' },
-  { name: 'Vue.js', category: 'frontend' },
-  { name: 'Tailwind CSS', category: 'frontend' },
-  { name: 'Framer Motion', category: 'frontend' },
-  // Backend
-  { name: 'Node.js', category: 'backend' },
+  { name: 'PyTorch', category: 'other' },
+  { name: 'LLM Inference', category: 'other' },
+  { name: 'vLLM', category: 'other' },
+  { name: 'GANs', category: 'other' },
+  { name: 'Ascend NPU', category: 'other' },
+  { name: 'Deep Learning', category: 'other' },
   { name: 'Python', category: 'backend' },
-  { name: 'PostgreSQL', category: 'backend' },
-  { name: 'MongoDB', category: 'backend' },
-  { name: 'GraphQL', category: 'backend' },
+  { name: 'C++', category: 'backend' },
+  { name: 'TypeScript', category: 'backend' },
+  { name: 'Node.js', category: 'backend' },
+  { name: 'SQL', category: 'backend' },
   { name: 'Redis', category: 'backend' },
-  // Tools
+  { name: 'React', category: 'frontend' },
+  { name: 'Next.js', category: 'frontend' },
+  { name: 'Tailwind CSS', category: 'frontend' },
   { name: 'Git', category: 'tools' },
   { name: 'Docker', category: 'tools' },
   { name: 'Kubernetes', category: 'tools' },
-  { name: 'AWS', category: 'tools' },
   { name: 'CI/CD', category: 'tools' },
-  { name: 'Figma', category: 'tools' },
+  { name: 'Linux', category: 'tools' },
 ];
 
 export const projects: Project[] = [
@@ -142,9 +141,9 @@ export const travelStats = {
 export function getSkillCategoryLabel(category: string): string {
   const labels: Record<string, string> = {
     frontend: 'Frontend',
-    backend: 'Backend',
-    tools: 'Tools',
-    other: 'Other',
+    backend: 'Backend & Systems',
+    tools: 'DevOps & Tools',
+    other: 'AI / ML',
   };
   return labels[category] || category;
 }

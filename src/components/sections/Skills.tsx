@@ -5,7 +5,7 @@ import { SectionHeader } from '@/components/common/SectionHeader';
 import { AnimatedSection } from '@/components/common/AnimatedSection';
 import { skills, getSkillCategoryLabel } from '@/lib/data';
 
-const categories = ['frontend', 'backend', 'tools'] as const;
+const categories = ['other', 'backend', 'frontend', 'tools'] as const;
 
 interface SkillChipProps {
   name: string;
@@ -54,7 +54,7 @@ function SkillChip({ name, index }: SkillChipProps) {
 }
 
 export function Skills() {
-  const [activeCategory, setActiveCategory] = useState<string>('frontend');
+  const [activeCategory, setActiveCategory] = useState<string>('other');
 
   const filteredSkills = skills.filter(
     (skill) => skill.category === activeCategory
@@ -65,7 +65,7 @@ export function Skills() {
       <SectionHeader
         label="Expertise"
         title="Tech Stack"
-        description="Proficient in frontend, backend and modern development tools"
+        description="AI/ML, backend systems, frontend and modern development tools"
       />
 
       <AnimatedSection animation="fade-up" delay={0.1}>
@@ -118,10 +118,10 @@ export function Skills() {
       <AnimatedSection animation="fade-up" delay={0.3}>
         <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { label: 'Years Experience', value: '5+' },
-            { label: 'Projects Completed', value: '20+' },
+            { label: 'Years Experience', value: '8+' },
+            { label: 'Projects Completed', value: '10+' },
             { label: 'Technologies', value: skills.length.toString() },
-            { label: 'Open Source', value: '10+' },
+            { label: 'Open Source', value: '3+' },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
