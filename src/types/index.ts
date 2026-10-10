@@ -5,6 +5,7 @@ export interface Project {
   image: string;
   tags: string[];
   demoUrl?: string;
+  demoLabel?: string;
   githubUrl?: string;
   stars?: number;
 }

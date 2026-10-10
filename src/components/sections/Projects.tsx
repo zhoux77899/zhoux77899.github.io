@@ -128,7 +128,7 @@ export function Projects() {
                         onClick={(e) => e.stopPropagation()}
                       >
                         <HugeiconsIcon icon={LinkSquare01Icon} className="h-4 w-4 mr-1" />
-                        Live Demo
+                        {project.demoLabel || 'Live Demo'}
                       </motion.a>
                     )}
                     {project.githubUrl && (
