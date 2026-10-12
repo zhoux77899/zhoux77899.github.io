@@ -7,7 +7,6 @@
 .agents/
 
 # Develop docs
-.heroui-docs/
 docs/
 
 # System files
@@ -23,6 +22,8 @@ docs/
 node_modules/
 dist/
 dist-ssr/
+.tools/
+coverage/
 *.local
 
 # Logs

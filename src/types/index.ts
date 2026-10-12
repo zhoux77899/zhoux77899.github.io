@@ -29,15 +29,17 @@ export interface ExperienceItem {
   type: 'work' | 'education';
 }
 
+export type SkillCategory = 'frontend' | 'backend' | 'tools' | 'other';
+
 export interface Skill {
   name: string;
-  category: 'frontend' | 'backend' | 'tools' | 'other';
+  category: SkillCategory;
 }
 
 export interface SocialLink {
   name: string;
   url: string;
-  icon: string;
+  icon: 'github';
 }
 
 export interface PersonalInfo {
@@ -45,7 +47,5 @@ export interface PersonalInfo {
   title: string;
   bio: string;
   avatar: string;
-  email: string;
-  location: string;
   socialLinks: SocialLink[];
 }

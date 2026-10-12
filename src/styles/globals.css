@@ -1,322 +1,148 @@
-/* Font imports must come first (before Tailwind expands to @layer etc.) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import './boardui/globals.css';
+@source '../**/*.{tsx,ts}';
 
-@import "tailwindcss";
-/* Tailwind v4 content path - @source is valid in Tailwind CSS v4 */
-@source "../**/*.{tsx,jsx,ts,js}";
-@import "@heroui/styles";
+@font-face {
+  font-family: 'Geist';
+  src: url('../assets/fonts/Geist-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
 
-/* Light theme (default) */
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('../assets/fonts/GeistMono-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent: var(--accent);
+  --color-line: var(--border);
+}
+
 :root,
-[data-theme="light"] {
-  /* Background & Surface */
+[data-theme='light'] {
   --background: oklch(0.98 0.01 93.48);
   --foreground: oklch(0.34 0.03 94.42);
   --surface: oklch(0.95 0.01 91.46);
   --surface-foreground: oklch(0.19 0 0);
-  --overlay: oklch(0.00 0 0 / 0.5);
-  --overlay-foreground: oklch(1.00 0 0);
-
-  /* Accent - Warm Terracotta */
+  --overlay: oklch(0 0 0 / 0.5);
   --accent: oklch(0.62 0.14 39.15);
-  --accent-foreground: oklch(1.00 0 0);
+  --accent-foreground: oklch(1 0 0);
   --accent-soft: oklch(0.92 0.01 87.42);
   --accent-soft-foreground: oklch(0.27 0.02 99.70);
-
-  /* Sage - Muted Green */
   --sage: oklch(0.51 0.03 148.51);
-  --sage-foreground: oklch(1.00 0 0);
   --sage-soft: oklch(0.95 0.01 91.46);
   --sage-soft-foreground: oklch(0.51 0.03 148.51);
-
-  /* Status colors */
-  --success: oklch(0.50 0.03 148.51);
-  --success-foreground: oklch(1.00 0 0);
-  --warning: oklch(0.75 0.09 67.09);
-  --warning-foreground: oklch(0.27 0.02 99.70);
-  --danger: oklch(0.64 0.21 25.39);
-  --danger-foreground: oklch(1.00 0 0);
-
-  /* Form fields */
-  --field-background: oklch(1.00 0 0);
-  --field-foreground: oklch(0.34 0.03 94.42);
-  --field-placeholder: oklch(0.61 0.01 91.49);
-  --field-border: oklch(0.91 0.01 106.47);
-
-  /* Other */
-  --default: oklch(0.92 0.01 87.42);
-  --default-foreground: oklch(0.27 0.02 99.70);
-  --muted: oklch(0.61 0.01 91.49);
+  --muted: oklch(0.55 0.01 91.49);
   --border: oklch(0.91 0.01 106.47);
-  --focus: oklch(0.62 0.14 39.15);
-  --link: oklch(0.62 0.14 39.15);
-  --scrollbar: oklch(0.91 0.01 106.47);
-
-  /* Border Radius */
-  --radius: 0.5rem;
-  --field-radius: 0.75rem;
-
-  /* Navbar glass (semi-transparent frosted) */
-  --navbar-glass: oklch(0.98 0.01 93.48 / 0.42);
+  --navbar-glass: oklch(0.98 0.01 93.48 / 0.85);
   --navbar-glass-border: oklch(0.91 0.01 106.47 / 0.6);
 }
 
-/* Dark theme */
-[data-theme="dark"] {
-  /* Background & Surface */
+.dark,
+[data-theme='dark'] {
   --background: oklch(0.27 0 0);
   --foreground: oklch(0.81 0.01 93.53);
   --surface: oklch(0.22 0 0);
   --surface-foreground: oklch(0.98 0.01 93.48);
-  --overlay: oklch(0.00 0 0 / 0.8);
-  --overlay-foreground: oklch(1.00 0 0);
-
-  /* Accent - Warm Terracotta */
+  --overlay: oklch(0 0 0 / 0.8);
   --accent: oklch(0.67 0.13 38.92);
-  --accent-foreground: oklch(0.27 0 0);
-  --accent-soft: oklch(0.21 0.01 88.79);
+  --accent-foreground: oklch(0.22 0 0);
+  --accent-soft: oklch(0.3 0.01 88.79);
   --accent-soft-foreground: oklch(0.97 0.01 93.49);
-
-  /* Sage - Muted Green */
   --sage: oklch(0.62 0.03 148.70);
-  --sage-foreground: oklch(0.27 0 0);
-  --sage-soft: oklch(0.21 0.01 88.79);
-  --sage-soft-foreground: oklch(0.62 0.03 148.70);
-
-  /* Status colors */
-  --success: oklch(0.62 0.03 148.70);
-  --success-foreground: oklch(0.27 0 0);
-  --warning: oklch(0.80 0.08 67.31);
-  --warning-foreground: oklch(0.27 0 0);
-  --danger: oklch(0.64 0.21 25.39);
-  --danger-foreground: oklch(0.27 0 0);
-
-  /* Form fields */
-  --field-background: oklch(0.31 0 0);
-  --field-foreground: oklch(0.92 0 0);
-  --field-placeholder: oklch(0.77 0.02 100.64);
-  --field-border: oklch(0.36 0.01 106.85);
-
-  /* Other */
-  --default: oklch(0.31 0 0);
-  --default-foreground: oklch(0.92 0 0);
-  --muted: oklch(0.77 0.02 100.64);
-  --border: oklch(0.36 0.01 106.85);
-  --focus: oklch(0.67 0.13 38.92);
-  --link: oklch(0.67 0.13 38.92);
-  --scrollbar: oklch(0.36 0.01 106.85);
-
-  /* Navbar glass (semi-transparent frosted) */
-  --navbar-glass: oklch(0.27 0 0 / 0.42);
-  --navbar-glass-border: oklch(0.36 0.01 106.85 / 0.6);
+  --sage-soft: oklch(0.3 0.02 148.70);
+  --sage-soft-foreground: oklch(0.75 0.03 148.70);
+  --muted: oklch(0.68 0.01 91.49);
+  --border: oklch(0.4 0.01 106.85);
+  --navbar-glass: oklch(0.27 0 0 / 0.9);
+  --navbar-glass-border: oklch(0.4 0.01 106.85 / 0.6);
 }
 
-html,
+/* Brand mappings follow the upstream tokens so UI states share one palette. */
+:root,
+.dark {
+  --font-geist: 'Geist';
+  --font-geist-mono: 'Geist Mono';
+  --color-background-full: var(--surface);
+  --color-background-primary-default: var(--background);
+  --color-background-primary-hover: var(--accent-soft);
+  --color-background-primary-active: var(--accent-soft);
+  --color-background-primary-disabled: var(--surface);
+  --color-background-secondary-default: var(--accent-soft);
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--muted);
+  --color-text-tertiary: var(--muted);
+  --color-text-white: var(--accent-foreground);
+  --color-foreground-icon-primary: var(--foreground);
+  --color-foreground-icon-hover: var(--accent);
+  --color-foreground-icon-secondary: var(--muted);
+  --color-border-button-default: var(--border);
+  --color-border-button-hover: var(--accent);
+  --color-border-button-active: var(--accent);
+  --color-border-focus-ring: var(--accent);
+  --color-segmented-control-background: var(--accent-soft);
+  --color-segmented-control-selected-background: var(--background);
+  --color-button-ghost-hover: var(--accent-soft);
+  --gradient-button-primary-default: linear-gradient(var(--accent), var(--accent));
+  --gradient-button-primary-hover: linear-gradient(color-mix(in oklch, var(--accent) 90%, var(--foreground)), color-mix(in oklch, var(--accent) 90%, var(--foreground)));
+  --gradient-button-primary-active: var(--gradient-button-primary-hover);
+  --gradient-button-primary-disabled: linear-gradient(var(--accent-soft), var(--accent-soft));
+  --color-accent-50: color-mix(in oklch, var(--accent) 8%, var(--background));
+  --color-accent-100: var(--accent-soft);
+  --color-accent-200: color-mix(in oklch, var(--accent) 30%, var(--background));
+  --color-accent-300: color-mix(in oklch, var(--accent) 50%, var(--background));
+  --color-accent-400: var(--accent);
+  --color-accent-500: var(--accent);
+  --color-accent-600: var(--accent);
+  --color-accent-700: var(--accent);
+  --color-accent-800: var(--accent-soft-foreground);
+  --color-accent-900: var(--foreground);
+  --color-accent-950: var(--foreground);
+}
+
+html, body { margin: 0; }
+html { scroll-behavior: smooth; }
 body {
-  margin: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: var(--background);
-  color: var(--foreground);
+  min-width: 320px;
+  font-family: var(--font-sans);
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--surface);
+  color: var(--foreground);
 }
-
-/* Theme transition */
-* {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-}
-
-/* Exclude media elements from transition */
-img,
-video,
-canvas,
-svg {
-  transition-property: none;
-}
-
-/* Font family utilities */
-.font-sans {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-.font-mono {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-}
-
-.font-display {
-  font-family: 'Space Grotesk', 'Inter', sans-serif;
-}
-
-/* Animation utilities */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px var(--accent-soft);
-  }
-  50% {
-    box-shadow: 0 0 40px var(--accent);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-.animate-slide-in-left {
-  animation: slide-in-left 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Hover effect utilities */
-.hover-lift {
-  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px -12px oklch(0 0 0 / 0.25);
-}
-
-.hover-scale {
-  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.hover-scale:hover {
-  transform: scale(1.02);
-}
-
-/* Gradient text utility */
+section[id] { scroll-margin-top: 5rem; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), a[href] { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.font-display { font-family: var(--font-sans); }
+code, pre, kbd, samp, .font-mono { font-family: var(--font-mono); }
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--sage) 100%);
+  background: linear-gradient(135deg, var(--accent), var(--sage));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
+.hover-lift { transition: transform 200ms ease, box-shadow 200ms ease; }
+.hover-lift:hover { transform: translateY(-4px); box-shadow: 0 12px 40px -12px oklch(0 0 0 / 0.25); }
+::selection { background-color: var(--accent); color: var(--accent-foreground); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background-color: var(--background); }
+::-webkit-scrollbar-thumb { background-color: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--muted); }
 
-/* Glass effect */
-.glass {
-  background: var(--navbar-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-/* Section divider pattern */
-.section-pattern {
-  background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
-  background-size: 24px 24px;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--scrollbar);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
-}
-
-/* Selection color */
-::selection {
-  background-color: var(--accent);
-  color: var(--accent-foreground);
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .hover-lift:hover { transform: none; }
 }

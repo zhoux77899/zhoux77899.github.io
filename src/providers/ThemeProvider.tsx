@@ -1,84 +1,48 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-
-type Theme = 'light' | 'dark' | 'system';
-
-interface ThemeContextType {
-  theme: Theme;
-  resolvedTheme: 'light' | 'dark';
-  setTheme: (theme: Theme) => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-function getSystemTheme(): 'light' | 'dark' {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-function resolveTheme(theme: Theme): 'light' | 'dark' {
-  if (theme === 'system') {
-    return getSystemTheme();
-  }
-  return theme;
-}
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { ThemeContext, type Theme, type ThemeContextType } from './themeContext';
+import { applyTheme, readInitialTheme, resolveTheme } from './theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
-  const [mounted, setMounted] = useState(false);
+  const [state, setState] = useState(readInitialTheme);
 
   useEffect(() => {
-    setMounted(true);
-    // Read theme preference from localStorage
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    const initialTheme = savedTheme || 'system';
-    setThemeState(initialTheme);
-    
-    const resolved = resolveTheme(initialTheme);
-    setResolvedTheme(resolved);
-    document.documentElement.setAttribute('data-theme', resolved);
-  }, []);
+    applyTheme(state);
+  }, [state]);
 
   useEffect(() => {
-    if (!mounted) return;
-
-    // Listen for system theme changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
-      if (theme === 'system') {
-        const resolved = getSystemTheme();
-        setResolvedTheme(resolved);
-        document.documentElement.setAttribute('data-theme', resolved);
-      }
+      setState((current) => {
+        if (current.theme !== 'system') return current;
+        const resolvedTheme = mediaQuery.matches ? 'dark' : 'light';
+        return current.resolvedTheme === resolvedTheme
+          ? current
+          : { theme: 'system', resolvedTheme };
+      });
     };
 
     mediaQuery.addEventListener('change', handleChange);
+    // Recheck after subscribing so changes between render and this effect are observed.
+    handleChange();
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [mounted, theme]);
+  }, []);
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    const resolved = resolveTheme(newTheme);
-    setResolvedTheme(resolved);
-    document.documentElement.setAttribute('data-theme', resolved);
-  };
+  const setTheme = useCallback((theme: Theme) => {
+    const nextState = { theme, resolvedTheme: resolveTheme(theme) };
+    applyTheme(nextState);
+    setState(nextState);
 
-  const value: ThemeContextType = mounted
-    ? { theme, resolvedTheme, setTheme }
-    : { theme: 'system', resolvedTheme: 'light', setTheme: () => {} };
+    try {
+      localStorage.setItem('theme', theme);
+    } catch {
+      // An unavailable storage area must not prevent theme selection.
+    }
+  }, []);
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+  const value = useMemo<ThemeContextType>(
+    () => ({ ...state, setTheme }),
+    [state, setTheme],
   );
-}
 
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
-  return context;
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

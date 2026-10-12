@@ -1,0 +1,60 @@
+/* Adapted from BoardUI free source (MIT). See licenses/BoardUI-LICENSE.txt. */
+@import "tailwindcss";
+@import "./theme.css";
+@import "./typography.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant rtl (&:dir(rtl));
+@custom-variant ltr (&:dir(ltr));
+
+/* Base rendering and surfaces shared by the selected components. */
+html,
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: contextual;
+  font-kerning: normal;
+}
+
+html {
+  color-scheme: light;
+  background-color: var(--color-background-full);
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-background-full);
+  color: var(--color-text-primary);
+}
+
+/* Resolve generated elevation utilities against the active theme tokens. */
+.dark .shadow-2xs {
+  --tw-shadow: var(--shadow-2xs);
+}
+
+.dark .shadow-xs {
+  --tw-shadow: var(--shadow-xs);
+}
+
+.dark .shadow-sm {
+  --tw-shadow: var(--shadow-sm);
+}
+
+.dark .shadow-md {
+  --tw-shadow: var(--shadow-md);
+}
+
+.dark .shadow-lg {
+  --tw-shadow: var(--shadow-lg);
+}
+
+.dark .shadow-xl {
+  --tw-shadow: var(--shadow-xl);
+}
+
+.dark .shadow-card {
+  --tw-shadow: var(--shadow-card);
+}

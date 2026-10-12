@@ -8,23 +8,28 @@ import { Projects } from '@/components/sections/Projects';
 import { Travel } from '@/components/sections/Travel';
 import { Experience } from '@/components/sections/Experience';
 import { Contact } from '@/components/sections/Contact';
+import { MotionConfig } from 'motion/react';
+import { useMotionPreference } from '@/hooks/useMotionPreference';
 
 function App() {
+  const reduceMotion = useMotionPreference();
   return (
     <ThemeProvider>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--surface)' }}>
-        <Navbar />
-        <main>
-          <Hero />
-          <Skills />
-          <Projects />
-          <Travel />
-          <Experience />
-          <Contact />
-        </main>
-        <Footer />
-        <ScrollToTop />
-      </div>
+      <MotionConfig reducedMotion={reduceMotion ? 'always' : 'never'}>
+        <div className="min-h-screen" style={{ backgroundColor: 'var(--surface)' }}>
+          <Navbar />
+          <main>
+            <Hero />
+            <Skills />
+            <Projects />
+            <Travel />
+            <Experience />
+            <Contact />
+          </main>
+          <Footer />
+          <ScrollToTop />
+        </div>
+      </MotionConfig>
     </ThemeProvider>
   );
 }

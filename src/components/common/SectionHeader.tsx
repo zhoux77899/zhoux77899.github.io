@@ -1,6 +1,7 @@
 import { AnimatedSection } from './AnimatedSection';
 
 interface SectionHeaderProps {
+  titleId?: string;
   label: string;
   title: string;
   description?: string;
@@ -8,6 +9,7 @@ interface SectionHeaderProps {
 }
 
 export function SectionHeader({
+  titleId,
   label,
   title,
   description,
@@ -26,6 +28,7 @@ export function SectionHeader({
           {label}
         </span>
         <h2
+          id={titleId}
           className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
           style={{ color: 'var(--foreground)' }}
         >

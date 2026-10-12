@@ -2,7 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/jpeg" sizes="64x64" href="/favicon.jpg" />
+    <script>
+      (() => {
+        let preference = 'system';
+        try {
+          const saved = localStorage.getItem('theme');
+          if (saved === 'light' || saved === 'dark' || saved === 'system') preference = saved;
+        } catch {
+          // Storage may be disabled by browser privacy settings.
+        }
+        const dark = preference === 'dark' || (preference === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        const root = document.documentElement;
+        root.dataset.themePreference = preference;
+        root.dataset.theme = dark ? 'dark' : 'light';
+        root.classList.toggle('dark', dark);
+        root.style.colorScheme = dark ? 'dark' : 'light';
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Ruri - AI Infrastructure & Agent Engineer. Building LLM inference infrastructure and AI agent systems." />
     <meta name="author" content="Ruri" />

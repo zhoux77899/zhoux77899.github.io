@@ -1,7 +1,9 @@
-import { motion, useReducedMotion } from 'framer-motion';
-import { type ReactNode } from 'react';
+import { motion, type MotionProps, type Variants } from "motion/react";
+import type { ReactNode } from "react";
+import { useMotionPreference } from "@/hooks/useMotionPreference";
 
-export type AnimationType = 'fade-up' | 'fade-in' | 'scale-up' | 'slide-left' | 'slide-right';
+export type AnimationType = "fade-up" | "fade-in" | "scale-up" | "slide-left" | "slide-right";
+type ViewportMargin = NonNullable<MotionProps["viewport"]>["margin"];
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -11,63 +13,38 @@ interface AnimatedSectionProps {
   animation?: AnimationType;
   threshold?: number;
   once?: boolean;
-  rootMargin?: string;
+  rootMargin?: ViewportMargin;
 }
 
-const animationVariants = {
-  'fade-up': {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 },
-  },
-  'fade-in': {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-  },
-  'scale-up': {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1 },
-  },
-  'slide-left': {
-    hidden: { opacity: 0, x: 30 },
-    visible: { opacity: 1, x: 0 },
-  },
-  'slide-right': {
-    hidden: { opacity: 0, x: -30 },
-    visible: { opacity: 1, x: 0 },
-  },
+const animationVariants: Record<AnimationType, Variants> = {
+  "fade-up": { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } },
+  "fade-in": { hidden: { opacity: 0 }, visible: { opacity: 1 } },
+  "scale-up": { hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 } },
+  "slide-left": { hidden: { opacity: 0, x: 30 }, visible: { opacity: 1, x: 0 } },
+  "slide-right": { hidden: { opacity: 0, x: -30 }, visible: { opacity: 1, x: 0 } },
 };
 
 export function AnimatedSection({
   children,
-  className = '',
+  className = "",
   delay = 0,
   duration = 0.6,
-  animation = 'fade-up',
+  animation = "fade-up",
   threshold = 0.1,
   once = true,
-  rootMargin = '-50px',
+  rootMargin = "-50px",
 }: AnimatedSectionProps) {
-  const prefersReducedMotion = useReducedMotion();
-
-  const variants = animationVariants[animation];
-
-  if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
+  const prefersReducedMotion = useMotionPreference();
+  if (prefersReducedMotion) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once, amount: threshold, margin: rootMargin }}
-      variants={variants}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+      variants={animationVariants[animation]}
+      transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1] }}
       className={className}
-      style={{ willChange: 'transform, opacity' }}
     >
       {children}
     </motion.div>
@@ -80,36 +57,26 @@ interface StaggerContainerProps {
   staggerDelay?: number;
   threshold?: number;
   once?: boolean;
-  rootMargin?: string;
+  rootMargin?: ViewportMargin;
 }
 
 export function StaggerContainer({
   children,
-  className = '',
+  className = "",
   staggerDelay = 0.1,
   threshold = 0.1,
   once = true,
-  rootMargin = '-50px',
+  rootMargin = "-50px",
 }: StaggerContainerProps) {
-  const prefersReducedMotion = useReducedMotion();
-
-  if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
+  const prefersReducedMotion = useMotionPreference();
+  if (prefersReducedMotion) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once, amount: threshold, margin: rootMargin }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay,
-          },
-        },
-      }}
+      variants={{ hidden: {}, visible: { transition: { staggerChildren: staggerDelay } } }}
       className={className}
     >
       {children}
@@ -124,29 +91,15 @@ interface StaggerItemProps {
   duration?: number;
 }
 
-export function StaggerItem({
-  children,
-  className = '',
-  animation = 'fade-up',
-  duration = 0.5,
-}: StaggerItemProps) {
-  const prefersReducedMotion = useReducedMotion();
-
-  const variants = animationVariants[animation];
-
-  if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
-  }
+export function StaggerItem({ children, className = "", animation = "fade-up", duration = 0.5 }: StaggerItemProps) {
+  const prefersReducedMotion = useMotionPreference();
+  if (prefersReducedMotion) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
-      variants={variants}
-      transition={{
-        duration,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+      variants={animationVariants[animation]}
+      transition={{ duration, ease: [0.25, 0.1, 0.25, 1] }}
       className={className}
-      style={{ willChange: 'transform, opacity' }}
     >
       {children}
     </motion.div>

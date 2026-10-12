@@ -1,287 +1,143 @@
-import { Button, Avatar } from '@heroui/react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowDown01Icon, SparklesIcon } from '@hugeicons/core-free-icons';
-import { SocialLinks } from '@/components/common/SocialLinks';
-import { personalInfo } from '@/lib/data';
-import { useTheme } from '@/providers/ThemeProvider';
-import { useRef } from 'react';
+import { useRef } from "react";
+import { motion, useScroll, useTransform, type Variants } from "motion/react";
+import { ButtonLink } from "@/components/base/buttons/button";
+import { PhotoAvatar } from "@/components/common/PhotoAvatar";
+import { SocialLinks } from "@/components/common/SocialLinks";
+import { useTheme } from "@/hooks/useTheme";
+import { useMotionPreference } from "@/hooks/useMotionPreference";
+import { personalInfo } from "@/lib/data";
+import { ArrowDownIcon, SparklesIcon } from "@/utils/icons";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } },
+};
+
+const reducedItemVariants: Variants = {
+  visible: { opacity: 1, y: 0, transition: { duration: 0 } },
+};
 
 export function Hero() {
   const { resolvedTheme } = useTheme();
+  const prefersReducedMotion = useMotionPreference();
   const containerRef = useRef<HTMLElement>(null);
-
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end start'],
+    offset: ["start start", "end start"],
   });
-
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  const handleScrollToProjects = () => {
-    const element = document.querySelector('#projects');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleScrollToContact = () => {
-    const element = document.querySelector('#contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const heroImage = resolvedTheme === 'dark'
-    ? '/assets/images/hero/transformer_dark.png'
-    : '/assets/images/hero/transformer_light.png';
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1],
-      },
-    },
-  };
+  const variants = prefersReducedMotion ? reducedItemVariants : itemVariants;
+  const heroImage = resolvedTheme === "dark"
+    ? "/assets/images/hero/transformer_dark.png"
+    : "/assets/images/hero/transformer_light.png";
 
   return (
-    <section
-      ref={containerRef}
-      id="hero"
-      className="min-h-screen relative overflow-hidden"
-      style={{ backgroundColor: 'var(--surface)' }}
-    >
-      {/* Background Pattern */}
+    <section ref={containerRef} id="hero" aria-labelledby="hero-title" className="relative min-h-screen overflow-hidden bg-[var(--surface)]">
       <div
-        className="absolute inset-0 opacity-30"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-30"
         style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, var(--border) 1px, transparent 0)`,
-          backgroundSize: '32px 32px',
+          backgroundImage: "radial-gradient(circle at 2px 2px, var(--border) 1px, transparent 0)",
+          backgroundSize: "32px 32px",
         }}
       />
 
-      {/* Content Area */}
       <motion.div
-        style={{ y: textY, opacity }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-20 min-h-screen flex items-center"
+        style={prefersReducedMotion ? undefined : { y: textY, opacity }}
+        className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-4 pt-10 pb-28 sm:px-6 lg:px-8 lg:pt-20"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 w-full">
-          {/* Left Side: Content */}
+        <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial={prefersReducedMotion ? false : "hidden"}
             animate="visible"
-            className="text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center pt-[40vh] sm:pt-[45vh] lg:pt-0"
+            className="order-2 flex flex-col justify-center pt-[40vh] text-center sm:pt-[45vh] lg:order-1 lg:pt-0 lg:text-left"
           >
-            {/* Badge */}
-            <motion.div variants={itemVariants} className="mb-6 flex justify-center lg:justify-start">
-              <span
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
-                style={{
-                  backgroundColor: 'var(--accent-soft)',
-                  color: 'var(--accent)',
-                }}
-              >
-                <HugeiconsIcon icon={SparklesIcon} className="w-4 h-4" />
+            <motion.div variants={variants} className="mb-6 flex justify-center lg:justify-start">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-soft)] px-4 py-2 text-sm font-medium text-[var(--accent)]">
+                <SparklesIcon className="size-4" aria-hidden="true" />
                 Available for opportunities
               </span>
             </motion.div>
 
-            {/* Avatar */}
-            <motion.div
-              variants={itemVariants}
-              className="mb-6 flex justify-center lg:justify-start"
-            >
-              <div
-                className="w-20 h-20 rounded-full p-1"
-                style={{ backgroundColor: 'var(--accent-soft)' }}
-              >
-                <Avatar className="w-[72px] h-[72px]">
-                  <Avatar.Image
-                    src={personalInfo.avatar}
-                    alt={personalInfo.name}
-                    className="w-[72px] h-[72px]"
-                  />
-                  <Avatar.Fallback
-                    className="text-3xl font-bold w-[72px] h-[72px]"
-                    style={{
-                      backgroundColor: 'var(--accent)',
-                      color: 'var(--accent-foreground)',
-                    }}
-                  >
-                    {personalInfo.name.slice(0, 1)}
-                  </Avatar.Fallback>
-                </Avatar>
+            <motion.div variants={variants} className="mb-6 flex justify-center lg:justify-start">
+              <div className="size-20 rounded-full bg-[var(--accent-soft)] p-1">
+                <PhotoAvatar src={personalInfo.avatar} name={personalInfo.name} className="size-[72px] text-3xl font-bold" />
               </div>
             </motion.div>
 
-            {/* Name - Large Display */}
-            <motion.h1
-              variants={itemVariants}
-              className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 tracking-tight leading-[1.1]"
-              style={{ color: 'var(--foreground)' }}
-            >
+            <motion.h1 id="hero-title" variants={variants} className="mb-4 font-display text-5xl leading-[1.1] font-bold tracking-tight text-[var(--foreground)] sm:text-6xl md:text-7xl lg:text-8xl">
               Hi, I'm
               <br />
               <span className="gradient-text">{personalInfo.name}</span>
             </motion.h1>
 
-            {/* Title */}
-            <motion.p
-              variants={itemVariants}
-              className="text-xl md:text-2xl lg:text-3xl font-medium mb-6"
-              style={{ color: 'var(--accent)' }}
-            >
+            <motion.p variants={variants} className="mb-6 text-xl font-medium text-[var(--accent)] md:text-2xl lg:text-3xl">
               {personalInfo.title}
             </motion.p>
-
-            {/* Bio */}
-            <motion.p
-              variants={itemVariants}
-              className="text-lg mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed"
-              style={{ color: 'var(--muted)' }}
-            >
+            <motion.p variants={variants} className="mx-auto mb-8 max-w-xl text-lg leading-relaxed text-[var(--muted)] lg:mx-0">
               {personalInfo.bio}
             </motion.p>
 
-            {/* Social Links */}
-            <motion.div
-              variants={itemVariants}
-              className="mb-10 flex justify-center lg:justify-start"
-            >
+            <motion.div variants={variants} className="mb-10 flex justify-center lg:justify-start">
               <SocialLinks />
             </motion.div>
 
-            {/* CTA Buttons */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-            >
-              <Button
-                size="lg"
-                onPress={handleScrollToProjects}
-                className="font-semibold px-8 py-6 text-lg hover-lift"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'var(--accent-foreground)',
-                }}
-              >
+            <motion.div variants={variants} className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+              <ButtonLink href="#projects" variant="primary" className="h-auto min-h-14 rounded-xl px-8 py-4 text-lg font-semibold">
                 View My Work
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onPress={handleScrollToContact}
-                className="font-semibold px-8 py-6 text-lg hover-lift"
-                style={{
-                  borderColor: 'var(--border)',
-                  borderWidth: '2px',
-                  color: 'var(--foreground)',
-                }}
-              >
+              </ButtonLink>
+              <ButtonLink href="#contact" variant="secondary" className="h-auto min-h-14 rounded-xl border-2 px-8 py-4 text-lg font-semibold">
                 Get In Touch
-              </Button>
+              </ButtonLink>
             </motion.div>
           </motion.div>
-
-          {/* Right Side: Placeholder for desktop layout */}
-          <div className="order-1 lg:order-2 hidden lg:block" />
+          <div className="order-1 hidden lg:order-2 lg:block" />
         </div>
       </motion.div>
 
-      {/* Desktop Image - Full right half with parallax */}
       <motion.div
-        initial={{ opacity: 0, scale: 1.1 }}
+        aria-hidden="true"
+        initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-        style={{ y: backgroundY }}
-        className="hidden lg:block absolute top-0 right-0 w-1/2 h-full"
+        transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.2 }}
+        style={prefersReducedMotion ? undefined : { y: backgroundY }}
+        className="absolute top-0 right-0 hidden h-full w-1/2 lg:block"
       >
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage: `url(${heroImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        />
-        {/* Gradient overlay for better text contrast */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(to right, var(--surface) 0%, transparent 30%)`,
-          }}
-        />
+        <img src={heroImage} alt="" className="h-full w-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to right, var(--surface) 0%, transparent 30%)" }} />
       </motion.div>
 
-      {/* Mobile Image - Full width top */}
       <motion.div
-        initial={{ opacity: 0, y: -30 }}
+        aria-hidden="true"
+        initial={prefersReducedMotion ? false : { opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-        className="lg:hidden absolute top-16 left-0 w-full h-[40vh] sm:h-[45vh]"
-        style={{
-          backgroundImage: `url(${heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.2 }}
+        className="absolute top-16 left-0 h-[40vh] w-full sm:h-[45vh] lg:hidden"
       >
-        {/* Bottom gradient for mobile */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(to bottom, transparent 60%, var(--surface) 100%)`,
-          }}
-        />
+        <img src={heroImage} alt="" className="h-full w-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 60%, var(--surface) 100%)" }} />
       </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-      >
+      <div aria-hidden="true" className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          animate={prefersReducedMotion ? { y: 0 } : { y: [0, 10, 0] }}
+          transition={prefersReducedMotion ? { duration: 0 } : { duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="flex flex-col items-center gap-2"
         >
-          <span className="text-sm font-medium" style={{ color: 'var(--muted)' }}>
-            Scroll to explore
-          </span>
-          <div
-            className="p-2 rounded-full"
-            style={{ backgroundColor: 'var(--accent-soft)' }}
-          >
-            <HugeiconsIcon
-              icon={ArrowDown01Icon}
-              className="w-5 h-5"
-              style={{ color: 'var(--accent)' }}
-            />
+          <span className="text-sm font-medium text-[var(--muted)]">Scroll to explore</span>
+          <div className="rounded-full bg-[var(--accent-soft)] p-2">
+            <ArrowDownIcon className="size-5 text-[var(--accent)]" />
           </div>
         </motion.div>
-      </motion.div>
-
+      </div>
     </section>
   );
 }

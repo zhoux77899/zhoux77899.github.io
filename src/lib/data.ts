@@ -1,14 +1,14 @@
 import type { Project, TravelItem, ExperienceItem, Skill, PersonalInfo } from '@/types';
 
+export const githubUrl = 'https://github.com/zhoux77899';
+
 export const personalInfo: PersonalInfo = {
   name: 'Ruri',
   title: 'AI Infrastructure & Agent Engineer',
   bio: 'Building LLM inference infrastructure and AI agent systems. From optical engineering through life science research to AI — bridging disciplines to solve complex problems.',
   avatar: 'https://avatars.githubusercontent.com/u/33858552?v=4',
-  email: '',
-  location: '',
   socialLinks: [
-    { name: 'GitHub', url: 'https://github.com/zhoux77899', icon: 'github' },
+    { name: 'GitHub', url: githubUrl, icon: 'github' },
   ],
 };
 
@@ -75,7 +75,7 @@ export const travelItems: TravelItem[] = [
     description: 'Magnificent fjords and glaciers, a journey through the pristine wilderness of the southern hemisphere.',
     image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800&q=80',
     year: '2025',
-    flag: '��',
+    flag: '🇳🇿',
   },
   {
     id: '2',
@@ -84,7 +84,7 @@ export const travelItems: TravelItem[] = [
     description: 'Geothermal wonders of hot springs and volcanoes, experiencing the charm of the Land of Fire.',
     image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80',
     year: '2021',
-    flag: '��',
+    flag: '🇯🇵',
   },
   {
     id: '3',
@@ -93,7 +93,7 @@ export const travelItems: TravelItem[] = [
     description: 'From ancient capitals to modern metropolis, memories of Japanese life across all four seasons.',
     image: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800&q=80',
     year: '2018-2022',
-    flag: '��',
+    flag: '🇯🇵',
   },
 ];
 
