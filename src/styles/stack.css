@@ -1,0 +1,168 @@
+/* BoardUI underline tabs, with the portfolio's warm semantic colors. */
+.stack-tabs {
+  --color-accent-600: var(--accent);
+  --color-text-primary: var(--foreground);
+  --color-separator-border: var(--border);
+  gap: 24px;
+}
+
+.stack-tab-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  padding-bottom: 4px;
+}
+
+.stack-tab-scroll > div {
+  width: max-content;
+  min-width: 100%;
+}
+
+.stack-tabs .stack-tab-list {
+  width: max-content;
+  min-width: 100%;
+  gap: 24px;
+}
+
+.stack-tabs .stack-tab {
+  min-height: 48px;
+  padding: 10px 0;
+}
+
+.stack-tab > span {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.stack-tab[data-selected] > span {
+  font-weight: 600;
+}
+
+.stack-skill-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 36px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stack-skill-list > li {
+  min-width: 0;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stack-skill-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 5px;
+  font-size: 18px;
+  font-weight: 550;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.technology-brands {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+}
+
+.stack-technology-icon {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  object-fit: contain;
+  color: var(--foreground);
+}
+
+.technology-image {
+  filter: grayscale(1);
+}
+
+[data-theme='dark'] .technology-image[src$='/sdl.png'] {
+  filter: grayscale(1) invert(1);
+}
+
+.stack-skill-projects {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 16px;
+}
+
+.stack-skill-projects a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  max-width: 100%;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.stack-project-icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.stack-skill-projects a:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.contact-links-revised .contact-brand-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.25;
+}
+
+.contact-brand-icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+
+.contact-links.contact-links-revised > a {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.contact-links-revised .contact-handle {
+  padding-left: calc(25px + 10px);
+}
+
+@media (max-width: 1023px) {
+  .stack-skill-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+
+  .stack-skill-name {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 479px) {
+  .stack-skill-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stack-skill-list > li {
+    padding-block: 18px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-tab-scroll span[aria-hidden] {
+    transition: none;
+  }
+}

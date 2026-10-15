@@ -1,77 +1,67 @@
-import { useState } from "react";
-import { Chip } from "@/components/base/badges/chip";
-import { SegmentedControl, SegmentedControlItem } from "@/components/base/segmented-control/segmented-control";
-import { AnimatedSection } from "@/components/common/AnimatedSection";
-import { SectionHeader } from "@/components/common/SectionHeader";
-import { Section } from "@/components/layout/Section";
-import { getSkillCategoryLabel, skills } from "@/lib/data";
-import type { SkillCategory } from "@/types";
+import { useState } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from '@/components/base/tabs/tabs';
+import { SectionHeader } from '@/components/common/SectionHeader';
+import { Section } from '@/components/layout/Section';
+import { getSkillCategoryLabel, skills, projects } from '@/lib/data';
+import type { SkillCategory } from '@/types';
+import { GitHubBrandIcon, TechnologyIcon } from '@/utils/brand-icons';
+import '@/styles/stack.css';
 
-const categories: readonly SkillCategory[] = ["other", "backend", "frontend", "tools"];
-const stats = [
-  { label: "Years Experience", value: "8+" },
-  { label: "Projects Completed", value: "10+" },
-  { label: "Technologies", value: skills.length.toString() },
-  { label: "Open Source", value: "3+" },
-];
+const categories: readonly SkillCategory[] = ['ai', 'science', 'systems', 'web', 'tools'];
 
 export function Skills() {
-  const [activeCategory, setActiveCategory] = useState<SkillCategory>("other");
-  const filteredSkills = skills.filter((skill) => skill.category === activeCategory);
-
+  const [activeCategory, setActiveCategory] = useState<SkillCategory>('ai');
   return (
-    <Section id="skills" decorativeElements>
-      <SectionHeader titleId="skills-title" label="Expertise" title="Tech Stack" description="AI/ML, backend systems, frontend and modern development tools" />
-
-      <AnimatedSection animation="fade-up" delay={0.1}>
-        <div className="mb-16 overflow-x-auto pb-2">
-          <SegmentedControl
-            aria-label="Skill categories"
-            variant="plain"
-            selectedKeys={new Set([activeCategory])}
-            onSelectionChange={(keys) => {
-              const key = keys.values().next().value;
-              if (categories.some((category) => category === key)) {
-                setActiveCategory(key as SkillCategory);
-              }
-            }}
-            className="mx-auto flex w-max min-w-max gap-3"
-          >
-            {categories.map((category) => (
-              <SegmentedControlItem
-                key={category}
-                id={category}
-                className={({ isSelected }) => `min-h-12 rounded-xl px-6 py-3 font-medium ${isSelected ? "bg-[var(--accent)] text-[var(--accent-foreground)]" : "text-[var(--foreground)]"}`}
-              >
+    <Section id="skills" className="stack-section">
+      <SectionHeader titleId="skills-title" title="Tools I work with" description="From inference and agent tools to scientific computing, embedded devices, and the web." />
+      <Tabs
+        selectedKey={activeCategory}
+        onSelectionChange={key => {
+          if (categories.some(category => category === key)) setActiveCategory(key as SkillCategory);
+        }}
+        className="stack-tabs"
+      >
+        <div className="stack-tab-scroll">
+          <TabList aria-label="Skill categories" className="stack-tab-list">
+            {categories.map(category => (
+              <Tab key={category} id={category} className="stack-tab">
                 {getSkillCategoryLabel(category)}
-              </SegmentedControlItem>
+              </Tab>
             ))}
-          </SegmentedControl>
+          </TabList>
         </div>
-      </AnimatedSection>
-
-      <AnimatedSection key={activeCategory} animation="fade-up" duration={0.4}>
-        <ul aria-label={`${getSkillCategoryLabel(activeCategory)} skills`} className="flex flex-wrap justify-center gap-4">
-          {filteredSkills.map((skill) => (
-            <li key={skill.name}>
-              <Chip color="lime" variant="subtle" className="rounded-xl bg-[var(--sage-soft)] px-5 py-2.5 text-base font-medium text-[var(--sage-soft-foreground)]">
-                {skill.name}
-              </Chip>
-            </li>
-          ))}
-        </ul>
-      </AnimatedSection>
-
-      <AnimatedSection animation="fade-up" delay={0.3}>
-        <dl className="mt-20 grid grid-cols-2 gap-6 md:grid-cols-4">
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col rounded-2xl bg-[var(--background)] p-6 text-center">
-              <dt className="order-2 text-sm font-medium text-[var(--muted)]">{stat.label}</dt>
-              <dd className="order-1 mb-2 font-display text-3xl font-bold text-[var(--accent)] md:text-4xl">{stat.value}</dd>
-            </div>
-          ))}
-        </dl>
-      </AnimatedSection>
+        {categories.map(category => (
+          <TabPanel key={category} id={category} className="stack-tab-panel">
+            <ul aria-label={`${getSkillCategoryLabel(category)} skills`} className="stack-skill-list">
+              {skills.filter(skill => skill.category === category).map(skill => (
+                <li key={skill.name}>
+                  <h3 className="stack-skill-name">
+                    <TechnologyIcon name={skill.name} className="stack-technology-icon" />
+                    {skill.name}
+                  </h3>
+                  <div className="stack-skill-projects">
+                    {skill.projects.map(id => {
+                      const project = projects.find(item => item.id === id);
+                      return project ? (
+                        <a key={id} href={`#project-${id}`}>
+                          <GitHubBrandIcon className="stack-project-icon" />
+                          {project.title}
+                        </a>
+                      ) : null;
+                    })}
+                    {skill.source ? (
+                      <a href={skill.source.url}>
+                        <GitHubBrandIcon className="stack-project-icon" />
+                        {skill.source.name}
+                      </a>
+                    ) : null}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </TabPanel>
+        ))}
+      </Tabs>
     </Section>
   );
 }

@@ -26,6 +26,12 @@ Object.defineProperty(globalThis, 'IntersectionObserver', {
 Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
   value: () => {}, configurable: true, writable: true,
 });
+Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
+  value: function(this: HTMLElement, options: ScrollToOptions) {
+    if (options.left !== undefined) this.scrollLeft = options.left;
+    if (options.top !== undefined) this.scrollTop = options.top;
+  }, configurable: true, writable: true,
+});
 
 afterEach(() => {
   cleanup();
@@ -35,5 +41,6 @@ afterEach(() => {
   delete document.documentElement.dataset.themePreference;
   document.documentElement.style.colorScheme = '';
   document.body.innerHTML = '';
+  window.history.replaceState(null, '', '/');
   resetMediaQueries();
 });

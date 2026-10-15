@@ -7,7 +7,14 @@
 .agents/
 
 # Develop docs
-docs/
+docs/*
+!docs/content-sources.md
+!docs/surface-home.md
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/review-v2/
+.impeccable/review-v3/
+.impeccable/concept-seeds/
 
 # System files
 .DS_Store

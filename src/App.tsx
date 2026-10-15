@@ -10,25 +10,30 @@ import { Experience } from '@/components/sections/Experience';
 import { Contact } from '@/components/sections/Contact';
 import { MotionConfig } from 'motion/react';
 import { useMotionPreference } from '@/hooks/useMotionPreference';
+import { ExplorerProvider } from '@/providers/ExplorerProvider';
+import { ExplorerDock } from '@/components/common/ExplorerDock';
 
 function App() {
   const reduceMotion = useMotionPreference();
   return (
     <ThemeProvider>
       <MotionConfig reducedMotion={reduceMotion ? 'always' : 'never'}>
+        <ExplorerProvider>
         <div className="min-h-screen" style={{ backgroundColor: 'var(--surface)' }}>
           <Navbar />
           <main>
             <Hero />
-            <Skills />
             <Projects />
-            <Travel />
+            <Skills />
             <Experience />
+            <Travel />
             <Contact />
           </main>
           <Footer />
           <ScrollToTop />
+          <ExplorerDock />
         </div>
+        </ExplorerProvider>
       </MotionConfig>
     </ThemeProvider>
   );

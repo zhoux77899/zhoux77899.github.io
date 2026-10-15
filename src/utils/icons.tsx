@@ -2,6 +2,8 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import type { HugeiconsIconProps, IconSvgElement } from '@hugeicons/react';
 import ArrowDownIconData from '@hugeicons/core-free-icons/ArrowDown01Icon';
 import ArrowUpIconData from '@hugeicons/core-free-icons/ArrowUp01Icon';
+import ArrowLeftIconData from '@hugeicons/core-free-icons/ArrowLeft01Icon';
+import ArrowRightIconData from '@hugeicons/core-free-icons/ArrowRight01Icon';
 import BriefcaseIconData from '@hugeicons/core-free-icons/Briefcase01Icon';
 import CloseIconData from '@hugeicons/core-free-icons/Cancel01Icon';
 import SystemIconData from '@hugeicons/core-free-icons/ComputerIcon';
@@ -46,6 +48,8 @@ export const MenuIcon = createHugeicon(MenuIconData, { displayName: 'MenuIcon' }
 export const CloseIcon = createHugeicon(CloseIconData, { displayName: 'CloseIcon' });
 export const ArrowUpIcon = createHugeicon(ArrowUpIconData, { displayName: 'ArrowUpIcon' });
 export const ArrowDownIcon = createHugeicon(ArrowDownIconData, { displayName: 'ArrowDownIcon' });
+export const ArrowLeftIcon = createHugeicon(ArrowLeftIconData, { displayName: 'ArrowLeftIcon', rtlMirror: true });
+export const ArrowRightIcon = createHugeicon(ArrowRightIconData, { displayName: 'ArrowRightIcon', rtlMirror: true });
 export const ExternalLinkIcon = createHugeicon(ExternalLinkIconData, { displayName: 'ExternalLinkIcon' });
 export const GitHubIcon = createHugeicon(GitHubIconData, { displayName: 'GitHubIcon' });
 export const SunIcon = createHugeicon(SunIconData, { displayName: 'SunIcon' });

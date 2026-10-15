@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IconButton } from "@/components/base/buttons/icon-button";
+import { Button } from "@/components/base/buttons/button";
 import { useMotionPreference } from "@/hooks/useMotionPreference";
 import { ArrowUpIcon } from "@/utils/icons";
 
@@ -17,13 +17,13 @@ export function ScrollToTop() {
   if (!isVisible) return null;
 
   return (
-    <IconButton
-      icon={ArrowUpIcon}
+    <Button
+      variant="primary" iconOnly leadingIcon={ArrowUpIcon}
       onClick={() => window.scrollTo({
         top: 0,
         behavior: prefersReducedMotion ? "instant" : "smooth",
       })}
-      className="fixed right-6 bottom-6 z-50 size-12 rounded-full bg-[var(--accent)] text-[var(--accent-foreground)] shadow-lg"
+      className="fixed right-5 bottom-5 z-50 size-12 rounded-xl"
       aria-label="Back to top"
     />
   );

@@ -1,0 +1,92 @@
+#projects .carousel { --carousel-card-width: min(82%, 960px); --carousel-gap: 24px; }
+#projects .carousel-track {
+  position: relative;
+  display: flex;
+  width: 100%;
+  gap: var(--carousel-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y pinch-zoom;
+  padding-block: 2px;
+}
+#projects .carousel-track::-webkit-scrollbar { display: none; }
+#projects .carousel-track::before, #projects .carousel-track::after {
+  content: '';
+  flex: 0 0 max(0px, calc((100% - var(--carousel-card-width)) / 2 - var(--carousel-gap)));
+}
+#projects .carousel-item {
+  flex: 0 0 var(--carousel-card-width);
+  min-width: 0;
+  display: flex;
+  scroll-snap-align: center;
+  scroll-snap-stop: normal;
+}
+#projects .carousel-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: 14px; }
+#projects .project-card {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--background);
+  scroll-margin-top: 112px;
+}
+#projects .carousel-item[data-active='true'] .project-card { border-color: var(--accent); }
+#projects .project-card .hairline-figure { width: 100%; margin: 0; }
+#projects .project-static-figure { position: relative; aspect-ratio: 5 / 4; }
+#projects .project-static-figure img { width: 100%; height: 100%; object-fit: contain; }
+#projects .project-copy { display: flex; flex-direction: column; min-width: 0; height: 100%; justify-content: center; }
+#projects .project-card h3, #projects .project-card-title { font-size: clamp(24px, 2.4vw, 30px); line-height: 1.2; letter-spacing: -.025em; font-weight: 600; margin: 0 0 12px; overflow-wrap: anywhere; }
+#projects .project-summary { font-size: 17px; line-height: 1.55; margin: 0 0 10px; color: var(--foreground); }
+#projects .project-details { font-size: 14px; line-height: 1.7; margin: 0 0 16px; color: var(--muted); }
+#projects .tag-list { gap: 6px; margin: 0 0 12px; }
+#projects .tag-list li { font-size: 11px; padding: 3px 7px; }
+#projects .project-links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: auto; padding-top: 4px; }
+#projects .project-links a, #projects .project-links > span { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; color: var(--sage); font-size: 13px; }
+#projects .project-link-icon { width: 17px; height: 17px; flex-shrink: 0; }
+#projects .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; }
+#projects .carousel-rotation { width: 44px; height: 44px; }
+#projects .carousel-dots { display: flex; align-items: center; gap: 0; }
+#projects .carousel-dot { display: flex; align-items: center; justify-content: center; width: 28px; min-height: 44px; padding: 0; border: 0; background: none; cursor: pointer; }
+#projects .carousel-dot span { width: 6px; height: 6px; border-radius: 999px; background: var(--muted); opacity: .6; transition: width 180ms ease-out, background-color 180ms ease-out, opacity 180ms ease-out; }
+#projects .carousel-dot[aria-current] span { width: 20px; background: var(--accent); opacity: 1; }
+#projects .carousel-dot:hover span { opacity: 1; }
+#projects .carousel-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-radius: 6px; }
+#projects .contribution-section { gap: 40px; margin-top: 48px; padding-top: 36px; }
+#projects .contribution-section article { scroll-margin-top: 112px; }
+#projects .contribution-source { margin-bottom: 12px; }
+#projects .contribution-source a, #projects .contribution-requests a { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; color: var(--sage); font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
+#projects .contribution-source a:hover, #projects .contribution-requests a:hover { color: var(--foreground); }
+#projects .contribution-count { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+#projects .contribution-requests { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 24px; list-style: none; margin: 0; padding: 0; }
+#projects .contribution-more { margin-top: 12px; }
+#projects .contribution-more summary { color: var(--muted); font-size: 13px; min-height: 36px; cursor: pointer; width: fit-content; }
+#projects .contribution-more summary:hover { color: var(--foreground); }
+#projects .contribution-more[open] summary { margin-bottom: 4px; }
+@media (max-width: 1023px) {
+  #projects .carousel { --carousel-card-width: 82%; --carousel-gap: 20px; }
+  #projects .project-card { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 24px; align-items: start; }
+  #projects .project-card .hairline-figure { width: min(100%, 280px); margin-inline: auto; }
+  #projects .project-copy { justify-content: start; }
+  #projects .project-summary { font-size: 16px; }
+}
+@media (max-width: 767px) {
+  #projects .carousel { --carousel-gap: 14px; }
+  #projects .project-card { padding: 20px; gap: 14px; }
+  #projects .project-card .hairline-figure { width: min(100%, 240px); }
+  #projects .project-card h3, #projects .project-card-title { font-size: 24px; margin-bottom: 10px; }
+  #projects .project-details { font-size: 13px; line-height: 1.65; margin-bottom: 14px; }
+  #projects .project-links { gap: 2px 12px; }
+  #projects .carousel-controls { gap: 10px; margin-top: 14px; }
+  #projects .contribution-section { gap: 20px; margin-top: 36px; }
+  #projects .contribution-requests { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #projects .carousel-dot span { transition: none; }
+}

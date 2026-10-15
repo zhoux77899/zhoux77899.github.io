@@ -6,7 +6,12 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
-  { ignores: ['dist/**', 'node_modules/**', '.tools/**', 'coverage/**', 'docs/**'] },
+  { ignores: ['dist/**', 'node_modules/**', '.tools/**', 'coverage/**', 'docs/**', 'public/hairline/kernel.js'] },
+  {
+    files: ['public/hairline/figures/*.js'],
+    languageOptions: { globals: { HL: 'readonly', hairline: 'readonly' } },
+    rules: { '@typescript-eslint/no-unused-vars': 'off' },
+  },
   {
     files: ['**/*.{ts,tsx,js}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

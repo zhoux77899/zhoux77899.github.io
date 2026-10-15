@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { ThemeProvider } from '@/providers/ThemeProvider';
+import { ExplorerProvider } from '@/providers/ExplorerProvider';
 import { navLinks } from '@/lib/navigation';
 import { setMediaQuery } from '@/test/media';
 import { Navbar } from './Navbar';
@@ -8,7 +9,9 @@ import { Navbar } from './Navbar';
 function renderNavbar() {
   return render(
     <ThemeProvider>
+      <ExplorerProvider>
       <Navbar />
+      </ExplorerProvider>
     </ThemeProvider>,
   );
 }
@@ -16,7 +19,7 @@ function renderNavbar() {
 describe('Navbar', () => {
   it('renders a real home link and links to every page section', async () => {
     await act(async () => { renderNavbar(); });
-    expect(screen.getByRole('link', { name: 'Portfolio' })).toHaveAttribute('href', '#hero');
+    expect(screen.getByRole('link', { name: 'zhoux77899' })).toHaveAttribute('href', '#hero');
 
     const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
     for (const link of navLinks) {
@@ -56,7 +59,7 @@ describe('Navbar', () => {
     projects.getBoundingClientRect = () => ({ top: 400 } as DOMRect);
     fireEvent.scroll(window);
     await waitFor(() => {
-      expect(within(navigation).getByRole('link', { name: 'Home' }))
+      expect(within(navigation).getByRole('link', { name: 'About' }))
         .toHaveAttribute('aria-current', 'location');
     });
   });

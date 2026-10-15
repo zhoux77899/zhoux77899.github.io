@@ -1,0 +1,46 @@
+export type ExplorerDestination = 'projects' | 'skills' | 'experience' | 'open-source' | 'travel' | 'contact';
+
+export const explorerDestinations: ReadonlyArray<{ id: ExplorerDestination; label: string; href: string; object: string }> = [
+  { id: 'projects', label: 'Projects', href: '#projects', object: 'Model workstation' },
+  { id: 'skills', label: 'Stack', href: '#skills', object: 'Portable terminal' },
+  { id: 'experience', label: 'Background', href: '#experience', object: 'Optical instrument' },
+  { id: 'open-source', label: 'Open source', href: '#vllm-ascend-work', object: 'Workshop folio' },
+  { id: 'travel', label: 'Travel', href: '#travel', object: 'Map and compass' },
+  { id: 'contact', label: 'Contact', href: '#contact', object: 'Connection panel' },
+];
+
+export interface ExplorerItem {
+  id: string;
+  piece: ExplorerDestination | 'stand';
+  key: number;
+  lift: number;
+  offset: [number, number];
+}
+export interface ExplorerAsset {
+  version: 1;
+  width: number;
+  height: number;
+  solids: number;
+  body: string;
+  items: ExplorerItem[];
+  modules: Array<{ id: ExplorerDestination; label: string; href: string; object: string; x: number; y: number; rx: number; ry: number }>;
+}
+
+let pending: Promise<ExplorerAsset> | undefined;
+export function loadExplorer(): Promise<ExplorerAsset> {
+  if (pending) return pending;
+  pending = fetch(`${import.meta.env.BASE_URL}anatomy/explorer.json`)
+    .then(async response => {
+      if (!response.ok) throw new Error('The exploration drawing could not load.');
+      const asset = await response.json() as ExplorerAsset;
+      if (asset.version !== 1 || !Array.isArray(asset.items) || asset.modules.length !== 6) {
+        throw new Error('The exploration drawing has an unsupported format.');
+      }
+      return asset;
+    })
+    .catch((error: unknown) => {
+      pending = undefined;
+      throw error;
+    });
+  return pending;
+}
