@@ -1,0 +1,645 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-15T04:03:55.140Z",
+  "title": "Design System: zhoux77899's personal site",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Ivory page",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 93.48)",
+          "oklch(0.26 0.01000 93.48)",
+          "oklch(0.38 0.01000 93.48)",
+          "oklch(0.49 0.01000 93.48)",
+          "oklch(0.61 0.01000 93.48)",
+          "oklch(0.72 0.01000 93.48)",
+          "oklch(0.84 0.01000 93.48)",
+          "oklch(0.95 0.01000 93.48)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Warm reading ink",
+        "tonalRamp": [
+          "oklch(0.15 0.03000 94.42)",
+          "oklch(0.26 0.03000 94.42)",
+          "oklch(0.38 0.03000 94.42)",
+          "oklch(0.49 0.03000 94.42)",
+          "oklch(0.61 0.03000 94.42)",
+          "oklch(0.72 0.03000 94.42)",
+          "oklch(0.84 0.03000 94.42)",
+          "oklch(0.95 0.03000 94.42)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Ivory surface",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 91.46)",
+          "oklch(0.26 0.01000 91.46)",
+          "oklch(0.38 0.01000 91.46)",
+          "oklch(0.49 0.01000 91.46)",
+          "oklch(0.61 0.01000 91.46)",
+          "oklch(0.72 0.01000 91.46)",
+          "oklch(0.84 0.01000 91.46)",
+          "oklch(0.95 0.01000 91.46)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Terracotta",
+        "tonalRamp": [
+          "oklch(0.15 0.14000 39.15)",
+          "oklch(0.26 0.14000 39.15)",
+          "oklch(0.38 0.14000 39.15)",
+          "oklch(0.49 0.14000 39.15)",
+          "oklch(0.61 0.14000 39.15)",
+          "oklch(0.72 0.14000 39.15)",
+          "oklch(0.84 0.14000 39.15)",
+          "oklch(0.95 0.14000 39.15)"
+        ]
+      },
+      "accent-foreground": {
+        "role": "primary",
+        "displayName": "Primary action foreground",
+        "tonalRamp": [
+          "oklch(0.15 0.00000 0.00)",
+          "oklch(0.26 0.00000 0.00)",
+          "oklch(0.38 0.00000 0.00)",
+          "oklch(0.49 0.00000 0.00)",
+          "oklch(0.61 0.00000 0.00)",
+          "oklch(0.72 0.00000 0.00)",
+          "oklch(0.84 0.00000 0.00)",
+          "oklch(0.95 0.00000 0.00)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Soft action surface",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 87.42)",
+          "oklch(0.26 0.01000 87.42)",
+          "oklch(0.38 0.01000 87.42)",
+          "oklch(0.49 0.01000 87.42)",
+          "oklch(0.61 0.01000 87.42)",
+          "oklch(0.72 0.01000 87.42)",
+          "oklch(0.84 0.01000 87.42)",
+          "oklch(0.95 0.01000 87.42)"
+        ]
+      },
+      "accent-soft-foreground": {
+        "role": "primary",
+        "displayName": "Selected navigation ink",
+        "tonalRamp": [
+          "oklch(0.15 0.02000 99.70)",
+          "oklch(0.26 0.02000 99.70)",
+          "oklch(0.38 0.02000 99.70)",
+          "oklch(0.49 0.02000 99.70)",
+          "oklch(0.61 0.02000 99.70)",
+          "oklch(0.72 0.02000 99.70)",
+          "oklch(0.84 0.02000 99.70)",
+          "oklch(0.95 0.02000 99.70)"
+        ]
+      },
+      "sage": {
+        "role": "secondary",
+        "displayName": "Sage link",
+        "tonalRamp": [
+          "oklch(0.15 0.03000 148.51)",
+          "oklch(0.26 0.03000 148.51)",
+          "oklch(0.38 0.03000 148.51)",
+          "oklch(0.49 0.03000 148.51)",
+          "oklch(0.61 0.03000 148.51)",
+          "oklch(0.72 0.03000 148.51)",
+          "oklch(0.84 0.03000 148.51)",
+          "oklch(0.95 0.03000 148.51)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Supporting ink",
+        "tonalRamp": [
+          "oklch(0.15 0.02000 94.00)",
+          "oklch(0.26 0.02000 94.00)",
+          "oklch(0.38 0.02000 94.00)",
+          "oklch(0.49 0.02000 94.00)",
+          "oklch(0.61 0.02000 94.00)",
+          "oklch(0.72 0.02000 94.00)",
+          "oklch(0.84 0.02000 94.00)",
+          "oklch(0.95 0.02000 94.00)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Fine divider",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 106.47)",
+          "oklch(0.26 0.01000 106.47)",
+          "oklch(0.38 0.01000 106.47)",
+          "oklch(0.49 0.01000 106.47)",
+          "oklch(0.61 0.01000 106.47)",
+          "oklch(0.72 0.01000 106.47)",
+          "oklch(0.84 0.01000 106.47)",
+          "oklch(0.95 0.01000 106.47)"
+        ]
+      },
+      "dark-background": {
+        "role": "neutral",
+        "displayName": "Charcoal page",
+        "tonalRamp": [
+          "oklch(0.15 0.00000 0.00)",
+          "oklch(0.26 0.00000 0.00)",
+          "oklch(0.38 0.00000 0.00)",
+          "oklch(0.49 0.00000 0.00)",
+          "oklch(0.61 0.00000 0.00)",
+          "oklch(0.72 0.00000 0.00)",
+          "oklch(0.84 0.00000 0.00)",
+          "oklch(0.95 0.00000 0.00)"
+        ]
+      },
+      "dark-foreground": {
+        "role": "neutral",
+        "displayName": "Light reading ink",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 93.53)",
+          "oklch(0.26 0.01000 93.53)",
+          "oklch(0.38 0.01000 93.53)",
+          "oklch(0.49 0.01000 93.53)",
+          "oklch(0.61 0.01000 93.53)",
+          "oklch(0.72 0.01000 93.53)",
+          "oklch(0.84 0.01000 93.53)",
+          "oklch(0.95 0.01000 93.53)"
+        ]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Charcoal surface",
+        "tonalRamp": [
+          "oklch(0.15 0.00000 0.00)",
+          "oklch(0.26 0.00000 0.00)",
+          "oklch(0.38 0.00000 0.00)",
+          "oklch(0.49 0.00000 0.00)",
+          "oklch(0.61 0.00000 0.00)",
+          "oklch(0.72 0.00000 0.00)",
+          "oklch(0.84 0.00000 0.00)",
+          "oklch(0.95 0.00000 0.00)"
+        ]
+      },
+      "dark-accent": {
+        "role": "primary",
+        "displayName": "Dark-theme terracotta",
+        "tonalRamp": [
+          "oklch(0.15 0.12000 39.00)",
+          "oklch(0.26 0.12000 39.00)",
+          "oklch(0.38 0.12000 39.00)",
+          "oklch(0.49 0.12000 39.00)",
+          "oklch(0.61 0.12000 39.00)",
+          "oklch(0.72 0.12000 39.00)",
+          "oklch(0.84 0.12000 39.00)",
+          "oklch(0.95 0.12000 39.00)"
+        ]
+      },
+      "dark-accent-foreground": {
+        "role": "primary",
+        "displayName": "Dark primary action foreground",
+        "tonalRamp": [
+          "oklch(0.15 0.00000 0.00)",
+          "oklch(0.26 0.00000 0.00)",
+          "oklch(0.38 0.00000 0.00)",
+          "oklch(0.49 0.00000 0.00)",
+          "oklch(0.61 0.00000 0.00)",
+          "oklch(0.72 0.00000 0.00)",
+          "oklch(0.84 0.00000 0.00)",
+          "oklch(0.95 0.00000 0.00)"
+        ]
+      },
+      "dark-accent-soft": {
+        "role": "primary",
+        "displayName": "Dark soft action surface",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 88.79)",
+          "oklch(0.26 0.01000 88.79)",
+          "oklch(0.38 0.01000 88.79)",
+          "oklch(0.49 0.01000 88.79)",
+          "oklch(0.61 0.01000 88.79)",
+          "oklch(0.72 0.01000 88.79)",
+          "oklch(0.84 0.01000 88.79)",
+          "oklch(0.95 0.01000 88.79)"
+        ]
+      },
+      "dark-accent-soft-foreground": {
+        "role": "primary",
+        "displayName": "Dark selected navigation ink",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 93.49)",
+          "oklch(0.26 0.01000 93.49)",
+          "oklch(0.38 0.01000 93.49)",
+          "oklch(0.49 0.01000 93.49)",
+          "oklch(0.61 0.01000 93.49)",
+          "oklch(0.72 0.01000 93.49)",
+          "oklch(0.84 0.01000 93.49)",
+          "oklch(0.95 0.01000 93.49)"
+        ]
+      },
+      "dark-sage": {
+        "role": "secondary",
+        "displayName": "Dark sage link",
+        "tonalRamp": [
+          "oklch(0.15 0.03000 148.70)",
+          "oklch(0.26 0.03000 148.70)",
+          "oklch(0.38 0.03000 148.70)",
+          "oklch(0.49 0.03000 148.70)",
+          "oklch(0.61 0.03000 148.70)",
+          "oklch(0.72 0.03000 148.70)",
+          "oklch(0.84 0.03000 148.70)",
+          "oklch(0.95 0.03000 148.70)"
+        ]
+      },
+      "dark-sage-soft": {
+        "role": "secondary",
+        "displayName": "Dark tag surface",
+        "tonalRamp": [
+          "oklch(0.15 0.02000 148.70)",
+          "oklch(0.26 0.02000 148.70)",
+          "oklch(0.38 0.02000 148.70)",
+          "oklch(0.49 0.02000 148.70)",
+          "oklch(0.61 0.02000 148.70)",
+          "oklch(0.72 0.02000 148.70)",
+          "oklch(0.84 0.02000 148.70)",
+          "oklch(0.95 0.02000 148.70)"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark supporting ink",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 94.00)",
+          "oklch(0.26 0.01000 94.00)",
+          "oklch(0.38 0.01000 94.00)",
+          "oklch(0.49 0.01000 94.00)",
+          "oklch(0.61 0.01000 94.00)",
+          "oklch(0.72 0.01000 94.00)",
+          "oklch(0.84 0.01000 94.00)",
+          "oklch(0.95 0.01000 94.00)"
+        ]
+      },
+      "dark-border": {
+        "role": "neutral",
+        "displayName": "Dark fine divider",
+        "tonalRamp": [
+          "oklch(0.15 0.01000 106.85)",
+          "oklch(0.26 0.01000 106.85)",
+          "oklch(0.38 0.01000 106.85)",
+          "oklch(0.49 0.01000 106.85)",
+          "oklch(0.61 0.01000 106.85)",
+          "oklch(0.72 0.01000 106.85)",
+          "oklch(0.84 0.01000 106.85)",
+          "oklch(0.95 0.01000 106.85)"
+        ]
+      },
+      "anatomy-top": {
+        "role": "neutral",
+        "displayName": "Anatomy top face",
+        "tonalRamp": [
+          "oklch(0.15 0.00796 98.87)",
+          "oklch(0.26 0.00796 98.87)",
+          "oklch(0.38 0.00796 98.87)",
+          "oklch(0.49 0.00796 98.87)",
+          "oklch(0.61 0.00796 98.87)",
+          "oklch(0.72 0.00796 98.87)",
+          "oklch(0.84 0.00796 98.87)",
+          "oklch(0.95 0.00796 98.87)"
+        ]
+      },
+      "anatomy-shade-0": {
+        "role": "neutral",
+        "displayName": "Anatomy side tone 0",
+        "tonalRamp": [
+          "oklch(0.15 0.01084 100.84)",
+          "oklch(0.26 0.01084 100.84)",
+          "oklch(0.38 0.01084 100.84)",
+          "oklch(0.49 0.01084 100.84)",
+          "oklch(0.61 0.01084 100.84)",
+          "oklch(0.72 0.01084 100.84)",
+          "oklch(0.84 0.01084 100.84)",
+          "oklch(0.95 0.01084 100.84)"
+        ]
+      },
+      "anatomy-shade-1": {
+        "role": "neutral",
+        "displayName": "Anatomy side tone 1",
+        "tonalRamp": [
+          "oklch(0.15 0.01076 100.83)",
+          "oklch(0.26 0.01076 100.83)",
+          "oklch(0.38 0.01076 100.83)",
+          "oklch(0.49 0.01076 100.83)",
+          "oklch(0.61 0.01076 100.83)",
+          "oklch(0.72 0.01076 100.83)",
+          "oklch(0.84 0.01076 100.83)",
+          "oklch(0.95 0.01076 100.83)"
+        ]
+      },
+      "anatomy-shade-2": {
+        "role": "neutral",
+        "displayName": "Anatomy side tone 2",
+        "tonalRamp": [
+          "oklch(0.15 0.01069 100.83)",
+          "oklch(0.26 0.01069 100.83)",
+          "oklch(0.38 0.01069 100.83)",
+          "oklch(0.49 0.01069 100.83)",
+          "oklch(0.61 0.01069 100.83)",
+          "oklch(0.72 0.01069 100.83)",
+          "oklch(0.84 0.01069 100.83)",
+          "oklch(0.95 0.01069 100.83)"
+        ]
+      },
+      "anatomy-shade-3": {
+        "role": "neutral",
+        "displayName": "Anatomy side tone 3",
+        "tonalRamp": [
+          "oklch(0.15 0.01064 100.82)",
+          "oklch(0.26 0.01064 100.82)",
+          "oklch(0.38 0.01064 100.82)",
+          "oklch(0.49 0.01064 100.82)",
+          "oklch(0.61 0.01064 100.82)",
+          "oklch(0.72 0.01064 100.82)",
+          "oklch(0.84 0.01064 100.82)",
+          "oklch(0.95 0.01064 100.82)"
+        ]
+      },
+      "dark-anatomy-top": {
+        "role": "neutral",
+        "displayName": "Dark Anatomy top face",
+        "tonalRamp": [
+          "oklch(0.15 0.01043 114.66)",
+          "oklch(0.26 0.01043 114.66)",
+          "oklch(0.38 0.01043 114.66)",
+          "oklch(0.49 0.01043 114.66)",
+          "oklch(0.61 0.01043 114.66)",
+          "oklch(0.72 0.01043 114.66)",
+          "oklch(0.84 0.01043 114.66)",
+          "oklch(0.95 0.01043 114.66)"
+        ]
+      },
+      "dark-anatomy-shade-0": {
+        "role": "neutral",
+        "displayName": "Dark Anatomy side tone 0",
+        "tonalRamp": [
+          "oklch(0.15 0.00586 121.91)",
+          "oklch(0.26 0.00586 121.91)",
+          "oklch(0.38 0.00586 121.91)",
+          "oklch(0.49 0.00586 121.91)",
+          "oklch(0.61 0.00586 121.91)",
+          "oklch(0.72 0.00586 121.91)",
+          "oklch(0.84 0.00586 121.91)",
+          "oklch(0.95 0.00586 121.91)"
+        ]
+      },
+      "dark-anatomy-shade-1": {
+        "role": "neutral",
+        "displayName": "Dark Anatomy side tone 1",
+        "tonalRamp": [
+          "oklch(0.15 0.00749 118.35)",
+          "oklch(0.26 0.00749 118.35)",
+          "oklch(0.38 0.00749 118.35)",
+          "oklch(0.49 0.00749 118.35)",
+          "oklch(0.61 0.00749 118.35)",
+          "oklch(0.72 0.00749 118.35)",
+          "oklch(0.84 0.00749 118.35)",
+          "oklch(0.95 0.00749 118.35)"
+        ]
+      },
+      "dark-anatomy-shade-2": {
+        "role": "neutral",
+        "displayName": "Dark Anatomy side tone 2",
+        "tonalRamp": [
+          "oklch(0.15 0.00905 116.17)",
+          "oklch(0.26 0.00905 116.17)",
+          "oklch(0.38 0.00905 116.17)",
+          "oklch(0.49 0.00905 116.17)",
+          "oklch(0.61 0.00905 116.17)",
+          "oklch(0.72 0.00905 116.17)",
+          "oklch(0.84 0.00905 116.17)",
+          "oklch(0.95 0.00905 116.17)"
+        ]
+      },
+      "dark-anatomy-shade-3": {
+        "role": "neutral",
+        "displayName": "Dark Anatomy side tone 3",
+        "tonalRamp": [
+          "oklch(0.15 0.01055 114.70)",
+          "oklch(0.26 0.01055 114.70)",
+          "oklch(0.38 0.01055 114.70)",
+          "oklch(0.49 0.01055 114.70)",
+          "oklch(0.61 0.01055 114.70)",
+          "oklch(0.72 0.01055 114.70)",
+          "oklch(0.84 0.01055 114.70)",
+          "oklch(0.95 0.01055 114.70)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Identity display",
+        "purpose": "The hero username and matching avatar share clamp(30px, 6vw, 64px) at every viewport."
+      },
+      "headline": {
+        "displayName": "Section heading",
+        "purpose": "Primary section introductions."
+      },
+      "title": {
+        "displayName": "Project title",
+        "purpose": "Compact project titles use clamp(24px, 2.4vw, 30px), then 24px on phones."
+      },
+      "body": {
+        "displayName": "Supporting body",
+        "purpose": "Project detail and measured reading copy."
+      },
+      "label": {
+        "displayName": "Interface label",
+        "purpose": "Navigation and hero actions."
+      },
+      "mono": {
+        "displayName": "Code",
+        "purpose": "Genuine code only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "action-xs",
+        "value": "var(--shadow-xs)",
+        "purpose": "Small action elevation; inherited from the current BoardUI/Tailwind theme."
+      },
+      {
+        "name": "theme-thumb-2xs",
+        "value": "var(--shadow-2xs)",
+        "purpose": "Selected theme thumb."
+      },
+      {
+        "name": "mobile-modal-xl",
+        "value": "var(--shadow-xl)",
+        "purpose": "The existing mobile navigation modal."
+      },
+      {
+        "name": "explore-popover",
+        "value": "0 16px 50px -16px oklch(0 0 0 / .32)",
+        "purpose": "Raised surface holding the same interactive case as the main hero."
+      },
+      {
+        "name": "hotspot-tooltip",
+        "value": "0 3px 10px oklch(0 0 0 / .08)",
+        "purpose": "Temporary destination label during hotspot hover or visible keyboard focus."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-feedback",
+        "value": "150ms ease",
+        "purpose": "Semantic button fill, border, and text feedback."
+      },
+      {
+        "name": "button-return",
+        "value": "420ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Return from the physical button press."
+      },
+      {
+        "name": "button-press",
+        "value": "scale(0.98) / 220ms",
+        "purpose": "Pressed action transform; disabled by reduced motion."
+      },
+      {
+        "name": "theme-thumb",
+        "value": "200ms ease",
+        "purpose": "Theme selection thumb and label states."
+      },
+      {
+        "name": "country-divider",
+        "value": "180ms ease",
+        "purpose": "Shared country selection divider."
+      },
+      {
+        "name": "case-tour-idle",
+        "value": "8000ms",
+        "purpose": "Wait before the visible case previews its six destinations; never commits navigation."
+      },
+      {
+        "name": "case-tour-step",
+        "value": "2800ms",
+        "purpose": "One destination preview in the idle tour."
+      },
+      {
+        "name": "tabs-underline",
+        "value": "200ms ease",
+        "purpose": "Measured BoardUI selected-tab underline translation and width."
+      },
+      {
+        "name": "carousel-indicator",
+        "value": "180ms ease-out",
+        "purpose": "The active dot widens to a short pill; disabled by reduced motion."
+      },
+      {
+        "name": "carousel-rotation",
+        "value": "6000ms",
+        "purpose": "Automatic rotation only at 35% visibility or more with a visible document; hover, keyboard focus, pointer gestures, reduced motion, and explicit Pause suspend it. Manual navigation restarts the interval; automatic changes never write history."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow-skill-list",
+        "value": "480px"
+      },
+      {
+        "name": "mobile",
+        "value": "768px"
+      },
+      {
+        "name": "desktop-navigation",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary hero action",
+      "kind": "button",
+      "refersTo": "hero-primary",
+      "description": "Both real Hero section anchors use BoardUI Primary semantic vertical gradients, iconless labels, hover layering, keyboard focus, and press motion.",
+      "html": "<a class=\"ds-primary-action\" href=\"#projects\"><span class=\"ds-primary-label\">Explore projects</span></a>",
+      "css": ".ds-primary-action{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:2px;overflow:hidden;border:0;border-radius:12px;background-image:var(--gradient-button-primary-default,linear-gradient(180deg,var(--accent,oklch(.57 .14 39.15)),color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 88%,var(--foreground,oklch(0.34 0.03 94.42)))));color:var(--accent-foreground,oklch(1 0 0));font-family:var(--font-sans,Geist,ui-sans-serif,system-ui,sans-serif);font-size:14px;font-weight:500;line-height:20px;text-decoration:none;white-space:nowrap;cursor:pointer;box-shadow:var(--shadow-xs,0 1px 2px 0 rgb(0 0 0 / .05));transition:background-color 150ms ease,color 150ms ease,box-shadow 150ms ease,transform 420ms cubic-bezier(.4,0,.2,1);}.ds-primary-action::before{content:\"\";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background-image:var(--gradient-button-primary-hover,linear-gradient(180deg,color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 92%,var(--foreground,oklch(0.34 0.03 94.42))),color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 80%,var(--foreground,oklch(0.34 0.03 94.42)))));opacity:0;transition:opacity 150ms ease;}.ds-primary-action:hover::before{opacity:1;}.ds-primary-action:active{background-image:var(--gradient-button-primary-active,linear-gradient(180deg,color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 85%,var(--foreground,oklch(0.34 0.03 94.42))),color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 72%,var(--foreground,oklch(0.34 0.03 94.42)))));transform:scale(.98);transition-duration:150ms,150ms,150ms,220ms;}.ds-primary-action:active::before{opacity:0;}.ds-primary-action:focus-visible{outline:2px solid var(--accent,oklch(.57 .14 39.15));outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-primary-action,.ds-primary-action::before{transition:none;}.ds-primary-action:active{transform:none;}}.ds-primary-action{box-sizing:border-box;min-height:46px;padding:12px 22px;}.ds-primary-label{display:inline-flex;padding-inline:4px;}@media(max-width:767px){.ds-primary-action{min-height:44px;padding:10px 18px;}}"
+    },
+    {
+      "name": "Compact project card",
+      "kind": "card",
+      "refersTo": "project-card",
+      "description": "Compact factual copy, informational tags, and a distinct GitHub Source mark. The full application places actual 5:4 Hairline art beside this copy on desktop and above it below 1024px.",
+      "html": "<article class=\"ds-project-card\"><h3 class=\"ds-project-title\">CFGAN</h3><p class=\"ds-project-summary\">Microscopy research tools built around a PyTorch GAN.</p><p class=\"ds-project-details\">Includes a U-Net generator, a CNN discriminator, training logs, and tools for image denoising, 3D localization, and CRLB analysis.</p><ul class=\"ds-project-tags\" aria-label=\"CFGAN technologies\"><li class=\"ds-project-tag\">Python</li><li class=\"ds-project-tag\">PyTorch</li><li class=\"ds-project-tag\">Microscopy</li></ul><div class=\"ds-project-links\"><a href=\"https://github.com/zhoux77899/cfgan\"><svg class=\"ds-project-icon\" viewBox=\"0 0 98 96\" aria-hidden=\"true\"><path d=\"M41.4395 69.3848C28.8066 67.8535 19.9062 58.7617 19.9062 46.9902C19.9062 42.2051 21.6289 37.0371 24.5 33.5918C23.2559 30.4336 23.4473 23.7344 24.8828 20.959C28.7109 20.4805 33.8789 22.4902 36.9414 25.2656C40.5781 24.1172 44.4062 23.543 49.0957 23.543C53.7852 23.543 57.6133 24.1172 61.0586 25.1699C64.0254 22.4902 69.2891 20.4805 73.1172 20.959C74.457 23.543 74.6484 30.2422 73.4043 33.4961C76.4668 37.1328 78.0937 42.0137 78.0937 46.9902C78.0937 58.7617 69.1934 67.6621 56.3691 69.2891C59.623 71.3945 61.8242 75.9883 61.8242 81.252L61.8242 91.2051C61.8242 94.0762 64.2168 95.7031 67.0879 94.5547C84.4102 87.9512 98 70.6289 98 49.1914C98 22.1074 75.9883 6.69539e-07 48.9043 4.309e-07C21.8203 1.92261e-07 -1.9479e-07 22.1074 -4.3343e-07 49.1914C-6.20631e-07 70.4375 13.4941 88.0469 31.6777 94.6504C34.2617 95.6074 36.75 93.8848 36.75 91.3008L36.75 83.6445C35.4102 84.2188 33.6875 84.6016 32.1562 84.6016C25.8398 84.6016 22.1074 81.1563 19.4277 74.7441C18.375 72.1602 17.2266 70.6289 15.0254 70.3418C13.877 70.2461 13.4941 69.7676 13.4941 69.1934C13.4941 68.0449 15.4082 67.1836 17.3223 67.1836C20.0977 67.1836 22.4902 68.9063 24.9785 72.4473C26.8926 75.2227 28.9023 76.4668 31.2949 76.4668C33.6875 76.4668 35.2187 75.6055 37.4199 73.4043C39.0469 71.7773 40.291 70.3418 41.4395 69.3848Z\" fill=\"currentColor\"/></svg>Source</a></div></article>",
+      "css": ".ds-project-card{display:flex;flex-direction:column;min-width:0;padding:28px;border:1px solid var(--border,oklch(0.91 0.01 106.47));border-radius:14px;background:var(--background,oklch(0.98 0.01 93.48));color:var(--foreground,oklch(0.34 0.03 94.42));font-family:var(--font-sans,Geist,ui-sans-serif,system-ui,sans-serif);}.ds-project-title{margin:0 0 12px;font-size:clamp(24px,2.4vw,30px);font-weight:600;line-height:1.2;letter-spacing:-.025em;overflow-wrap:anywhere;}.ds-project-summary{margin:0 0 10px;font-size:17px;line-height:1.55;}.ds-project-details{margin:0 0 16px;font-size:14px;line-height:1.7;color:var(--muted,oklch(.48 .02 94));}.ds-project-tags{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:0 0 12px;}.ds-project-tag{padding:3px 7px;border-radius:6px;background:var(--sage-soft,oklch(0.95 0.01 91.46));font-size:11px;line-height:1.6;}.ds-project-links{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:auto;padding-top:4px;}.ds-project-links a{display:inline-flex;align-items:center;gap:6px;min-height:40px;font-size:13px;color:var(--sage,oklch(0.51 0.03 148.51));text-decoration:underline;text-underline-offset:5px;}.ds-project-icon{width:17px;height:17px;flex-shrink:0;}.ds-project-links a:hover{color:var(--foreground,oklch(0.34 0.03 94.42));text-decoration-thickness:2px;}.ds-project-links a:focus-visible{outline:2px solid var(--accent,oklch(.57 .14 39.15));outline-offset:4px;}@media(max-width:1023px){.ds-project-card{padding:24px;}.ds-project-summary{font-size:16px;}}@media(max-width:767px){.ds-project-card{padding:20px;}.ds-project-title{font-size:24px;margin-bottom:10px;}.ds-project-details{font-size:13px;line-height:1.65;margin-bottom:14px;}.ds-project-links{gap:2px 12px;}}"
+    },
+    {
+      "name": "Technology tag",
+      "kind": "chip",
+      "refersTo": "technology-tag",
+      "description": "An informational technology label in the compact project cards. It carries no score, hover action, or extra focus stop.",
+      "html": "<span class=\"ds-technology-tag\">PyTorch</span>",
+      "css": ".ds-technology-tag{display:inline-block;padding:3px 7px;border-radius:6px;background:var(--sage-soft,oklch(0.95 0.01 91.46));color:var(--foreground,oklch(0.34 0.03 94.42));font-family:var(--font-sans,Geist,ui-sans-serif,system-ui,sans-serif);font-size:11px;line-height:1.6;}"
+    },
+    {
+      "name": "Explore trigger",
+      "kind": "button",
+      "refersTo": "explorer-trigger",
+      "description": "BoardUI Primary access after the main case leaves view. The live control adds an actual-geometry thumbnail and opens the same interactive case; navigation or Escape closes the popover and restores focus. This text-control sample omits that thumbnail and artwork.",
+      "html": "<button class=\"ds-explore-trigger\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\"><span class=\"ds-explore-label\">Explore</span></button>",
+      "css": ".ds-explore-trigger{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:2px;overflow:hidden;border:0;border-radius:12px;background-image:var(--gradient-button-primary-default,linear-gradient(180deg,var(--accent,oklch(.57 .14 39.15)),color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 88%,var(--foreground,oklch(0.34 0.03 94.42)))));color:var(--accent-foreground,oklch(1 0 0));font-family:var(--font-sans,Geist,ui-sans-serif,system-ui,sans-serif);font-size:14px;font-weight:500;line-height:20px;text-decoration:none;white-space:nowrap;cursor:pointer;box-shadow:var(--shadow-xs,0 1px 2px 0 rgb(0 0 0 / .05));transition:background-color 150ms ease,color 150ms ease,box-shadow 150ms ease,transform 420ms cubic-bezier(.4,0,.2,1);}.ds-explore-trigger::before{content:\"\";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background-image:var(--gradient-button-primary-hover,linear-gradient(180deg,color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 92%,var(--foreground,oklch(0.34 0.03 94.42))),color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 80%,var(--foreground,oklch(0.34 0.03 94.42)))));opacity:0;transition:opacity 150ms ease;}.ds-explore-trigger:hover::before{opacity:1;}.ds-explore-trigger:active{background-image:var(--gradient-button-primary-active,linear-gradient(180deg,color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 85%,var(--foreground,oklch(0.34 0.03 94.42))),color-mix(in oklch,var(--accent,oklch(.57 .14 39.15)) 72%,var(--foreground,oklch(0.34 0.03 94.42)))));transform:scale(.98);transition-duration:150ms,150ms,150ms,220ms;}.ds-explore-trigger:active::before{opacity:0;}.ds-explore-trigger:focus-visible{outline:2px solid var(--accent,oklch(.57 .14 39.15));outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-explore-trigger,.ds-explore-trigger::before{transition:none;}.ds-explore-trigger:active{transform:none;}}.ds-explore-trigger{box-sizing:border-box;min-height:48px;padding:4px 14px 4px 6px;}.ds-explore-label{display:inline-flex;gap:8px;padding:0;}"
+    },
+    {
+      "name": "Skill category underline tabs",
+      "kind": "nav",
+      "refersTo": "skill-tab",
+      "description": "The official BoardUI underline Tabs visual treatment for five categories. The app retains React Aria roving focus, automatic activation, panel association, and a measured 2px selected underline; the sample shows the current AI category selected.",
+      "html": "<div class=\"ds-skill-tabs\"><div class=\"ds-tab-list\" role=\"tablist\" aria-label=\"Skill categories\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\" aria-controls=\"ds-ai-panel\" id=\"ds-ai-tab\" tabindex=\"0\">AI infrastructure &amp; agents</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" tabindex=\"-1\">Scientific computing</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" tabindex=\"-1\">Systems &amp; embedded</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" tabindex=\"-1\">Web &amp; data</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" tabindex=\"-1\">Development tools</button></div><div class=\"ds-tab-panel\" role=\"tabpanel\" id=\"ds-ai-panel\" aria-labelledby=\"ds-ai-tab\">vLLM · Ascend NPU · PyTorch · OpenAI API · Agent skills · HTTP &amp; SSE</div></div>",
+      "css": ".ds-skill-tabs{display:flex;flex-direction:column;gap:24px;color:var(--foreground,oklch(0.34 0.03 94.42));font-family:var(--font-sans,Geist,ui-sans-serif,system-ui,sans-serif);}.ds-tab-list{display:flex;gap:24px;overflow-x:auto;border-bottom:1px solid var(--border,oklch(0.91 0.01 106.47));}.ds-tab{box-sizing:border-box;position:relative;min-height:48px;padding:10px 0;border:0;background:transparent;white-space:nowrap;color:var(--foreground,oklch(0.34 0.03 94.42));font-family:inherit;font-size:14px;line-height:1.5;font-weight:400;cursor:pointer;transition:color 150ms ease;}.ds-tab[aria-selected=\"true\"]{color:var(--accent,oklch(.57 .14 39.15));font-weight:600;}.ds-tab[aria-selected=\"true\"]::after{content:\"\";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--accent,oklch(.57 .14 39.15));}.ds-tab:hover{background:transparent;}.ds-tab:focus-visible{outline:2px solid var(--accent,oklch(.57 .14 39.15));outline-offset:-2px;border-radius:2px;}.ds-tab-panel{font-size:16px;line-height:1.6;}@media(prefers-reduced-motion:reduce){.ds-tab{transition:none;}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Precision exploration case",
+    "overview": "A warm personal dossier gives research, tools, small devices, and travel room to coexist. Ivory and charcoal grounds, terracotta actions, sage links, and self-hosted Geist carry the existing identity. The precision case makes that identity tangible through solid parts, visible joints, four-tone shading, and a complete drawing frame.\n\nThe interface keeps its text and links plain. Navigation objects preview a destination before a real anchor commits it; decorative drawings respond locally to the pointer. Motion settles when input stops, pauses outside the visible page, and resolves immediately when reduced motion is requested. The centered six-project carousel offers a visible pause control and suspends rotation for interaction. Country impressions reserve terracotta for their moving objects.",
+    "keyCharacteristics": [
+      "Warm semantic colors shared by both themes.",
+      "Geist for identity, reading, and interface labels.",
+      "Physical SVG geometry with a complete 5:4 frame.",
+      "Real anchors, native scrolling, and visible keyboard focus."
+    ],
+    "rules": [
+      {
+        "name": "The shared palette rule",
+        "body": "Bind UI states to the semantic palette. Hairline fills inherit their containing ground and stationary geometry uses monochrome theme ink. Only the moving country SUV, train, and lattice shutters use the shared semantic accent; exports follow the complete applicable theme cascade.",
+        "section": "colors"
+      },
+      {
+        "name": "The reading hierarchy rule",
+        "body": "Keep identity, section titles, summaries, and supporting details visually distinct. Use sentence case for interface copy and keep code typography out of prose.",
+        "section": "typography"
+      },
+      {
+        "name": "The physical depth rule",
+        "body": "Draw complete solids and keep their visible joints connected. Preserve the audited order throughout the bounded module lifts; do not substitute translated flat groups for physical surfaces.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the final semantic color tokens and their paired theme foregrounds.",
+      "Do retain the complete object in a 5:4 drawing frame and match actual geometry, crop, and theme colors in fallbacks.",
+      "Do keep real hash links, native gallery scrolling, keyboard focus, and reduced motion working together.",
+      "Do preserve the real avatar, factual project copy, visit records, and public destinations.",
+      "Do keep navigable Anatomy previews separate from committed selection and decorative Hairline input."
+    ],
+    "donts": [
+      "Don't modify the Hairline kernel or assign colors separately to individual figures; country moving parts use the shared semantic accent.",
+      "Don't turn the idle tour, hover preview, gallery scroll, or automatic rotation into a URL or history change.",
+      "Don't add gradient lettering, status badges, section numbers, decorative grids, or skill-score counters.",
+      "Don't present drawn impressions as application screenshots, research results, hardware photographs, or personal travel photos.",
+      "Don't infer employers, outcomes, proficiency, private contact details, travel dates, or routes from illustrations."
+    ]
+  }
+}

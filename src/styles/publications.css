@@ -1,0 +1,17 @@
+.publication-list { list-style: none; padding: 0; margin: 0; }
+.publication-row { display: grid; grid-template-columns: .7fr 2fr; gap: 40px; padding: 32px 0; border-top: 1px solid var(--border); }
+.publication-year { color: var(--muted); font-size: 14px; margin: 0; font-variant-numeric: tabular-nums; }
+.publication-copy { min-width: 0; }
+.publication-row h3 { max-width: 60ch; font-size: 22px; line-height: 1.5; font-weight: 550; letter-spacing: -.02em; margin: 0 0 14px; text-wrap: pretty; }
+.publication-authors { font-size: 15px; color: var(--muted); line-height: 1.8; margin: 0 0 6px; }
+.publication-authors strong { font-weight: 600; color: var(--foreground); }
+.publication-journal { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+.publication-doi { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; color: var(--sage); font-size: 14px; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: 5px; }
+.publication-doi:hover, .publication-source a:hover { color: var(--foreground); text-decoration-thickness: 2px; }
+.publication-source { margin: 18px 0 0; color: var(--muted); font-size: 14px; }
+.publication-source a { color: var(--sage); text-underline-offset: 4px; }
+
+@media (max-width: 767px) {
+  .publication-row { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 26px 0; }
+  .publication-row h3 { font-size: 20px; }
+}

@@ -1,0 +1,17 @@
+[
+  ["wait", 600],
+  ["eval", "(()=>{const r=document.querySelector('.anatomy-explorer');const a=[...r.querySelectorAll('[data-hotspot]')];return {ready:!!r.querySelector('svg'),links:a.length,minHit:Math.min(...a.flatMap(a=>{const b=a.getBoundingClientRect();return [b.width,b.height]}))}})()"],
+  ["move", "[data-hotspot='projects']", 0.5, 0.5],
+  ["wait", 450],
+  ["lines", "scripts/anatomy/live-lines.png", ".anatomy-explorer-stage"],
+  ["shot", "scripts/anatomy/live-light.png", ".anatomy-explorer", 2],
+  ["click", "[data-hotspot='travel']", 0.5, 0.5],
+  ["wait", 300],
+  ["eval", "({hash:location.hash,current:document.querySelector('.anatomy-explorer-links a[aria-current]')?.getAttribute('href')})"],
+  ["eval", "scrollTo({top:0,behavior:'instant'})"],
+  ["wait", 350],
+  ["key", "ArrowRight", ".anatomy-explorer-links a[href='#projects']"],
+  ["wait", 450],
+  ["eval", "({focused:document.activeElement?.getAttribute('href'),selected:document.querySelector('.anatomy-explorer-links a[aria-current]')?.getAttribute('href'),preview:document.querySelector('.anatomy-explorer')?.dataset.preview,hash:location.hash})"],
+  ["lines", "scripts/anatomy/live-keyboard-lines.png", ".anatomy-explorer-stage"]
+]

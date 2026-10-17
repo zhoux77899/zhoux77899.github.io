@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-14",
+  "geometry": {
+    "command": "bun scripts/anatomy/build.mjs --audit",
+    "report": "public/anatomy/audit.json",
+    "solids": 113,
+    "depthStates": 581,
+    "replayedFrames": 159,
+    "overlapSamples": 285097,
+    "orderRules": 541,
+    "result": "audit passed",
+    "motionCoverage": "Bounded 8-unit vertical module lifts; every pair of modules is checked over the Cartesian product of 0, .2, .4, .6, .8 and 1, plus 159 actual 60fps frames using the browser's shared followLift model. The replay includes rapid six-module takeover, reverse-order takeover, multiple decaying modules and collapse to rest; every replay frame feeds clearance and every fourth frame feeds depth solving."
+  },
+  "lineEnds": {
+    "light": "0 of 92 ends on 72 lines float",
+    "dark": "0 of 92 ends on 72 lines float",
+    "liveHover": "0 of 92 ends on 72 lines float",
+    "liveKeyboard": "0 of 92 ends on 72 lines float"
+  },
+  "browser": {
+    "tool": "Unmodified Anatomy capture.mjs, drive.mjs and lines.mjs in verify/",
+    "runtime": "Native Node with Google Chrome; sandboxed Chrome launch was unavailable, verification ran with the approved shell escalation.",
+    "viewports": ["1440x1100", "1000x850", "390x844", "390x780"],
+    "minimumMobileHotspot": 44,
+    "travelNavigation": "#travel, with #travel active in the hero links",
+    "keyboardPreview": "ArrowRight focused #skills and previewed skills while location.hash remained #travel",
+    "console": "clean",
+    "horizontalOverflow": false,
+    "visualReview": "Light and dark resting art, selected live art, mobile frame, both-theme 4x mechanical details and marked line-end screenshots were opened and reviewed."
+  },
+  "unitTests": {
+    "command": "bun test src/lib/anatomy/motion.test.ts src/components/common/AnatomyExplorer.test.tsx",
+    "passed": 11,
+    "failed": 0,
+    "scenarios": ["Reduced motion", "Frame-rate consistency", "Rapid reversals", "Tour ordering", "Loading failure fallback", "StrictMode", "Unmount during load", "Real links and keyboard preview", "Newest intersection record", "Hidden document pause/resume", "Eight-second tour without selection/hash changes"]
+  },
+  "limitations": ["Pure SVG with discrete navigation, no WebGL or turning 3D engine", "Minimum 44px hit targets overlap the static drawing but never follow lifted modules", "The bounded pose grid and recorded fast-takeover paths do not enumerate every arbitrary future input sequence; full-page usability review remains the root agent's responsibility"]
+}

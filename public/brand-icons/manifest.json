@@ -1,0 +1,111 @@
+{
+  "retrieved": "2026-10-14",
+  "simpleIconsCommit": "4d29a35c954699b389a834aacc97dd6e7e74143c",
+  "boardUiCommit": "ec5c5eb3e29c2441be63b9422cd54f411ef23466",
+  "files": [
+    {
+      "file": "arduino.svg",
+      "sha256": "e3e0b836d682159a1d0660e3081527fca03bf767202dff3bdebea3593fd7e77a"
+    },
+    {
+      "file": "ascend.svg",
+      "sha256": "f1ca145ef5d7e918e80796af67e5f7dd6957bb9746ce5ce111c82eabc310bf9c"
+    },
+    {
+      "file": "cmake.svg",
+      "sha256": "06757bccadf0459aca0a4c6a3898bd58e2dd71ea552bf7058cd406adc32fefa9"
+    },
+    {
+      "file": "cplusplus.svg",
+      "sha256": "adf33f5026f3f70d54f1068cb5d1a790c37b2105cbe728edd170251759d13f18"
+    },
+    {
+      "file": "drizzle.svg",
+      "sha256": "dbe13ddf4a2c69ee6379e29edcd82584c13499b59304d94b2d29631527b9a46d"
+    },
+    {
+      "file": "espressif.svg",
+      "sha256": "d0c66fc70620542d6fd16c5369d99cebd110abdcc24b7233c2d3dd14d256d420"
+    },
+    {
+      "file": "github.svg",
+      "sha256": "693d7abe6f899646cc2e96856723b45e95f71885a54910b2749f6decdf7e1ee1"
+    },
+    {
+      "file": "githubactions.svg",
+      "sha256": "e8b23379b4d89e96731ae354ea9cd3d8ceddf67f411bde39853f215138843777"
+    },
+    {
+      "file": "go.svg",
+      "sha256": "36a745fe15584bf138d02ae6abcbdd155bc1cd4f4976634ad34861b2059db559"
+    },
+    {
+      "file": "nextdotjs.svg",
+      "sha256": "593e14da3ddb65be4c8fa6a178f2f48a01a8bd39ea384f679cd7182b520da502"
+    },
+    {
+      "file": "numpy.svg",
+      "sha256": "ddbd7d92ab879ceba54f5428f49a703ba8d05d54b93808b7178f5e0afc8373a3"
+    },
+    {
+      "file": "openai.svg",
+      "sha256": "197708c9429f953a5ab25031c0dd8e4bd532a02d35aed1928b1763390654a45c"
+    },
+    {
+      "file": "orcid.svg",
+      "sha256": "8b4fcb056be447044f5be055d0ee8d27e70cb24153bb2b10c4cfa0a3f16ae19c"
+    },
+    {
+      "file": "platformio.svg",
+      "sha256": "793505bad61acb61eb2d66891abf48ab74a6d4d5b78cd99da41eca3a87fcbed1"
+    },
+    {
+      "file": "playwright.svg",
+      "sha256": "6b0a4367bdeab10995bc239278f04c68c10e48adbec15e799e01909a0d66dcb9"
+    },
+    {
+      "file": "postgresql.svg",
+      "sha256": "c8ccadbd88c9312c2ad3734c4861b31d3485ce179ee91d64793143f83cfa745c"
+    },
+    {
+      "file": "python.svg",
+      "sha256": "ad9468e1c4903f73ae7eebfbe980f0f727a10db695be3d914e7d8bd25356a862"
+    },
+    {
+      "file": "pytorch.svg",
+      "sha256": "4dd3f3d3e4102f3bee391fcb3d8ac960a14c48e6655d43b23f7b386d5da36d01"
+    },
+    {
+      "file": "react.svg",
+      "sha256": "ab9136a1a4a8be72ac6743e1bdd1912d878bd68d57787ea7a6c6838e3b23c01c"
+    },
+    {
+      "file": "scipy.svg",
+      "sha256": "5ec415714cccb3de34bb6e795367e9bcce071ed3feab3390fcedf48c1c8f47f9"
+    },
+    {
+      "file": "sdl.png",
+      "sha256": "b8eebe5a461777cd708adcfb925701b8f3a8a7c19a9295eb7e4d712e12a4b528"
+    },
+    {
+      "file": "tailwindcss.svg",
+      "sha256": "5d4ede3c95da824f543c6eefbe7c78b45ecce6796f6633de196dd712a7841140"
+    },
+    {
+      "file": "typescript.svg",
+      "sha256": "7f023e8d1e767370306ec9437d2de5d5af97491d6208dd7799a3808a7c10a36a"
+    },
+    {
+      "file": "vitest.svg",
+      "sha256": "216ef31fa83484d7c42fa9caae00a857d3756cb6158516dd395799f2b6631d5c"
+    },
+    {
+      "file": "vllm.svg",
+      "sha256": "1b55a37f4deae2956f4a9e3a7b6eea50f73ee1b056e0e4e86060c25f48f546f8"
+    },
+    {
+      "file": "x.svg",
+      "sha256": "693e68863eceb8dc9f72e2acd386ab9c20a10858dab2c076212f7084cb7a32fe"
+    }
+  ]
+}
