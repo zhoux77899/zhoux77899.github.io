@@ -10,6 +10,12 @@
 docs/*
 !docs/content-sources.md
 !docs/surface-home.md
+!docs/development.md
+!docs/agents/
+docs/agents/*
+!docs/agents/issue-tracker.md
+!docs/agents/triage-labels.md
+!docs/agents/domain.md
 .impeccable/mocks/
 .impeccable/review/
 .impeccable/review-v2/
