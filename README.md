@@ -1,27 +1,30 @@
 # zhoux77899 Portfolio
 
-zhoux77899's personal site: open-source projects, tools, research background, and travel impressions. A centered precision exploration case connects the page sections, six projects share a looping gallery, and Hairline scenes represent New Zealand, Japan, and China. English content is grounded in public GitHub repositories and user-confirmed personal records. The site supports light, dark, and system themes and deploys to GitHub Pages.
+Personal website for zhoux77899, with open-source projects, research publications, background, and travel impressions. An interactive exploration case connects the sections, six projects share a looping gallery, and Hairline drawings depict New Zealand, Japan, and China.
 
-## Local development
+[Visit the website](https://zhoux77899.github.io/)
 
-Use **Bun 1.4.3**. Project commands run without a Node installation.
+The site uses React, TypeScript, Vite, and Tailwind CSS. It supports keyboard navigation, light/dark/system themes, and reduced motion. Content comes from public sources and user-confirmed personal records.
+
+## Development
+
+Install [Bun 1.4.3](https://bun.com/docs/installation), then run:
 
 ```bash
 bun install --frozen-lockfile
 bun run dev
 ```
 
-The development server defaults to `http://localhost:5173`. Follow the [Bun installation guide](https://bun.com/docs/installation) to install the specified version when setting up a new environment.
+The development server defaults to `http://localhost:5173`. Project commands use Bun and do not require a separate Node installation.
 
-This workspace also has a portable Windows executable at `.tools/bun/bun-windows-x64-baseline/bun.exe`. If it is present, add its directory to the current PowerShell process's PATH:
+To build and preview the production site:
 
-```powershell
-$portfolioBunDirectory = (Resolve-Path '.tools/bun/bun-windows-x64-baseline').Path
-$env:PATH = $portfolioBunDirectory + ';' + $env:PATH
-bun --version
+```bash
+bun run build
+bun run preview
 ```
 
-`.tools/` holds local runtimes, caches, and temporary files and is excluded from Git. Install the same Bun version when using another workspace.
+The build goes into `dist/`; the preview server defaults to port 4173.
 
 ## Commands
 
@@ -33,98 +36,50 @@ bun --version
 | `bun run test` | Run Bun Test in watch mode |
 | `bun run test:run` | Run the tests once |
 | `bun run test:coverage` | Run tests and produce console and LCOV coverage reports |
-| `bun run build` | Build the static site into `dist/` |
+| `bun run build` | Generate the Anatomy assets, audit their geometry, and build the static site |
 | `bun run anatomy:build` | Generate and audit the case geometry and both theme previews |
 | `bun run anatomy:audit` | Run the physical-part audit across resting and moving poses |
-| `bun run preview` | Preview the production build on port 4173 by default |
+| `bun run preview` | Preview the production build |
 | `bun run check` | Run type checking, lint, coverage tests, and the production build |
 
-Vite handles transpilation and bundling. Type checking is a separate step, so run the full `check` before publishing.
+Vite handles transpilation and bundling separately from type checking. Run `bun run check` before opening a pull request.
 
-## Technology stack
+## Content and structure
 
-| Category | Version or implementation |
+The seven sections are About, Projects, Stack, Background, Publications, Elsewhere, and Contact. Upstream contributions appear within Projects. Contact links to GitHub, X, and ORCID.
+
+The project gallery advances every six seconds while visible and idle. Hover, keyboard focus, gestures, hidden or offscreen content, and reduced motion suspend rotation. Indicators, keyboard controls, and native swipes remain available. Explicit project links and browser Back restore the selected card.
+
+| Path | Contents |
 | --- | --- |
-| React / React DOM | 19.3.0 |
-| TypeScript type checking | 7.0.2 |
-| Vite / React plugin | 8.3.4 / 6.1.2 |
-| Tailwind CSS | 4.3.3 |
-| UI | Local BoardUI Free source and React Aria Components |
-| Icons | Hugeicons React 1.1.10 and Free Icons 4.3.5 |
-| Animation | Motion 14.1.0 |
-| Testing | Bun Test, Happy DOM, and Testing Library |
-| Package manager and JavaScript tooling runtime | Bun 1.4.3 |
+| [`src/content/`](src/content/) | Website copy, content records, accessible labels, and SEO metadata |
+| [`src/components/sections/`](src/components/sections/) | The seven page sections |
+| [`src/components/base/`](src/components/base/) | Adapted BoardUI components |
+| [`src/providers/`](src/providers/) and [`src/hooks/`](src/hooks/) | Themes, exploration state, and motion preferences |
+| [`src/styles/`](src/styles/) | Fonts, brand tokens, responsive layout, and reduced-motion styles |
+| [`public/hairline/`](public/hairline/) | Hairline kernel, figure source, and static previews |
+| [`scripts/anatomy/`](scripts/anatomy/) | Exploration-case geometry, generation scripts, and audit tools |
+| [`public/anatomy/`](public/anatomy/) | Generated case assets and theme previews |
 
-### TypeScript compatibility packages
+Edit website text in [`src/content/en.ts`](src/content/en.ts). The same content supplies static HTML metadata and illustration labels. Keep factual changes tied to the evidence in [`docs/content-sources.md`](docs/content-sources.md).
 
-`@typescript/native` is an npm alias for the stable `typescript@7.0.2` package. The `typecheck` script explicitly invokes its native compiler launcher. `typescript` is an alias for `@typescript/typescript6@6.0.2` and supplies the compiler API needed by typescript-eslint; it does not run the project's type checks. This follows [Microsoft's coexistence strategy](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/).
+## Deployment
 
-`@types/node` supplies type declarations required by dependencies, without adding a Node runtime. Project scripts invoke each CLI through Bun so that a Node shebang cannot silently change the runtime.
+The [GitHub Actions workflow](.github/workflows/deploy.yml) installs dependencies from the frozen lockfile and runs `bun run check` on Ubuntu and Windows. Pull requests run checks only. A push to `main` uploads the Ubuntu build and deploys it after both platform checks pass.
 
-The development configuration excludes `.tools/`, coverage output, and local documentation from file watching. React Aria uses component subpaths, and Hugeicons uses individual icon subpaths. Vite explicitly prebundles React and its CommonJS compatibility shims while loading other modules as ESM. When adding a CommonJS dependency, update `optimizeDeps.include` and verify that the development page loads.
+Set the repository's Pages publishing source to **GitHub Actions**. The site is a static single-page application served from the root URL, with hash anchors for sections.
 
-## Project structure and content
+## Documentation and contributing
 
-- `src/content/en.ts`: The single source for English copy, content records, accessible labels, and SEO metadata.
-- `src/content/index.ts`: The typed content entry point and locale registry. `src/content/types.ts` defines the shared content contract.
-- `src/lib/navigation.ts`: Stable section anchors paired with labels from the content module.
-- `src/components/sections/`: The seven page sections. Contact links to GitHub, X, and ORCID.
-- `src/components/base/`: Local BoardUI component source.
-- `src/providers/` and `src/hooks/`: Shared themes, exploration state, and motion preferences.
-- `src/styles/globals.css`: Fonts, brand colors, responsive behavior, and reduced motion. `src/styles/boardui/` contains the base design tokens.
-- `src/assets/fonts/`: Self-hosted Geist and Geist Mono variable WOFF2 fonts. Geist covers body text, headings, and controls; Geist Mono covers code and monospaced styles.
-- `src/utils/icons.tsx`: Stable Hugeicons component adapters and RTL mirroring metadata.
-- `src/utils/brand-icons.tsx` and `public/brand-icons/`: Monochrome vendor marks shared by social links, Contact, and the technology stack. Sources, hashes, and licenses accompany the assets.
-- `public/hairline/`: The unmodified Hairline kernel, project and country figures, and light/dark rest previews. Earlier figure definitions remain available for compatibility.
-- `scripts/anatomy/`: Original case geometry and the MIT Anatomy kit. Development and production builds regenerate its static assets and run the geometry audit.
-- `public/anatomy/`: Generated case paths, both theme previews, and the Anatomy license.
-
-Edit website text in `src/content/en.ts`, including section copy, dynamic labels, social handles, project links, and illustration descriptions. Vite fills the HTML metadata template from the same source in development and production, so the initial static HTML includes the site's SEO. Anatomy generation also reads this content module for labels and preview metadata; generated files should not be edited directly.
-
-The current default locale is English. To prepare another language, add a content file matching `SiteContent` and register it in `src/content/index.ts`. Identifiers, anchors, and icon keys remain stable independently of displayed labels. This structure reserves an i18n boundary; the site currently has no language selector, browser-language detection, or persisted locale preference.
-
-Theme preferences are stored in `localStorage.theme` as `light`, `dark`, or `system`. The startup script applies `.dark`, `data-theme`, and `color-scheme` before React renders. Theme selection remains available when browser storage is disabled.
-
-## Maintaining BoardUI source
-
-The base components come from the [BoardUI Free registry](https://www.boardui.com/components). The Carousel and underline Tabs adapt official source to the site's shared exploration state and brand tokens. Copyright and licensing details are in [Third-party notices](THIRD_PARTY_NOTICES.md). `boardui.json` directs upstream stylesheet installation to `src/styles/boardui/`.
-
-To update components, obtain the official source in a separate directory, review the differences, and merge them into the project. Preserve the Hugeicons adapters, direction helper, avatar image fallback, and brand token mappings rather than overwriting local changes. Run the CLI through Bun if you use it:
-
-```bash
-bunx --bun boardui@0.5.8 add button link-button icon-button chip avatar segmented-control
-```
-
-The CLI may write helper rule files or add an upstream icon package. Review generated changes after an update. Production icon dependencies should contain only the two Hugeicons packages.
-
-## Testing and deployment
-
-Bun preloads Happy DOM before loading Testing Library matchers, browser API mocks, and test cleanup. Tests cover themes, shared exploration state, project deep links and history, carousel autoplay and pause conditions, keyboard controls and interrupted transitions, country selection, both navigation menus, technology tabs, touch-tap cancellation, illustration loading and cleanup, and motion preferences. Content tests cover locale completeness, display-independent identities, rich-text order, and static SEO generation. The production build also audits the case's physical geometry and depth order. Run `bun run check` for current validation results; the original surface implementation record is in [docs/surface-home.md](docs/surface-home.md).
-
-GitHub Actions is configured to run frozen-lockfile installation and `bun run check` on Ubuntu and Windows. Pull requests run checks only. On a push to `main`, the Ubuntu job uploads the build artifact; deployment starts after both platform checks pass. Set the repository's Pages publishing source to **GitHub Actions**.
-
-The site is a static single-page application served from the repository's root URL path, with hash anchors for sections. GitHub manages the internal runtimes of official Actions; all project commands use Bun.
+- [Development guide](docs/development.md): tooling, content, component updates, illustration lifecycle, and validation.
+- [Contributing](CONTRIBUTING.md): contribution workflow, commit messages, pull requests, and checks.
+- [Product requirements](PRODUCT.md) and [design system](DESIGN.md): intended behavior and visual rules.
+- [Content sources](docs/content-sources.md): public evidence, verification dates, and personal-record boundaries.
+- [Implementation record](docs/surface-home.md): the original surface implementation and validation record.
+- [Agent instructions](AGENTS.md): repository guidance for coding agents.
 
 ## License
 
-See [LICENSE](LICENSE) for the project license. Copied BoardUI code uses the MIT license, with the complete text in [the BoardUI license](licenses/BoardUI-LICENSE.txt). Geist and Geist Mono use SIL OFL 1.1; their original [license](public/fonts/LICENSE.txt) and [OFL notice](public/fonts/OFL.txt) are included in the deployed site.
+See [LICENSE](LICENSE) for the project license and [Third-party notices](THIRD_PARTY_NOTICES.md) for component and asset attribution.
 
-## Hairline illustrations
-
-Figure source lives in `public/hairline/figures/`; the kernel is copied unchanged from the user-invoked hairline-create skill. Each figure uses the original `mount` / `set` / `destroy` contract and can also be assembled into its official standalone bench for validation. The site loads module scripts lazily through a shared registry and mounts only the drawing stage, without sliders, readouts, or labels. CSS maps the engine's exposed monochrome palette variables to the current surface and theme.
-
-Static SVG rest previews provide loading and error fallback. Build and look artifacts stay under the ignored `.tools/hairline/` directory. The Hairline license is included in both `licenses/` and the public `/hairline/LICENSE.txt` asset. Public project facts and personal-record boundaries are documented in `docs/content-sources.md`.
-
-Touch input is adapted outside the original kernel. A confirmed single tap calls the figure's optional `activate(point)` method; dragging scrolls the project gallery or page, and cancelled or multi-finger gestures do not activate a part. `activate(null)` restores its resting pose.
-
-## Exploration case
-
-The Anatomy case contains 113 recorded physical solids. Its six objects link to Projects, Stack, Background, Open source, Travel, and Contact. Pointer and keyboard focus preview a module; clicking or pressing Enter on its hotspot selects the destination. The Hero presents identity, the full case, biography, actions, and social links on one centered axis. Its tighter projection frame preserves the physical drawing and hotspot alignment while making room for the full cover in the tested viewports. Shorter or zoomed windows retain normal vertical flow. Once the case leaves view, Explore opens the same interactive drawing in a dismissible popover. An idle tour resumes after eight seconds without input and never changes the URL or page selection. The animation stops offscreen and in hidden tabs, and reduced motion settles directly to the chosen pose.
-
-`bun run anatomy:build` generates both SVG previews and the JSON scene from `scripts/anatomy/build.mjs`, then checks resting geometry, 581 depth states, and 159 replayed frames from the browser's shared motion model. Run it after changing case geometry or its palette while the development server is already running. The original Anatomy line verifier is available under `scripts/anatomy/verify`; its optional browser-based checks require Node and Chrome, while ordinary project checks use Bun.
-
-## Project gallery
-
-The BoardUI carousel keeps one project centered with neighboring cards visible on both sides. Six canonical cards retain the `#project-*` anchors; four inert static copies allow seamless first/last transitions without duplicate anchors or extra Hairline runtimes. It advances every six seconds while visible and idle. Hover, focus, gestures, hidden/offscreen state, reduced motion, and the pause control suspend automatic rotation. Keyboard commands, indicators, and native swipes remain available; manual interaction restarts the interval. Automatic selection and native scrolling do not add browser history; explicit deep links and Back reveal and center the target card. Project links use Source, Releases, and Website labels.
-
-The contribution section separately lists Source and all fifteen merged vLLM Ascend PRs verified on 2026-10-15. The technology tabs group AI infrastructure and agents together, followed by scientific computing, embedded systems, web/data, and development tools. Country scenes keep stationary geometry monochrome and use the site accent for the SUV, train, and opening shutters, including their static fallbacks.
+Copied BoardUI code uses the MIT license, with its full text in the [BoardUI license](licenses/BoardUI-LICENSE.txt). Geist and Geist Mono use SIL OFL 1.1; their [license](public/fonts/LICENSE.txt) and [OFL notice](public/fonts/OFL.txt) are included in the deployed site. Hairline and Anatomy license texts accompany their [Hairline](public/hairline/LICENSE.txt) and [Anatomy](public/anatomy/LICENSE.txt) assets.
