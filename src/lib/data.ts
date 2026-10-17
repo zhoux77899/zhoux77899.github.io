@@ -1,17 +1,42 @@
-import type { Contribution, ExperienceItem, PersonalInfo, Project, Skill, TravelItem } from '@/types';
+import type { Contribution, ExperienceItem, PersonalInfo, Project, Publication, Skill, TravelItem } from '@/types';
 
 export const githubUrl = 'https://github.com/zhoux77899';
+export const orcidUrl = 'https://orcid.org/0000-0003-3695-460X';
+
+// Verified against ORCID and publisher metadata on 2026-10-16. DOI identity is case-insensitive.
+export const publications: Publication[] = [
+  {
+    doi: '10.3390/photonics13070649',
+    title: 'Improving Precision in Extended-Range Three-Dimensional Single-Molecule Localization with Physics-Guided Deep Learning',
+    authors: ['Xiang Zhou', 'Yuma Ito', 'Makio Tokunaga'],
+    year: 2026,
+    journal: 'Photonics',
+    volume: '13',
+    issue: '7',
+    pages: '649',
+  },
+  {
+    doi: '10.1364/ao.56.008040',
+    title: 'Dynamic wavefront measurement with a pinhole linear polarizer point-diffraction interferometer',
+    authors: ['Xiang Zhou', 'Renhui Guo', 'Wenhua Zhu', 'Donghui Zheng', 'Lei Chen'],
+    year: 2017,
+    journal: 'Applied Optics',
+    volume: '56',
+    issue: '29',
+    pages: '8040–8047',
+  },
+];
 
 export const personalInfo: PersonalInfo = {
   name: 'zhoux77899',
   title: 'AI Infrastructure & Agent Engineer',
-  bio: "I work on LLM inference and agent systems, with a background in optics and life science research. Here you'll find my open-source projects and a few places I've been.",
+  bio: "I work on LLM inference and agent systems, with a background in optics and life science. Here I share my projects, research, and a few places I've been.",
   footerBio: 'I work on LLM inference and agents. This is where I keep my side projects.',
   avatar: 'https://avatars.githubusercontent.com/u/33858552?v=4',
   socialLinks: [
     { name: 'GitHub', url: githubUrl, icon: 'github' },
     { name: 'X', url: 'https://x.com/miyoshichi', icon: 'external' },
-    { name: 'ORCID', url: 'https://orcid.org/0000-0003-3695-460X', icon: 'external' },
+    { name: 'ORCID', url: orcidUrl, icon: 'external' },
   ],
 };
 
@@ -118,6 +143,7 @@ export const contributions: Contribution[] = [
   {
     title: 'vLLM Ascend',
     description: 'Contributions to the community-maintained vLLM plugin for Ascend NPUs. My merged work includes W4A16 quantized MoE support, fused MoE operators, and multimodal encoder graph execution.',
+    featuredPullRequests: [4516, 2275, 10712],
     links: [
       { name: 'Upstream project', url: 'https://github.com/vllm-project/vllm-ascend' },
       { name: 'Qwen3 W4A8 quantization (v0.9.1) #1275', url: 'https://github.com/vllm-project/vllm-ascend/pull/1275' },

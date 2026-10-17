@@ -7,6 +7,7 @@ import { Skills } from '@/components/sections/Skills';
 import { Projects } from '@/components/sections/Projects';
 import { Travel } from '@/components/sections/Travel';
 import { Experience } from '@/components/sections/Experience';
+import { Publications } from '@/components/sections/Publications';
 import { Contact } from '@/components/sections/Contact';
 import { MotionConfig } from 'motion/react';
 import { useMotionPreference } from '@/hooks/useMotionPreference';
@@ -26,6 +27,7 @@ function App() {
             <Projects />
             <Skills />
             <Experience />
+            <Publications />
             <Travel />
             <Contact />
           </main>

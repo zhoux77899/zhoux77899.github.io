@@ -14,9 +14,12 @@ function selectedProject() {
 function carouselGeometry(gallery: HTMLElement, initialWidth = 500, initialCardWidth = 400, initialGap = 24) {
   let width = initialWidth, cardWidth = initialCardWidth, gap = initialGap;
   Object.defineProperty(gallery, 'clientWidth', { get: () => width, configurable: true });
-  gallery.getBoundingClientRect = () => ({ left: 76, width, height: 500, top: 180, bottom: 680 } as DOMRect);
+  gallery.getBoundingClientRect = () => ({ left: 76, right: 76 + width, width, height: 500, top: 180, bottom: 680 } as DOMRect);
   Array.from(gallery.children).forEach((slide, index) => {
-    slide.getBoundingClientRect = () => ({ left: 76 + (width - cardWidth) / 2 + index * (cardWidth + gap) - gallery.scrollLeft, width: cardWidth, height: 500 } as DOMRect);
+    slide.getBoundingClientRect = () => {
+      const left = 76 + (width - cardWidth) / 2 + index * (cardWidth + gap) - gallery.scrollLeft;
+      return { left, right: left + cardWidth, width: cardWidth, height: 500, top: 180, bottom: 680 } as DOMRect;
+    };
   });
   return {
     offset: (logicalIndex: number) => (logicalIndex + 2) * (cardWidth + gap),
@@ -39,6 +42,7 @@ function rotationHarness() {
     callback: IntersectionObserverCallback;
     constructor(callback: IntersectionObserverCallback) { this.callback = callback; }
     observe(target: Element) { if (target.classList.contains('carousel')) observers.set(this as unknown as IntersectionObserver, this.callback); }
+    unobserve() {}
     disconnect() { observers.delete(this as unknown as IntersectionObserver); }
   } });
   window.setTimeout = ((callback: TimerHandler, delay?: number) => {
@@ -79,6 +83,8 @@ describe('Project carousel', () => {
     expect(screen.queryByRole('navigation', { name: 'Choose a project' })).not.toBeInTheDocument();
     expect(document.querySelector('.project-gallery-position')).toBeNull();
     const gallery = screen.getByRole('region', { name: 'Personal projects' });
+    expect(gallery.closest('section')?.id).toBe('projects');
+    expect(screen.queryByRole('button', { name: /automatic project rotation/ })).toBeNull();
     expect(gallery.querySelectorAll('[data-project-id]')).toHaveLength(6);
     expect(gallery.querySelectorAll('[data-hairline]')).toHaveLength(6);
     const copies = gallery.querySelectorAll('[data-carousel-copy]');
@@ -113,6 +119,107 @@ describe('Project carousel', () => {
     expect(selectedProject()).toHaveAccessibleName('Show CFGAN');
     expect(window.history.length).toBe(historyLength);
     expect(window.location.hash).toBe('');
+  });
+
+  it('selects a visible canonical neighbor without changing history', () => {
+    renderProjects();
+    const gallery = screen.getByRole('region', { name: 'Personal projects' });
+    const geometry = carouselGeometry(gallery);
+    gallery.scrollLeft = geometry.offset(0);
+    const historyLength = window.history.length;
+    const neighbor = screen.getByRole('heading', { name: 'LUMA' });
+    fireEvent.pointerDown(neighbor, { pointerId: 1, pointerType: 'mouse', isPrimary: true, button: 0, clientX: 564, clientY: 300 });
+    fireEvent.pointerUp(neighbor, { pointerId: 1, pointerType: 'mouse', isPrimary: true, button: 0, clientX: 564, clientY: 300 });
+    fireEvent.click(neighbor, { button: 0, detail: 1, clientX: 564, clientY: 300 });
+    expect(selectedProject()).toHaveAccessibleName('Show LUMA');
+    expect(gallery.scrollLeft).toBe(geometry.offset(1));
+    expect(window.history.length).toBe(historyLength);
+    expect(window.location.hash).toBe('');
+  });
+
+  it('selects inert endpoint neighbors from track-retargeted clicks and rebases both ends', () => {
+    renderProjects();
+    const gallery = screen.getByRole('region', { name: 'Personal projects' });
+    const geometry = carouselGeometry(gallery);
+    gallery.scrollLeft = geometry.offset(0);
+    const tap = (x: number) => {
+      // Inert descendants cannot be an event target in a real browser.
+      fireEvent.pointerDown(gallery, { pointerId: 1, pointerType: 'touch', isPrimary: true, button: 0, clientX: x, clientY: 300 });
+      fireEvent.pointerUp(gallery, { pointerId: 1, pointerType: 'touch', isPrimary: true, button: 0, clientX: x, clientY: 300 });
+      fireEvent.click(gallery, { button: 0, detail: 1, clientX: x, clientY: 300 });
+    };
+    tap(88);
+    expect(selectedProject()).toHaveAccessibleName('Show Kitsune Proxy');
+    expect(gallery.scrollLeft).toBe(geometry.endpoint());
+    fireEvent(gallery, new Event('scrollend'));
+    expect(gallery.scrollLeft).toBe(geometry.offset(5));
+    tap(564);
+    expect(selectedProject()).toHaveAccessibleName('Show CFGAN');
+    expect(gallery.scrollLeft).toBe(geometry.offset(6));
+    fireEvent(gallery, new Event('scrollend'));
+    expect(gallery.scrollLeft).toBe(geometry.offset(0));
+    expect(gallery.querySelectorAll('[data-carousel-copy][inert]')).toHaveLength(4);
+    expect(window.location.hash).toBe('');
+  });
+
+  it('passes active artwork clicks and project links through without selecting a neighbor', () => {
+    renderProjects();
+    const gallery = screen.getByRole('region', { name: 'Personal projects' });
+    const geometry = carouselGeometry(gallery);
+    gallery.scrollLeft = geometry.offset(0);
+    const current = document.querySelector<HTMLElement>('[data-project-id="cfgan"]')!;
+    const drawing = current.querySelector<HTMLElement>('.hairline-figure')!;
+    let drawingClicks = 0;
+    drawing.addEventListener('click', () => { drawingClicks++; });
+    fireEvent.pointerDown(drawing, { pointerId: 1, pointerType: 'touch', isPrimary: true, button: 0, clientX: 300, clientY: 300 });
+    fireEvent.pointerUp(drawing, { pointerId: 1, pointerType: 'touch', isPrimary: true, button: 0, clientX: 300, clientY: 300 });
+    fireEvent.click(drawing, { button: 0, detail: 1, clientX: 300, clientY: 300 });
+    expect(drawingClicks).toBe(1);
+    expect(selectedProject()).toHaveAccessibleName('Show CFGAN');
+    const source = within(document.querySelector<HTMLElement>('[data-project-id="luma"]')!).getByRole('link', { name: 'Source' });
+    let linkClicks = 0;
+    let intercepted = false;
+    source.addEventListener('click', event => { linkClicks++; intercepted = event.defaultPrevented; event.preventDefault(); });
+    fireEvent.pointerDown(source, { pointerId: 2, pointerType: 'mouse', isPrimary: true, button: 0, clientX: 564, clientY: 500 });
+    fireEvent.pointerUp(source, { pointerId: 2, pointerType: 'mouse', isPrimary: true, button: 0, clientX: 564, clientY: 500 });
+    fireEvent.click(source, { button: 0, detail: 1, clientX: 564, clientY: 500 });
+    expect(linkClicks).toBe(1);
+    expect(intercepted).toBe(false);
+    expect(source).toHaveAttribute('target', '_blank');
+    expect(selectedProject()).toHaveAccessibleName('Show CFGAN');
+  });
+
+  it('ignores clicks synthesized after drags, touch scrolling, and canceled gestures', () => {
+    renderProjects();
+    const gallery = screen.getByRole('region', { name: 'Personal projects' });
+    const geometry = carouselGeometry(gallery);
+    const neighbor = document.querySelector<HTMLElement>('[data-project-id="luma"] .hairline-figure')!;
+    gallery.scrollLeft = geometry.offset(0);
+    const start = (id: number, pointerType: string) => fireEvent.pointerDown(neighbor, { pointerId: id, pointerType, isPrimary: true, button: 0, clientX: 564, clientY: 300 });
+    const end = (id: number, pointerType: string) => {
+      fireEvent.pointerUp(neighbor, { pointerId: id, pointerType, isPrimary: true, button: 0, clientX: 564, clientY: 300 });
+      fireEvent.click(neighbor, { button: 0, detail: 1, clientX: 564, clientY: 300 });
+    };
+    start(1, 'mouse');
+    fireEvent.pointerMove(neighbor, { pointerId: 1, pointerType: 'mouse', clientX: 520, clientY: 300 });
+    end(1, 'mouse');
+    expect(selectedProject()).toHaveAccessibleName('Show CFGAN');
+    start(2, 'touch');
+    gallery.scrollLeft += 20;
+    end(2, 'touch');
+    expect(selectedProject()).toHaveAccessibleName('Show CFGAN');
+    gallery.scrollLeft = geometry.offset(0);
+    start(3, 'touch');
+    fireEvent.pointerCancel(neighbor, { pointerId: 3, pointerType: 'touch' });
+    end(3, 'touch');
+    expect(selectedProject()).toHaveAccessibleName('Show CFGAN');
+    start(4, 'touch');
+    fireEvent.pointerCancel(neighbor, { pointerId: 4, pointerType: 'touch' });
+    // Browsers normally omit click after pointercancel. The next clean tap
+    // must replace that abandoned gesture rather than stay blocked forever.
+    start(5, 'touch');
+    end(5, 'touch');
+    expect(selectedProject()).toHaveAccessibleName('Show LUMA');
   });
 
   it('restores deep links and browser Back while a native swipe adds no history', async () => {
@@ -264,6 +371,61 @@ describe('Project carousel', () => {
     } finally { view.unmount(); clock.restore(); }
   });
 
+  it.each([
+    { name: 'between canonical cards', hash: '', start: 0, target: 1, next: 2, stoppedLabel: 'LUMA', nextLabel: 'Claude Code Insights' },
+    { name: 'across the loop endpoint', hash: '#project-kitsune-proxy', start: 5, target: 6, next: 1, stoppedLabel: 'CFGAN', nextLabel: 'LUMA' },
+  ])('recovers an interrupted native transition $name after returning to the page', ({ hash, start, target, next, stoppedLabel, nextLabel }) => {
+    window.history.replaceState(null, '', hash || '/');
+    const clock = rotationHarness();
+    const view = renderProjects();
+    try {
+      const gallery = screen.getByRole('region', { name: 'Personal projects' });
+      const geometry = carouselGeometry(gallery);
+      act(() => { gallery.scrollLeft = geometry.offset(start); fireEvent(gallery, new Event('scrollend')); clock.visible(true); });
+      const nativeScroll = gallery.scrollTo;
+      gallery.scrollTo = options => {
+        if (typeof options !== 'object' || options.left === undefined) return;
+        // A backgrounded tab can interrupt smooth scrolling before its final
+        // snap. Restoring visibility does not produce another scrollend.
+        gallery.scrollLeft = options.behavior === 'smooth' ? options.left - 8 : options.left;
+      };
+      act(() => { clock.tick(); });
+      expect(selectedProject()).toHaveAccessibleName(`Show ${stoppedLabel}`);
+      expect(gallery.scrollLeft).toBe(geometry.offset(target) - 8);
+      act(() => { clock.hidden(true); clock.hidden(false); });
+      gallery.scrollTo = nativeScroll;
+      act(() => { clock.tick(); });
+      expect(selectedProject()).toHaveAccessibleName(`Show ${nextLabel}`);
+      expect(gallery.scrollLeft).toBe(geometry.offset(next));
+      expect(clock.timers.size).toBe(1);
+      expect(window.location.hash).toBe(hash);
+    } finally { view.unmount(); clock.restore(); }
+  });
+
+  it('releases stale gesture pauses when pointerup is lost after hiding or switching windows', () => {
+    const clock = rotationHarness();
+    const view = renderProjects();
+    try {
+      const gallery = screen.getByRole('region', { name: 'Personal projects' });
+      const geometry = carouselGeometry(gallery);
+      act(() => { gallery.scrollLeft = geometry.offset(0); fireEvent(gallery, new Event('scrollend')); clock.visible(true); });
+      act(() => { fireEvent.pointerDown(gallery, { pointerType: 'touch', pointerId: 1 }); });
+      expect(clock.timers.size).toBe(0);
+      // Releasing a pointer in another tab/window need not deliver pointerup
+      // to this document. Returning must not preserve the old gesture forever.
+      act(() => { clock.hidden(true); clock.hidden(false); });
+      expect(clock.timers.size).toBe(1);
+      act(() => { clock.tick(); });
+      expect(selectedProject()).toHaveAccessibleName('Show LUMA');
+      act(() => { fireEvent(gallery, new Event('scrollend')); fireEvent.pointerDown(gallery, { pointerType: 'touch', pointerId: 2 }); });
+      expect(clock.timers.size).toBe(0);
+      act(() => { fireEvent(window, new Event('blur')); });
+      expect(clock.timers.size).toBe(1);
+      act(() => { clock.tick(); });
+      expect(selectedProject()).toHaveAccessibleName('Show Claude Code Insights');
+    } finally { view.unmount(); clock.restore(); }
+  });
+
   it('pauses rotation for reading, gestures, hidden content and reduced motion, then restarts the idle period', () => {
     const clock = rotationHarness();
     const view = renderProjects();
@@ -295,7 +457,6 @@ describe('Project carousel', () => {
       expect(clock.timers.size).toBe(0);
       act(() => { clock.visible(true); setMediaQuery('(prefers-reduced-motion: reduce)', true); });
       expect(clock.timers.size).toBe(0);
-      expect(screen.getByRole('button', { name: 'Start automatic project rotation' })).toBeDisabled();
       act(() => { setMediaQuery('(prefers-reduced-motion: reduce)', false); });
       expect(clock.timers.size).toBe(1);
       expect(selectedProject()).toHaveAccessibleName('Show LUMA');
@@ -335,7 +496,7 @@ describe('Project carousel', () => {
     }
   });
 
-  it('allows explicit pause and resume and leaves no rotation timer or observer after StrictMode unmount', () => {
+  it('pauses for focused dots and leaves no rotation timer or observer after StrictMode unmount', () => {
     const clock = rotationHarness();
     const view = render(<StrictMode><ExplorerProvider><Projects /></ExplorerProvider></StrictMode>);
     try {
@@ -344,17 +505,13 @@ describe('Project carousel', () => {
       act(() => { gallery.scrollLeft = geometry.offset(0); fireEvent(gallery, new Event('scrollend')); clock.visible(true); });
       expect(clock.observers.size).toBe(1);
       expect(clock.timers.size).toBe(1);
-      act(() => { const pause = screen.getByRole('button', { name: 'Pause automatic project rotation' }); pause.focus(); fireEvent.click(pause); clock.visible(true); });
+      act(() => { screen.getByRole('button', { name: 'Show LUMA' }).focus(); clock.visible(true); });
       expect(clock.timers.size).toBe(0);
-      expect(screen.getByRole('button', { name: 'Start automatic project rotation' })).toHaveFocus();
-      act(() => { fireEvent.click(screen.getByRole('button', { name: 'Start automatic project rotation' })); });
-      act(() => { clock.visible(true); });
-      expect(clock.timers.size).toBe(1);
       const outside = document.createElement('button');
       document.body.append(outside);
       act(() => { outside.focus(); });
       expect(clock.timers.size).toBe(1);
-      act(() => { screen.getByRole('button', { name: 'Pause automatic project rotation' }).focus(); });
+      act(() => { screen.getByRole('button', { name: 'Show CFGAN' }).focus(); });
       expect(clock.timers.size).toBe(0);
       view.unmount();
       expect(clock.timers.size).toBe(0);
@@ -364,7 +521,7 @@ describe('Project carousel', () => {
     } finally { view.unmount(); clock.restore(); }
   });
 
-  it('normalizes project links and separates ordered pull requests from source', () => {
+  it('normalizes project links, features the three selected requests and folds the remaining twelve', () => {
     renderProjects();
     const luma = document.querySelector('[data-project-id="luma"]') as HTMLElement;
     expect(within(luma).getAllByRole('link').map(link => link.textContent)).toEqual(['Source', 'Releases', 'Website']);
@@ -373,12 +530,24 @@ describe('Project carousel', () => {
     expect(within(contribution).getByRole('link', { name: 'Source' }).parentElement).toHaveClass('contribution-source');
     const requests = contributions[0].links.filter(link => /\/pull\/\d+/.test(link.url))
       .sort((left, right) => Number(left.url.split('/').at(-1)) - Number(right.url.split('/').at(-1)));
-    const mainRequests = within(contribution).getByRole('list', { name: 'Merged pull requests' });
-    const links = within(mainRequests).getAllByRole('link');
-    expect(links.map(link => link.textContent)).toEqual(requests.map(link => link.name));
-    expect(links.map(link => link.getAttribute('href'))).toEqual(requests.map(link => link.url));
-    expect(new Set(links.map(link => link.getAttribute('href'))).size).toBe(requests.length);
-    expect(contribution.querySelector('details')).toBeNull();
+    const mainRequests = within(contribution).getByRole('list', { name: 'Featured merged pull requests' });
+    const featured = within(mainRequests).getAllByRole('link');
+    expect(featured.map(link => Number(link.getAttribute('href')?.split('/').at(-1)))).toEqual([4516, 2275, 10712]);
+    const disclosure = contribution.querySelector('details') as HTMLDetailsElement;
+    expect(disclosure).not.toHaveAttribute('open');
+    expect(within(disclosure).getByText('12 more pull requests')).toBeVisible();
+    const remaining = within(disclosure).getAllByRole('link', { hidden: true });
+    expect(remaining).toHaveLength(12);
+    expect(remaining[0]).not.toBeVisible();
+    const remainingRequests = requests.filter(link => !contributions[0].featuredPullRequests.includes(Number(link.url.split('/').at(-1))));
+    expect(remaining.map(link => link.textContent)).toEqual(remainingRequests.map(link => link.name));
+    expect(remaining.map(link => link.getAttribute('href'))).toEqual(remainingRequests.map(link => link.url));
+    const allLinks = [...featured, ...remaining];
+    expect(allLinks).toHaveLength(requests.length);
+    expect(new Set(allLinks.map(link => link.getAttribute('href'))).size).toBe(requests.length);
+    fireEvent.click(within(disclosure).getByText('12 more pull requests'));
+    expect(disclosure).toHaveAttribute('open');
+    expect(remaining[0]).toBeVisible();
     expect(within(contribution).getByText(`${requests.length} merged pull requests`)).toBeInTheDocument();
   });
 });

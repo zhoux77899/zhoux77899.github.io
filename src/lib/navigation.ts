@@ -3,6 +3,7 @@ export const navLinks = [
   { name: 'Projects', href: '#projects' },
   { name: 'Stack', href: '#skills' },
   { name: 'Background', href: '#experience' },
+  { name: 'Publications', href: '#publications' },
   { name: 'Elsewhere', href: '#travel' },
   { name: 'Contact', href: '#contact' },
 ] as const;

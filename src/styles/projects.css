@@ -35,10 +35,12 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--background);
-  scroll-margin-top: 112px;
+  scroll-margin-top: var(--anchor-offset);
 }
 #projects .carousel-item[data-active='true'] .project-card { border-color: var(--accent); }
+#projects .carousel-item[data-active='false'] .project-card { cursor: pointer; }
 #projects .project-card .hairline-figure { width: 100%; margin: 0; }
+#projects .project-art { width: 100%; min-width: 0; }
 #projects .project-static-figure { position: relative; aspect-ratio: 5 / 4; }
 #projects .project-static-figure img { width: 100%; height: 100%; object-fit: contain; }
 #projects .project-copy { display: flex; flex-direction: column; min-width: 0; height: 100%; justify-content: center; }
@@ -51,7 +53,6 @@
 #projects .project-links a, #projects .project-links > span { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; color: var(--sage); font-size: 13px; }
 #projects .project-link-icon { width: 17px; height: 17px; flex-shrink: 0; }
 #projects .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; }
-#projects .carousel-rotation { width: 44px; height: 44px; }
 #projects .carousel-dots { display: flex; align-items: center; gap: 0; }
 #projects .carousel-dot { display: flex; align-items: center; justify-content: center; width: 28px; min-height: 44px; padding: 0; border: 0; background: none; cursor: pointer; }
 #projects .carousel-dot span { width: 6px; height: 6px; border-radius: 999px; background: var(--muted); opacity: .6; transition: width 180ms ease-out, background-color 180ms ease-out, opacity 180ms ease-out; }
@@ -59,15 +60,16 @@
 #projects .carousel-dot:hover span { opacity: 1; }
 #projects .carousel-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-radius: 6px; }
 #projects .contribution-section { gap: 40px; margin-top: 48px; padding-top: 36px; }
-#projects .contribution-section article { scroll-margin-top: 112px; }
+#projects .contribution-section article { scroll-margin-top: var(--anchor-offset); }
 #projects .contribution-source { margin-bottom: 12px; }
 #projects .contribution-source a, #projects .contribution-requests a { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; color: var(--sage); font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
 #projects .contribution-source a:hover, #projects .contribution-requests a:hover { color: var(--foreground); }
 #projects .contribution-count { margin: 0 0 10px; color: var(--muted); font-size: 13px; }
 #projects .contribution-requests { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 24px; list-style: none; margin: 0; padding: 0; }
 #projects .contribution-more { margin-top: 12px; }
-#projects .contribution-more summary { color: var(--muted); font-size: 13px; min-height: 36px; cursor: pointer; width: fit-content; }
+#projects .contribution-more summary { color: var(--muted); font-size: 13px; min-height: 44px; align-content: center; cursor: pointer; width: fit-content; }
 #projects .contribution-more summary:hover { color: var(--foreground); }
+#projects .contribution-more summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
 #projects .contribution-more[open] summary { margin-bottom: 4px; }
 @media (max-width: 1023px) {
   #projects .carousel { --carousel-card-width: 82%; --carousel-gap: 20px; }

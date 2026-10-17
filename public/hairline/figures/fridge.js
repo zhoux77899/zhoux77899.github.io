@@ -1,6 +1,6 @@
 const { Cam, facing, fit, proj, unproj, rrect, circ, prism, solid, put, mk, poly, open, hull, run, seg, clamp, tween, tset, tval, tdone, pointer, register, disposer }=HL;
 function mount({stage,svg,read},value) {
-  const bag=disposer(),C=Cam(45,.5,1.25),W=76,D=54,H=130,A=145*Math.PI/180;
+  const bag=disposer(),C=Cam(45,.5,1.25),W=76,D=54,H=130,A=165*Math.PI/180,hinge=[W+5,D+6],doorWidth=W+10;
   fit(C,[[-7,-7,0],[84,136,0],[-7,-7,141],[145,105,137],[84,55,141]],200,166);
   const P=proj(C),front=facing(C),g=mk('g',{},svg),rr=(a,b,c,d,r)=>rrect(a,b,c,d,r,12),nodes=[],trays=[];
   const path=(parent,d,cls='nf lo')=>mk('path',{d,class:cls},parent);
@@ -30,7 +30,10 @@ function mount({stage,svg,read},value) {
   // Four front solids let an extracted shelf pass a frame edge without passing every wall.
   block(-5,D+3,2,D+5,7,H+5,1);block(W-2,D+3,W+5,D+5,7,H+5,1);
   block(2,D+3,W-2,D+5,7,12,1);block(2,D+3,W-2,D+5,H+1,H+5,1);
-  for(const z of [24,103])block(W-2,D-2,W+7,D+5,z,z+6,2);
+  for(const z of [24,103]) {
+    const ring=circ(2.2,48).map(q=>({...q,u:q.u+hinge[0],v:q.v+hinge[1]})),inner=circ(1.5,48).map(q=>({...q,u:q.u+hinge[0],v:q.v+hinge[1]}));
+    const n=node([z,z+6].flatMap(h=>ring.map(q=>[q.u,q.v,h])));put(solid(n.group),prism(P,front,ring,inner,z,z+6));
+  }
   for(let i=0;i<3;i++) {
     const z=18+i*35,shelf=block(4,5,W-4,D,z,z+3.1,5),foods=[],rest=[7,2,0][i];
     path(shelf.group,poly(rr(17,D-2,59,D,1).map(q=>P(q.u,q.v,z+3.2))));
@@ -56,15 +59,19 @@ function mount({stage,svg,read},value) {
     });
     trays.push({i,shelf,foods,rest,tw:tween(rest)});
   }
-  const doorPoint=(u,d,z)=>[W+1-u*Math.cos(A)+d*Math.sin(A),D+3+u*Math.sin(A)+d*Math.cos(A),z];
-  const doorSpace=([x,y,z])=>{const dx=x-W-1,dy=y-D-3;return [-dx*Math.cos(A)+dy*Math.sin(A),dx*Math.sin(A)+dy*Math.cos(A),z];};
-  const doorRing=rr(0,3,W,137,7),door=node([-2,2].flatMap(d=>doorRing.map(q=>doorPoint(q.u,d,q.v))),doorSpace);
+  // One fixed right-front hinge keeps the closed outline and the open slab aligned.
+  const doorPoint=(u,d,z,angle=A)=>[hinge[0]-u*Math.cos(angle)+d*Math.sin(angle),hinge[1]+u*Math.sin(angle)+d*Math.cos(angle),z];
+  const doorSpace=([x,y,z])=>{const dx=x-hinge[0],dy=y-hinge[1];return [-dx*Math.cos(A)+dy*Math.sin(A),dx*Math.sin(A)+dy*Math.cos(A),z];};
+  const doorRing=rr(0,7,doorWidth,H+5,6),door=node([-2,2].flatMap(d=>doorRing.map(q=>doorPoint(q.u,d,q.v))),doorSpace);
+  const doorP=(u,z,d)=>P(...doorPoint(u,-d,z)),doorFront=q=>q.nu*(-direction[0]*Math.cos(A)+direction[1]*Math.sin(A))+q.nv*direction[2]>0;
   const at=(ring,d)=>ring.map(q=>P(...doorPoint(q.u,d,q.v)));
-  path(door.group,poly(at(doorRing,-2)),'lo');path(door.group,poly(at(doorRing,2)),'sil');
-  path(door.group,poly(at(rr(4,8,W-4,131,5),2.1)),'nf lo');
-  path(door.group,poly(at(rr(12,72,19,108,3),4.8)),'nf');
-  path(door.group,open(at(rr(13,75,18,105,2),6.5).slice(4,40)),'nf sil');
-  path(door.group,poly(at(rr(8,14,W-8,37,3),2.2)),'nf lo');
+  put(solid(door.group),prism(doorP,doorFront,doorRing,rr(.9,7.9,doorWidth-.9,H+4.1,5.1),-2,2));
+  path(door.group,poly(at(rr(4,12,doorWidth-4,H,4),-2.1)),'nf lo');
+  path(door.group,poly(at(rr(8,18,doorWidth-8,39,3),-2.2)),'nf lo');
+  // The outside pull belongs to the free edge; its own solid sorts behind the open door.
+  const handleRing=rr(doorWidth-10,72,doorWidth-5,108,2.5),handle=node([2,7].flatMap(d=>handleRing.map(q=>doorPoint(q.u,d,q.v))),doorSpace);
+  for(const z of [72,103])put(solid(handle.group),prism(doorP,doorFront,rr(doorWidth-9.2,z,doorWidth-5.8,z+5,1.5),rr(doorWidth-8.8,z+.4,doorWidth-6.2,z+4.6,1.1),-5,-2));
+  put(solid(handle.group),prism(doorP,doorFront,handleRing,rr(doorWidth-9.2,72.8,doorWidth-5.8,107.2,1.7),-7,-4));
   // Compare opaque silhouettes only where they overlap, on a camera ray through that overlap.
   const cross=(a,b,p)=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);
   function overlap(a,b) {

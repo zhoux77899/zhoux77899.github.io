@@ -54,19 +54,19 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 border-b transition-colors ${
+        className={`site-header fixed inset-x-0 top-0 z-50 border-b transition-colors ${
           isScrolled
             ? 'border-line bg-background'
             : 'border-transparent bg-background'
         }`}
       >
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <div className="site-header-row mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <a
             href="#hero"
             onClick={handleNavClick}
             className="site-wordmark font-display font-semibold text-foreground"
           >
-            <span className="text-accent">{personalInfo.name}</span>
+            <span className="gradient-text-primary">{personalInfo.name}</span>
           </a>
 
           <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
@@ -91,7 +91,7 @@ export function Navbar() {
             <ThemeToggle />
             <Button
               ref={triggerRef}
-              variant="primary" iconOnly leadingIcon={MenuIcon}
+              variant="primary" size="small" iconOnly leadingIcon={MenuIcon}
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
               aria-controls={menuId}

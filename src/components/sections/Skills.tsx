@@ -6,6 +6,7 @@ import { getSkillCategoryLabel, skills, projects } from '@/lib/data';
 import type { SkillCategory } from '@/types';
 import { GitHubBrandIcon, TechnologyIcon } from '@/utils/brand-icons';
 import '@/styles/stack.css';
+import { AnimatedSection } from '@/components/common/AnimatedSection';
 
 const categories: readonly SkillCategory[] = ['ai', 'science', 'systems', 'web', 'tools'];
 
@@ -14,7 +15,7 @@ export function Skills() {
   return (
     <Section id="skills" className="stack-section">
       <SectionHeader titleId="skills-title" title="Tools I work with" description="From inference and agent tools to scientific computing, embedded devices, and the web." />
-      <Tabs
+      <AnimatedSection animation="fade-in"><Tabs
         selectedKey={activeCategory}
         onSelectionChange={key => {
           if (categories.some(category => category === key)) setActiveCategory(key as SkillCategory);
@@ -61,7 +62,7 @@ export function Skills() {
             </ul>
           </TabPanel>
         ))}
-      </Tabs>
+      </Tabs></AnimatedSection>
     </Section>
   );
 }

@@ -917,6 +917,42 @@
   }
 }
 
+/* Site extension: Secondary shares the brand gradient and Primary's state layering. */
+@utility bg-button-secondary {
+  position: relative;
+  isolation: isolate;
+  background-image: var(--gradient-button-secondary-default);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    background-image: var(--gradient-button-secondary-hover);
+    opacity: 0;
+    transition: opacity var(--button-transition-ms) ease;
+  }
+  &:hover:not(:disabled):not([aria-disabled="true"])::before {
+    opacity: 1;
+  }
+  &:active:not(:disabled):not([aria-disabled="true"]) {
+    background-image: var(--gradient-button-secondary-active);
+  }
+  &:active:not(:disabled):not([aria-disabled="true"])::before {
+    opacity: 0;
+  }
+  &:disabled,
+  &[aria-disabled="true"] {
+    background-image: var(--gradient-button-secondary-disabled);
+  }
+  &:disabled::before,
+  &[aria-disabled="true"]::before {
+    display: none;
+  }
+}
+
 @utility bg-button-danger {
   position: relative;
   isolation: isolate;

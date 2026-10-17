@@ -47,10 +47,10 @@ describe('Navbar', () => {
     hero.getBoundingClientRect = () => ({ top: -300 } as DOMRect);
     const projects = document.createElement('section');
     projects.id = 'projects';
-    projects.getBoundingClientRect = () => ({ top: 100 } as DOMRect);
+    projects.getBoundingClientRect = () => ({ top: 80 } as DOMRect);
     document.body.append(hero, projects);
 
-    renderNavbar();
+    await act(async () => { renderNavbar(); });
     const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
     const projectsLink = within(navigation).getByRole('link', { name: 'Projects' });
 

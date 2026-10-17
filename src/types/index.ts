@@ -13,9 +13,21 @@ export interface ContentLink {
   url: string;
 }
 
+export interface Publication {
+  doi: string;
+  title: string;
+  authors: string[];
+  year: number;
+  journal: string;
+  volume: string;
+  issue: string;
+  pages: string;
+}
+
 export interface Contribution {
   title: string;
   description: string;
+  featuredPullRequests: number[];
   links: ContentLink[];
 }
 

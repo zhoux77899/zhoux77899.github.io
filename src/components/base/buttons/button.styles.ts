@@ -53,12 +53,9 @@ export const buttonStyles = sortCx({
       "aria-disabled:text-foreground-disabled-danger aria-disabled:shadow-none",
     ].join(" "),
     secondary: [
-      "bg-background-primary-default text-text-primary",
-      "border border-border-button-default shadow-xs",
-      "hover:bg-background-primary-hover  hover:border-border-button-hover",
-      "active:bg-background-primary-active active:border-border-button-active",
-      "disabled:bg-background-primary-disabled disabled:border-border-button-default disabled:text-text-tertiary disabled:shadow-none",
-      "aria-disabled:bg-background-primary-disabled aria-disabled:border-border-button-default aria-disabled:text-text-tertiary aria-disabled:shadow-none",
+      "bg-button-secondary text-button-secondary-foreground shadow-xs",
+      "disabled:text-button-secondary-disabled-foreground disabled:shadow-none",
+      "aria-disabled:text-button-secondary-disabled-foreground aria-disabled:shadow-none",
     ].join(" "),
     ghost: [
       "bg-button-ghost-background text-button-ghost-foreground",

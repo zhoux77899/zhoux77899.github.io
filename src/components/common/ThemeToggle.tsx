@@ -14,7 +14,7 @@ export function ThemeToggle() {
         const selection = keys.values().next().value;
         if (isTheme(selection)) setTheme(selection);
       }}
-      className="shrink-0"
+      className="site-theme-toggle shrink-0"
     >
       <SegmentedControlItem id="light" aria-label="Light mode">
         <SunIcon aria-hidden="true" className="size-4" />

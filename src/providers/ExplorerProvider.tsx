@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { projects } from '@/lib/data';
-import { countryIds, readActiveExplorer, resolveExplorerHash } from '@/lib/explorer';
+import { countryIds, getNavigationOffset, readActiveExplorer, resolveExplorerHash } from '@/lib/explorer';
 import { ExplorerContext } from './explorerContext';
 import type { ExplorerState } from './explorerContext';
 
 function initialExplorer(): ExplorerState {
   const route = resolveExplorerHash(window.location.hash);
-  const current = route?.projectId || route?.countryId ? route : readActiveExplorer();
+  const current = route ?? readActiveExplorer();
   return {
     activeSection: current.section,
     activeDestination: current.destination,
@@ -43,11 +43,13 @@ export function ExplorerProvider({ children }: { children: ReactNode }) {
     const syncScroll = () => {
       scrollFrame = undefined;
       const current = readActiveExplorer();
+      const anchorOffset = getNavigationOffset();
+      const headerHeight = getNavigationOffset('header');
       const figure = document.querySelector('[data-explorer-main]')?.getBoundingClientRect();
-      const heroVisible = figure ? figure.bottom > 80 && figure.top < window.innerHeight : true;
+      const heroVisible = figure ? figure.bottom > headerHeight && figure.top < window.innerHeight : true;
       const visibleCountries = countryIds.filter((id) => {
         const rect = document.getElementById(`travel-${id}`)?.closest('article')?.getBoundingClientRect();
-        return rect && rect.height > 0 && rect.bottom > 112 && rect.top < window.innerHeight;
+        return rect && rect.height > 0 && rect.bottom > anchorOffset && rect.top < window.innerHeight;
       });
       setState((previous) => {
         const selectedCountryId = current.section === 'travel' && visibleCountries.length > 0 && !visibleCountries.includes(previous.selectedCountryId as typeof countryIds[number])

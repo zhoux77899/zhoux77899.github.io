@@ -3,15 +3,9 @@
  * Native scroll-snap and DOM measurements are retained; controlled selection,
  * inert endpoint copies and loop rebasing extend the original gallery.
  */
-import { Children, cloneElement, isValidElement, useCallback, useEffect, useRef, useState } from 'react';
-import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
-import { Button } from '@/components/base/buttons/button';
-import { createHugeicon } from '@/utils/icons';
-import PauseIconData from '@hugeicons/core-free-icons/PauseIcon';
-import PlayIconData from '@hugeicons/core-free-icons/PlayIcon';
+import { Children, cloneElement, isValidElement, useCallback, useEffect, useRef } from 'react';
+import type { HTMLAttributes, KeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactNode } from 'react';
 
-const PauseIcon = createHugeicon(PauseIconData, { displayName: 'PauseIcon' });
-const PlayIcon = createHugeicon(PlayIconData, { displayName: 'PlayIcon' });
 const rotationDelay = 6_000;
 
 interface CarouselItemProps extends HTMLAttributes<HTMLDivElement> {
@@ -48,9 +42,8 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
   const requestRef = useRef<{ index: number; position: number } | undefined>(undefined);
   const settleScrollRef = useRef(() => {});
   const restartRotationRef = useRef(() => {});
-  const interactionRef = useRef({ hovered: false, pressed: false, allowControlFocus: false });
-  const [rotationPaused, setRotationPaused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const interactionRef = useRef({ hovered: false, pressed: false });
+  const tapRef = useRef<{ id: number; x: number; y: number; scrollLeft: number; moved: number; complete: boolean; canceled: boolean } | undefined>(undefined);
   const all = Children.toArray(children).filter(isValidElement<CarouselItemProps>);
   const count = all.length;
   const copyCount = Math.min(2, count);
@@ -170,9 +163,8 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
     let visible = typeof IntersectionObserver === 'undefined';
     let timer: number | undefined;
     const interactions = interactionRef.current;
-    let focused = root.contains(document.activeElement)
-      && !(interactions.allowControlFocus && document.activeElement?.hasAttribute('data-carousel-rotation'));
-    const canRotate = () => visible && !document.hidden && !media.matches && !rotationPaused
+    let focused = root.contains(document.activeElement);
+    const canRotate = () => visible && !document.hidden && !media.matches
       && !interactions.hovered && !interactions.pressed && !focused;
     const restart = () => {
       window.clearTimeout(timer);
@@ -181,9 +173,14 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
       timer = window.setTimeout(() => {
         timer = undefined;
         if (!canRotate()) return;
-        // Never interrupt a native gesture or an unfinished loop transition.
-        // An instant recenter with an unchanged offset emits no scrollend.
+        // A native smooth scroll can stop before its final snap when the page
+        // is backgrounded. After six scroll-free seconds, finish that request
+        // instead of keeping its settle guard locked for every later cycle.
         if (requestRef.current) settleScrollRef.current();
+        if (requestRef.current) {
+          scrollToPosition(requestRef.current.position, true);
+          settleScrollRef.current();
+        }
         if (requestRef.current) { restart(); return; }
         choose(selectionRef.current + 1, 1);
       }, rotationDelay);
@@ -199,19 +196,18 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
     const leave = () => { interactions.hovered = false; restart(); };
     const press = () => { interactions.pressed = true; restart(); };
     const release = () => { interactions.pressed = false; restart(); };
-    const focus = (event: FocusEvent) => {
-      if (!(event.target instanceof Element && event.target.hasAttribute('data-carousel-rotation'))) interactions.allowControlFocus = false;
-      focused = !interactions.allowControlFocus;
+    const visibility = () => {
+      // A pointer released outside this tab may never send pointerup here.
+      if (document.hidden) interactions.pressed = false;
       restart();
     };
+    const focus = () => { focused = true; restart(); };
     const blur = (event: FocusEvent) => {
       if (!root.contains(event.relatedTarget as Node | null)) {
-        interactions.allowControlFocus = false;
         focused = false;
         restart();
       }
     };
-    const motion = () => { setReducedMotion(media.matches); restart(); };
     root.addEventListener('pointerenter', enter);
     root.addEventListener('pointerleave', leave);
     root.addEventListener('pointerdown', press, { passive: true });
@@ -221,8 +217,9 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
     root.addEventListener('wheel', restart, { passive: true });
     window.addEventListener('pointerup', release);
     window.addEventListener('pointercancel', release);
-    document.addEventListener('visibilitychange', restart);
-    media.addEventListener('change', motion);
+    window.addEventListener('blur', release);
+    document.addEventListener('visibilitychange', visibility);
+    media.addEventListener('change', restart);
     restart();
     return () => {
       window.clearTimeout(timer);
@@ -237,10 +234,11 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
       root.removeEventListener('wheel', restart);
       window.removeEventListener('pointerup', release);
       window.removeEventListener('pointercancel', release);
-      document.removeEventListener('visibilitychange', restart);
-      media.removeEventListener('change', motion);
+      window.removeEventListener('blur', release);
+      document.removeEventListener('visibilitychange', visibility);
+      media.removeEventListener('change', restart);
     };
-  }, [choose, count, rotationPaused]);
+  }, [choose, count, scrollToPosition]);
 
   useEffect(() => { restartRotationRef.current(); }, [selectedIndex]);
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -250,10 +248,47 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
     else if (event.key === 'Home') { event.preventDefault(); choose(0); }
     else if (event.key === 'End') { event.preventDefault(); choose(count - 1); }
   };
+  const onPointerDownCapture = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.button !== 0) {
+      if (tapRef.current) tapRef.current.canceled = true;
+      return;
+    }
+    tapRef.current = { id: event.pointerId, x: event.clientX, y: event.clientY, scrollLeft: event.currentTarget.scrollLeft, moved: 0, complete: false, canceled: false };
+  };
+  const trackPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const tap = tapRef.current;
+    if (tap?.id === event.pointerId) tap.moved = Math.max(tap.moved, Math.hypot(event.clientX - tap.x, event.clientY - tap.y));
+  };
+  const onClickCapture = (event: ReactMouseEvent<HTMLDivElement>) => {
+    const tap = tapRef.current;
+    tapRef.current = undefined;
+    const track = event.currentTarget;
+    if (!tap?.complete || tap.canceled || tap.moved > 8 || Math.abs(track.scrollLeft - tap.scrollLeft) >= 1
+      || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest('a, button, input, select, textarea, [role="button"], [contenteditable="true"]')) return;
+    let slide = target?.closest<HTMLElement>('[data-carousel-index]');
+    if (slide?.parentElement !== track) {
+      // Inert loop copies are excluded from hit testing, so their click target
+      // is the track. Resolve the visible copy from the pointer coordinates.
+      const bounds = track.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) return;
+      slide = items().find(item => {
+        const rect = item.getBoundingClientRect();
+        return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      });
+    }
+    const index = Number(slide?.dataset.carouselIndex);
+    if (!Number.isInteger(index) || index === selectionRef.current) return;
+    choose(index);
+  };
 
   return <div ref={rootRef} className={`carousel ${className}`} {...props}>
     <div ref={trackRef} className="carousel-track project-gallery" data-project-gallery tabIndex={0}
-      role="region" aria-roledescription="carousel" aria-label={props['aria-label']} onKeyDown={onKeyDown}>
+      role="region" aria-roledescription="carousel" aria-label={props['aria-label']} onKeyDown={onKeyDown}
+      onPointerDownCapture={onPointerDownCapture} onPointerMoveCapture={trackPointer}
+      onPointerUpCapture={event => { trackPointer(event); if (tapRef.current?.id === event.pointerId) tapRef.current.complete = true; }}
+      onPointerCancelCapture={() => { if (tapRef.current) tapRef.current.canceled = true; }} onClickCapture={onClickCapture}>
       {Array.from({ length: copyCount }, (_, offset) => count - copyCount + offset).map(index => <CarouselItem key={`before-${index}`} aria-hidden="true" inert data-carousel-copy="true" data-carousel-index={index} data-active={selectedIndex === index}>{renderCopy(index)}</CarouselItem>)}
       {all.map((child, index) => cloneElement(child, { key: child.key ?? index, 'aria-label': `${labels[index]}, ${index + 1} of ${count}`, 'data-carousel-index': index, 'data-active': selectedIndex === index }))}
       {Array.from({ length: copyCount }, (_, index) => <CarouselItem key={`after-${index}`} aria-hidden="true" inert data-carousel-copy="true" data-carousel-index={index} data-active={selectedIndex === index}>{renderCopy(index)}</CarouselItem>)}
@@ -263,14 +298,6 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
         {labels.map((label, index) => <button key={label} type="button" className="carousel-dot" aria-label={`Show ${label}`}
           aria-current={selectedIndex === index ? 'true' : undefined} onClick={() => choose(index)}><span /></button>)}
       </div>
-      <Button variant="primary" size="small" iconOnly data-carousel-rotation
-        leadingIcon={rotationPaused || reducedMotion ? PlayIcon : PauseIcon} className="carousel-rotation"
-        disabled={reducedMotion} title={reducedMotion ? 'Automatic rotation is off for reduced motion' : undefined}
-        aria-label={rotationPaused || reducedMotion ? 'Start automatic project rotation' : 'Pause automatic project rotation'}
-        onClick={() => {
-          interactionRef.current.allowControlFocus = rotationPaused;
-          setRotationPaused(paused => !paused);
-        }} />
     </div>
   </div>;
 }
