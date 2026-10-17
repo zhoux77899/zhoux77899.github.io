@@ -323,7 +323,7 @@ export const en = {
     },
     publications: {
       title: 'Publications',
-      description: 'Research in optical measurement and single-molecule microscopy.',
+      description: 'Research at the intersection of optics and AI.',
       listLabel: 'Research publications',
       doiLabel: doi => `DOI: ${doi}`,
       highlightedAuthor: 'Xiang Zhou',
