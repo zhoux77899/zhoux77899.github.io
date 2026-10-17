@@ -3,6 +3,7 @@ import type { SVGProps } from 'react';
 import AiBrainIconData from '@hugeicons/core-free-icons/AiBrain01Icon';
 import NetworkIconData from '@hugeicons/core-free-icons/InternetIcon';
 import { createHugeicon } from '@/utils/icons';
+import type { SocialLink } from '@/types';
 
 export type BrandIconProps = Omit<SVGProps<SVGSVGElement>, 'name'>;
 const symbols = {
@@ -138,27 +139,26 @@ export function GitHubBrandIcon(props: BrandIconProps) { return <BrandIcon name=
 export function XBrandIcon(props: BrandIconProps) { return <BrandIcon name="x" {...props} />; }
 export function OrcidBrandIcon(props: BrandIconProps) { return <BrandIcon name="orcid" {...props} />; }
 
-export function SocialBrandIcon({ name, ...props }: BrandIconProps & { name: string }) {
-  if (name === 'GitHub') return <GitHubBrandIcon {...props} />;
-  if (name === 'X') return <XBrandIcon {...props} />;
-  if (name === 'ORCID') return <OrcidBrandIcon {...props} />;
-  return null;
+export function SocialBrandIcon({ id, ...props }: Omit<BrandIconProps, 'id'> & { id: SocialLink['id'] }) {
+  const icons = { github: GitHubBrandIcon, x: XBrandIcon, orcid: OrcidBrandIcon };
+  const Icon = icons[id];
+  return <Icon {...props} />;
 }
 
 const AgentSkillIcon = createHugeicon(AiBrainIconData, { displayName: 'AgentSkillIcon' });
 const ProtocolIcon = createHugeicon(NetworkIconData, { displayName: 'ProtocolIcon' });
 const technologyBrands: Record<string, BrandName[]> = {
-  Python: ['python'], PyTorch: ['pytorch'], vLLM: ['vllm'], 'Ascend NPU': ['ascend'],
-  'NumPy & SciPy': ['numpy', 'scipy'], 'OpenAI API': ['openai'], Go: ['go'], 'C++': ['cplusplus'],
-  'ESP32 & Arduino': ['espressif', 'arduino'], PlatformIO: ['platformio'], TypeScript: ['typescript'],
-  React: ['react'], 'Next.js': ['nextdotjs'], 'Postgres & Drizzle': ['postgresql', 'drizzle'],
-  'Tailwind CSS': ['tailwindcss'], 'GitHub Actions': ['githubactions'], CMake: ['cmake'], Vitest: ['vitest'],
+  python: ['python'], pytorch: ['pytorch'], vllm: ['vllm'], 'ascend-npu': ['ascend'],
+  'numpy-scipy': ['numpy', 'scipy'], 'openai-api': ['openai'], go: ['go'], cpp: ['cplusplus'],
+  'esp32-arduino': ['espressif', 'arduino'], platformio: ['platformio'], typescript: ['typescript'],
+  react: ['react'], nextjs: ['nextdotjs'], 'postgres-drizzle': ['postgresql', 'drizzle'],
+  'tailwind-css': ['tailwindcss'], 'github-actions': ['githubactions'], cmake: ['cmake'], vitest: ['vitest'],
 };
 
 /** Protocols and agent skills use semantic symbols; vendor names retain their actual marks. */
-export function TechnologyIcon({ name, className = '' }: { name: string; className?: string }) {
-  if (name === 'Agent skills') return <AgentSkillIcon className={className} aria-hidden="true" />;
-  if (name === 'HTTP & SSE') return <ProtocolIcon className={className} aria-hidden="true" />;
-  if (name === 'SDL2' || name === 'Playwright') return <img src={name === 'SDL2' ? '/brand-icons/sdl.png' : '/brand-icons/playwright.svg'} alt="" aria-hidden="true" className={'technology-image ' + className} />;
-  return <span className="technology-brands" aria-hidden="true">{technologyBrands[name]?.map(brand => <BrandIcon key={brand} name={brand} className={className} />)}</span>;
+export function TechnologyIcon({ id, className = '' }: { id: string; className?: string }) {
+  if (id === 'agent-skills') return <AgentSkillIcon className={className} aria-hidden="true" />;
+  if (id === 'http-sse') return <ProtocolIcon className={className} aria-hidden="true" />;
+  if (id === 'sdl2' || id === 'playwright') return <img src={id === 'sdl2' ? '/brand-icons/sdl.png' : '/brand-icons/playwright.svg'} alt="" aria-hidden="true" className={'technology-image ' + className} />;
+  return <span className="technology-brands" aria-hidden="true">{technologyBrands[id]?.map(brand => <BrandIcon key={brand} name={brand} className={className} />)}</span>;
 }

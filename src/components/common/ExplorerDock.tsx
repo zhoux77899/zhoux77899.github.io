@@ -6,6 +6,7 @@ import type { ExplorerDestination } from '@/lib/explorer';
 import { CloseIcon } from '@/utils/icons';
 import { Button } from '@/components/base/buttons/button';
 import { AnatomyExplorer } from './AnatomyExplorer';
+import { content } from '@/content';
 
 export function ExplorerDock() {
   const { heroVisible, activeDestination } = useExplorer();
@@ -24,13 +25,13 @@ function ExplorerDockPanel({ activeDestination }: { activeDestination: ExplorerD
           <img className="hairline-preview-light" src={`${import.meta.env.BASE_URL}anatomy/explorer-light.svg`} alt="" width="64" height="50" />
           <img className="hairline-preview-dark" src={`${import.meta.env.BASE_URL}anatomy/explorer-dark.svg`} alt="" width="64" height="50" />
         </span>
-        <span>Explore</span>
+        <span>{content.explorer.open}</span>
       </Button>
       <Popover isOpen={isOpen} onOpenChange={setIsOpen} triggerRef={triggerRef} placement="top start" offset={10} className="explorer-dock-popover">
-        <Dialog id={dialogId} aria-label="Explore the toolbox" className="explorer-dock-dialog" onClick={(event) => {
+        <Dialog id={dialogId} aria-label={content.explorer.groupLabel} className="explorer-dock-dialog" onClick={(event) => {
           if (event.target instanceof Element && event.target.closest('a[href^="#"]')) setIsOpen(false);
         }}>
-          <div className="explorer-dock-heading"><h2>Explore</h2><Button variant="primary" iconOnly leadingIcon={CloseIcon} aria-label="Close explorer" onClick={() => setIsOpen(false)} /></div>
+          <div className="explorer-dock-heading"><h2>{content.explorer.open}</h2><Button variant="primary" iconOnly leadingIcon={CloseIcon} aria-label={content.explorer.close} onClick={() => setIsOpen(false)} /></div>
           <AnatomyExplorer activeDestination={activeDestination} />
         </Dialog>
       </Popover>

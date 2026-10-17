@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { render, screen } from "@testing-library/react";
-import { githubUrl } from "@/lib/data";
+import { render, screen, within } from "@testing-library/react";
+import { githubUrl, personalInfo } from "@/content";
 import { Contact } from "./Contact";
 import { SocialLinks } from "@/components/common/SocialLinks";
 
@@ -29,5 +29,25 @@ describe("Contact", () => {
       expect(icon?.querySelector("path")?.getAttribute("d")).toBe(socialLinks[index]?.querySelector("path")?.getAttribute("d"));
       expect(link.querySelectorAll("svg")).toHaveLength(1);
     });
+  });
+
+  it("keeps account handles, destinations and brand marks when display names change", () => {
+    const baseline = render(<Contact />);
+    const icons = new Map(Array.from(baseline.container.querySelectorAll("a"), link => [link.getAttribute("href"), link.querySelector("svg")?.innerHTML]));
+    baseline.unmount();
+    const names = personalInfo.socialLinks.map(link => link.name);
+    try {
+      personalInfo.socialLinks.forEach((link, index) => { link.name = `Account ${index + 1}`; });
+      const view = render(<Contact />);
+      personalInfo.socialLinks.forEach(link => {
+        const account = within(view.container).getByRole("link", { name: link.contactLabel });
+        expect(account).toHaveTextContent(link.name);
+        expect(account).toHaveTextContent(link.handle);
+        expect(account).toHaveAttribute("href", link.url);
+        expect(account.querySelector("svg")?.innerHTML).toBe(icons.get(link.url));
+      });
+    } finally {
+      personalInfo.socialLinks.forEach((link, index) => { link.name = names[index]; });
+    }
   });
 });

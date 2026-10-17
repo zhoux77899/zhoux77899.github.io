@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { projects } from '@/lib/data';
+import { projects } from '@/content';
 import { countryIds, getNavigationOffset, readActiveExplorer, resolveExplorerHash } from '@/lib/explorer';
 import { ExplorerContext } from './explorerContext';
 import type { ExplorerState } from './explorerContext';

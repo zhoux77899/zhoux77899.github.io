@@ -79,6 +79,23 @@ describe('Anatomy explorer lifecycle and navigation', () => {
     expect(view.container.querySelectorAll('[data-item]')).toHaveLength(0);
     expect(view.getByRole('img')).toHaveAccessibleName(/An open precision case/);
   });
+  it('keeps current hotspot copy and destinations when an older asset finishes loading', async () => {
+    const view = render(<AnatomyExplorer activeDestination={null} />);
+    const links = explorerDestinations.map(destination =>
+      view.getByRole('link', { name: `${destination.label} — ${destination.object}` }));
+    const olderAsset: ExplorerAsset = {
+      ...asset,
+      modules: asset.modules.map(module => ({ ...module, label: 'Old label', object: 'Old object', href: '#old-destination' })),
+    };
+    await act(async () => { pending.forEach(item => item.resolve(olderAsset)); });
+    for (const [index, destination] of explorerDestinations.entries()) {
+      const link = view.getByRole('link', { name: `${destination.label} — ${destination.object}` });
+      expect(link).toBe(links[index]);
+      expect(link).toHaveAttribute('href', destination.href);
+      expect(link.style.left).toBe(`${asset.modules[index].x / asset.width * 100}%`);
+    }
+    expect(view.queryByRole('link', { name: /Old label/ })).toBeNull();
+  });
   it('ignores the abandoned StrictMode load and removes its observer on unmount', async () => {
     const view = render(<StrictMode><AnatomyExplorer activeDestination="projects" /></StrictMode>);
     await loaded();

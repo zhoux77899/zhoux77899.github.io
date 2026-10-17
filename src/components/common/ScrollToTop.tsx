@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/base/buttons/button";
 import { useMotionPreference } from "@/hooks/useMotionPreference";
 import { ArrowUpIcon } from "@/utils/icons";
+import { content } from "@/content";
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -24,7 +25,7 @@ export function ScrollToTop() {
         behavior: prefersReducedMotion ? "instant" : "smooth",
       })}
       className="fixed right-5 bottom-5 z-50 size-12 rounded-xl"
-      aria-label="Back to top"
+      aria-label={content.ui.backToTop}
     />
   );
 }

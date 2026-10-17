@@ -5,6 +5,8 @@ import * as K from './kit/iso-kit.mjs';
 import * as G from './kit/lathe.mjs';
 import * as A from './kit/audit.mjs';
 import { followLift } from '../../src/lib/anatomy/model.mjs';
+import { content } from '../../src/content/index.ts';
+import { escapeHtml } from '../../src/content/html.ts';
 
 // Original geometry, built with the unmodified MIT Anatomy kit. Geometry and the
 // recorded audit shapes share the same builders; the browser receives paths only.
@@ -18,13 +20,17 @@ const P = K.fitProjection([
   ...K.boxCorners({ x: -142, y: -90, w: 284, d: 198 }, -12, 124),
 ], width, height, { pad: 62, azimuth: 45, elevation: 36 });
 const modules = [
-  { id: 'projects', label: 'Projects', href: '#projects', object: 'Model workstation', x: -119, y: -56, w: 72, d: 64 },
-  { id: 'experience', label: 'Background', href: '#experience', object: 'Optical instrument', x: -41, y: -56, w: 76, d: 64 },
-  { id: 'contact', label: 'Contact', href: '#contact', object: 'Connection panel', x: 41, y: -56, w: 78, d: 64 },
-  { id: 'skills', label: 'Stack', href: '#skills', object: 'Portable terminal', x: -119, y: 24, w: 72, d: 62 },
-  { id: 'open-source', label: 'Open source', href: '#vllm-ascend-work', object: 'Workshop folio', x: -41, y: 24, w: 76, d: 62 },
-  { id: 'travel', label: 'Travel', href: '#travel', object: 'Map and compass', x: 41, y: 24, w: 78, d: 62 },
-];
+  { id: 'projects', href: '#projects', x: -119, y: -56, w: 72, d: 64 },
+  { id: 'experience', href: '#experience', x: -41, y: -56, w: 76, d: 64 },
+  { id: 'contact', href: '#contact', x: 41, y: -56, w: 78, d: 64 },
+  { id: 'skills', href: '#skills', x: -119, y: 24, w: 72, d: 62 },
+  { id: 'open-source', href: '#vllm-ascend-work', x: -41, y: 24, w: 76, d: 62 },
+  { id: 'travel', href: '#travel', x: 41, y: 24, w: 78, d: 62 },
+].map(module => ({
+  ...module,
+  label: content.explorer.destinations[module.id].label,
+  object: content.explorer.destinations[module.id].object,
+}));
 const R = A.recorder(P);
 let solids = 0;
 const style = (tone = 'mid', inner = '') => ({ tone, inner, crease: 'faint' });
@@ -267,9 +273,9 @@ for (const theme of ['light', 'dark']) {
   const css = K.ISO_CSS + themeCSS;
   const paper = siteThemeValue(theme, 'background');
   const accent = siteThemeValue(theme, 'accent');
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="iso iso-svg anatomy-explorer-art" data-theme="${theme}" style="--background:${paper};--accent:${accent}" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="An open precision case carrying six objects for projects, skills, background, open source, travel and contact"><style>${css}</style>${body}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="iso iso-svg anatomy-explorer-art" data-theme="${theme}" style="--background:${paper};--accent:${accent}" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="${escapeHtml(content.explorer.previewIllustrationLabel)}"><style>${css}</style>${body}</svg>`;
   writeFileSync(resolve(OUT, `explorer-${theme}.svg`), svg);
-  writeFileSync(resolve(OUT, `explorer-${theme}.html`), `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Precision exploration case — ${theme}</title><style>body{margin:0;background:${paper}}.iso-plate{max-width:800px;margin:32px auto}</style><body><main class="iso-plate">${svg}</main></body></html>`);
+  writeFileSync(resolve(OUT, `explorer-${theme}.html`), `<!doctype html><html lang="${escapeHtml(content.metadata.lang)}"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(content.explorer.previewTitle(theme))}</title><style>body{margin:0;background:${paper}}.iso-plate{max-width:800px;margin:32px auto}</style><body><main class="iso-plate">${svg}</main></body></html>`);
 }
 console.log(`Anatomy explorer: ${solids} actual solids, ${items.length} sorted items, ${states.length} depth states, ${replay.length} replayed 60fps frames.`);
 const result = A.auditOrExit(R, P, { frames: [...states.slice(1), ...replay], apart: true });

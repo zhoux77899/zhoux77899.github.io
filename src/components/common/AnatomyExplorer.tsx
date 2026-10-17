@@ -4,6 +4,7 @@ import { explorerDestinations, loadExplorer } from '@/lib/anatomy';
 import type { ExplorerAsset, ExplorerDestination } from '@/lib/anatomy';
 import { explorerHotspots } from '@/lib/anatomy/hotspots';
 import { followLift, TOUR_WAIT_MS, tourDestination } from '@/lib/anatomy/motion';
+import { content } from '@/content';
 import '@/styles/anatomy.css';
 
 interface AnatomyExplorerProps {
@@ -209,22 +210,22 @@ export function AnatomyExplorer({ activeDestination, className = '', compactFram
   // audited coordinates; hotspots and fallback images use the same crop.
   const viewport = compactFrame ? { x: 75, y: 65, width: 650, height: 520 }
     : { x: 0, y: 0, width: frame.width, height: frame.height };
-  const hotspots = explorerDestinations.map(destination => ({
-    ...destination,
-    ...(asset?.modules.find(item => item.id === destination.id)
-      ?? explorerHotspots.modules.find(item => item.id === destination.id)!),
-  }));
+  const hotspots = explorerDestinations.map(destination => {
+    const { x, y, rx, ry } = asset?.modules.find(item => item.id === destination.id)
+      ?? explorerHotspots.modules.find(item => item.id === destination.id)!;
+    return { ...destination, x, y, rx, ry };
+  });
   return (
     <div ref={root} className={`anatomy-explorer ${compactFrame ? 'anatomy-explorer-cover' : ''} ${className}`} onBlur={blur}>
-      <div className="anatomy-explorer-stage" role="group" aria-label="Explore the toolbox" onPointerEnter={() => controller.current?.takeOver()} onPointerLeave={leave} onPointerUp={event => {
+      <div className="anatomy-explorer-stage" role="group" aria-label={content.explorer.groupLabel} onPointerEnter={() => controller.current?.takeOver()} onPointerLeave={leave} onPointerUp={event => {
         if (event.pointerType === 'touch') { preview.current = null; controller.current?.release(); }
       }} onPointerCancel={() => { preview.current = null; controller.current?.release(); }}>
         <img className={`anatomy-explorer-preview anatomy-explorer-preview-light ${asset ? 'anatomy-explorer-preview-hidden' : ''}`} src={`${import.meta.env.BASE_URL}anatomy/explorer-light.svg`} alt="" aria-hidden="true" width="800" height="640" fetchPriority="high" />
         <img className={`anatomy-explorer-preview anatomy-explorer-preview-dark ${asset ? 'anatomy-explorer-preview-hidden' : ''}`} src={`${import.meta.env.BASE_URL}anatomy/explorer-dark.svg`} alt="" aria-hidden="true" width="800" height="640" />
-        <svg viewBox={`${viewport.x} ${viewport.y} ${viewport.width} ${viewport.height}`} role="img" aria-label="An open precision case carrying a model workstation, terminal, optical instrument, folio, map and connection panel.">
+        <svg viewBox={`${viewport.x} ${viewport.y} ${viewport.width} ${viewport.height}`} role="img" aria-label={content.explorer.illustrationLabel}>
           <g ref={art} aria-hidden="true" dangerouslySetInnerHTML={{ __html: asset?.body ?? '' }} />
         </svg>
-        {hotspots.map(item => <a key={item.id} className="anatomy-hotspot-link" data-hotspot={item.id} href={item.href} aria-label={`${item.label} — ${item.object}`}
+        {hotspots.map(item => <a key={item.id} className="anatomy-hotspot-link" data-hotspot={item.id} href={item.href} aria-label={content.explorer.hotspotLabel(item.label, item.object)}
           aria-current={activeDestination === item.id ? 'location' : undefined}
           style={{ left: `${(item.x - viewport.x) / viewport.width * 100}%`, top: `${(item.y - viewport.y) / viewport.height * 100}%`, width: `${item.rx * 2 / viewport.width * 100}%`, height: `${item.ry * 2 / viewport.height * 100}%` }}
           onFocus={() => previewTo(item.id)} onKeyDown={keydown}

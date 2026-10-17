@@ -7,7 +7,7 @@ import { AnatomyExplorer } from '@/components/common/AnatomyExplorer';
 import { PhotoAvatar } from '@/components/common/PhotoAvatar';
 import { SocialLinks } from '@/components/common/SocialLinks';
 import { useExplorer } from '@/hooks/useExplorer';
-import { personalInfo } from '@/lib/data';
+import { content, personalInfo } from '@/content';
 export function Hero() {
   const { activeDestination } = useExplorer();
   const ref = useRef<HTMLElement>(null);
@@ -18,7 +18,7 @@ export function Hero() {
     <section ref={ref} id="hero" aria-labelledby="hero-title" className="hero-section">
       <div className="site-container hero-layout">
         <AnimatedSection className="hero-intro" rootMargin="0px">
-          <p className="hero-greeting">Hi there, I'm</p>
+          <p className="hero-greeting">{content.sections.hero.greeting}</p>
           <div className="hero-identity"><PhotoAvatar src={personalInfo.avatar} name={personalInfo.name} /><h1 id="hero-title" className="gradient-text-primary">{personalInfo.name}</h1></div>
           <p className="hero-role">{personalInfo.title}</p>
         </AnimatedSection>
@@ -30,8 +30,8 @@ export function Hero() {
         <AnimatedSection className="hero-copy" delay={0.12} rootMargin="0px">
           <p className="hero-bio">{personalInfo.bio}</p>
           <div className="hero-actions">
-            <ButtonLink href="#projects" variant="primary">Explore projects</ButtonLink>
-            <ButtonLink href="#contact" variant="secondary">Get in touch</ButtonLink>
+            <ButtonLink href="#projects" variant="primary">{content.sections.hero.projectsAction}</ButtonLink>
+            <ButtonLink href="#contact" variant="secondary">{content.sections.hero.contactAction}</ButtonLink>
           </div>
           <SocialLinks className="hero-socials" />
         </AnimatedSection>

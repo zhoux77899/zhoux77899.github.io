@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { skills } from "@/content";
 import { Skills } from "./Skills";
 
 describe("Skills", () => {
@@ -56,5 +57,21 @@ describe("Skills", () => {
     expect(within(panel).getAllByRole("link")[0].querySelector("svg")).toHaveAttribute("aria-hidden", "true");
     await act(async () => { fireEvent.keyDown(systemsTab, { key: "End", code: "End" }); });
     expect(screen.getByRole("tab", { name: "Development tools" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("keeps a skill's brand mark and evidence link when its display name changes", async () => {
+    const skill = skills.find(item => item.id === "vllm")!;
+    const name = skill.name;
+    const baseline = render(<Skills />);
+    const icon = screen.getByRole("heading", { name }).querySelector("svg")?.innerHTML;
+    baseline.unmount();
+    try {
+      skill.name = "Inference runtime";
+      await act(async () => { render(<Skills />); });
+      const heading = screen.getByRole("heading", { name: "Inference runtime" });
+      expect(heading.querySelector("svg")?.innerHTML).toBe(icon);
+      expect(icon).toBeDefined();
+      expect(within(heading.closest("li")!).getByRole("link", { name: skill.source!.name })).toHaveAttribute("href", skill.source!.url);
+    } finally { skill.name = name; }
   });
 });

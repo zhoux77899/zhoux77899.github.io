@@ -1,15 +1,10 @@
-import { projects } from '@/lib/data';
+import { projects } from '@/content';
+import { explorerDestinations } from '@/lib/navigation';
+import type { ExplorerDestination } from '@/types';
 
-export type ExplorerDestination = 'projects' | 'skills' | 'experience' | 'open-source' | 'travel' | 'contact';
+export type { ExplorerDestination } from '@/types';
 
-export const explorerLinks: { destination: ExplorerDestination; name: string; href: string }[] = [
-  { destination: 'projects', name: 'Projects', href: '#projects' },
-  { destination: 'skills', name: 'Stack', href: '#skills' },
-  { destination: 'experience', name: 'Background', href: '#experience' },
-  { destination: 'open-source', name: 'Open source', href: '#vllm-ascend-work' },
-  { destination: 'travel', name: 'Travel', href: '#travel' },
-  { destination: 'contact', name: 'Contact', href: '#contact' },
-];
+export const explorerLinks = explorerDestinations.map(({ id, label, href }) => ({ destination: id, name: label, href }));
 
 export const countryIds = ['new-zealand', 'japan', 'china'] as const;
 const legacyCountries: Record<string, string> = { 'travel-1': 'new-zealand', 'travel-2': 'japan', 'travel-3': 'japan' };

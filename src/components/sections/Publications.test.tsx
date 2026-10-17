@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { render, screen, within } from '@testing-library/react';
-import { publications } from '@/lib/data';
+import { content, publications } from '@/content';
 import { explorerLinks, resolveExplorerHash } from '@/lib/explorer';
 import { navLinks } from '@/lib/navigation';
 import { Publications } from './Publications';
@@ -36,5 +36,20 @@ describe('Publications', () => {
     expect(resolveExplorerHash('#publications')).toEqual({ section: 'publications', destination: null, target: 'publications' });
     expect(explorerLinks).toHaveLength(6);
     expect(explorerLinks.some((link) => link.href === '#publications')).toBe(false);
+  });
+
+  it('renders linked source copy in the order defined by the locale', () => {
+    const source = content.sections.publications.source;
+    try {
+      content.sections.publications.source = [
+        { type: 'link', id: 'orcid', text: 'Publication record' },
+        { type: 'text', text: ' has all the details.' },
+      ];
+      const view = render(<Publications />);
+      expect(view.container.querySelector('.publication-source')?.textContent).toBe('Publication record has all the details.');
+      const link = screen.getByRole('link', { name: 'Publication record' });
+      expect(link).toHaveAttribute('href', content.orcidUrl);
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    } finally { content.sections.publications.source = source; }
   });
 });

@@ -5,6 +5,7 @@
  */
 import { Children, cloneElement, isValidElement, useCallback, useEffect, useRef } from 'react';
 import type { HTMLAttributes, KeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactNode } from 'react';
+import { content } from '@/content';
 
 const rotationDelay = 6_000;
 
@@ -25,7 +26,7 @@ interface CarouselProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' 
 }
 
 export function CarouselItem({ children, className = '', ...props }: CarouselItemProps) {
-  return <div role="group" aria-roledescription="slide" className={`carousel-item ${className}`} {...props}>{children}</div>;
+  return <div role="group" aria-roledescription={content.ui.carousel.slideDescription} className={`carousel-item ${className}`} {...props}>{children}</div>;
 }
 
 function centeredOffset(track: HTMLElement, item: HTMLElement) {
@@ -285,17 +286,17 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
 
   return <div ref={rootRef} className={`carousel ${className}`} {...props}>
     <div ref={trackRef} className="carousel-track project-gallery" data-project-gallery tabIndex={0}
-      role="region" aria-roledescription="carousel" aria-label={props['aria-label']} onKeyDown={onKeyDown}
+      role="region" aria-roledescription={content.ui.carousel.roleDescription} aria-label={props['aria-label']} onKeyDown={onKeyDown}
       onPointerDownCapture={onPointerDownCapture} onPointerMoveCapture={trackPointer}
       onPointerUpCapture={event => { trackPointer(event); if (tapRef.current?.id === event.pointerId) tapRef.current.complete = true; }}
       onPointerCancelCapture={() => { if (tapRef.current) tapRef.current.canceled = true; }} onClickCapture={onClickCapture}>
       {Array.from({ length: copyCount }, (_, offset) => count - copyCount + offset).map(index => <CarouselItem key={`before-${index}`} aria-hidden="true" inert data-carousel-copy="true" data-carousel-index={index} data-active={selectedIndex === index}>{renderCopy(index)}</CarouselItem>)}
-      {all.map((child, index) => cloneElement(child, { key: child.key ?? index, 'aria-label': `${labels[index]}, ${index + 1} of ${count}`, 'data-carousel-index': index, 'data-active': selectedIndex === index }))}
+      {all.map((child, index) => cloneElement(child, { key: child.key ?? index, 'aria-label': content.ui.carousel.position(labels[index], index + 1, count), 'data-carousel-index': index, 'data-active': selectedIndex === index }))}
       {Array.from({ length: copyCount }, (_, index) => <CarouselItem key={`after-${index}`} aria-hidden="true" inert data-carousel-copy="true" data-carousel-index={index} data-active={selectedIndex === index}>{renderCopy(index)}</CarouselItem>)}
     </div>
     <div className="carousel-controls">
-      <div className="carousel-dots" role="group" aria-label="Choose a project">
-        {labels.map((label, index) => <button key={label} type="button" className="carousel-dot" aria-label={`Show ${label}`}
+      <div className="carousel-dots" role="group" aria-label={content.ui.carousel.choose}>
+        {labels.map((label, index) => <button key={index} type="button" className="carousel-dot" aria-label={content.ui.carousel.show(label)}
           aria-current={selectedIndex === index ? 'true' : undefined} onClick={() => choose(index)}><span /></button>)}
       </div>
     </div>

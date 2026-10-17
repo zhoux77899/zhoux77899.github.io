@@ -1,13 +1,7 @@
-export type ExplorerDestination = 'projects' | 'skills' | 'experience' | 'open-source' | 'travel' | 'contact';
+import type { ExplorerDestination } from '@/types';
 
-export const explorerDestinations: ReadonlyArray<{ id: ExplorerDestination; label: string; href: string; object: string }> = [
-  { id: 'projects', label: 'Projects', href: '#projects', object: 'Model workstation' },
-  { id: 'skills', label: 'Stack', href: '#skills', object: 'Portable terminal' },
-  { id: 'experience', label: 'Background', href: '#experience', object: 'Optical instrument' },
-  { id: 'open-source', label: 'Open source', href: '#vllm-ascend-work', object: 'Workshop folio' },
-  { id: 'travel', label: 'Travel', href: '#travel', object: 'Map and compass' },
-  { id: 'contact', label: 'Contact', href: '#contact', object: 'Connection panel' },
-];
+export type { ExplorerDestination } from '@/types';
+export { explorerDestinations } from '@/lib/navigation';
 
 export interface ExplorerItem {
   id: string;

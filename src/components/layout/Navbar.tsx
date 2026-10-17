@@ -4,7 +4,7 @@ import { Modal, ModalOverlay } from 'react-aria-components/Modal';
 import { Button } from '@/components/base/buttons/button';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { navLinks } from '@/lib/navigation';
-import { personalInfo } from '@/lib/data';
+import { content, personalInfo } from '@/content';
 import { CloseIcon, MenuIcon } from '@/utils/icons';
 import { useExplorer } from '@/hooks/useExplorer';
 
@@ -69,7 +69,7 @@ export function Navbar() {
             <span className="gradient-text-primary">{personalInfo.name}</span>
           </a>
 
-          <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
+          <nav aria-label={content.ui.navigation.mainLabel} className="hidden items-center gap-1 lg:flex">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -92,7 +92,7 @@ export function Navbar() {
             <Button
               ref={triggerRef}
               variant="primary" size="small" iconOnly leadingIcon={MenuIcon}
-              aria-label="Open menu"
+              aria-label={content.ui.navigation.openMenu}
               aria-expanded={isMobileMenuOpen}
               aria-controls={menuId}
               aria-haspopup="dialog"
@@ -113,17 +113,17 @@ export function Navbar() {
           <Dialog id={menuId} aria-labelledby={menuTitleId} className="outline-none">
             <div className="mb-6 flex items-center justify-between gap-4">
               <h2 id={menuTitleId} className="font-display text-xl font-semibold text-foreground">
-                Navigation
+                {content.ui.navigation.title}
               </h2>
               <Button
                 variant="primary" iconOnly leadingIcon={CloseIcon}
                 className="size-11"
-                aria-label="Close menu"
+                aria-label={content.ui.navigation.closeMenu}
                 onClick={() => setIsMobileMenuOpen(false)}
               />
             </div>
 
-            <nav aria-label="Mobile navigation" className="flex flex-col gap-2">
+            <nav aria-label={content.ui.navigation.mobileLabel} className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.href}

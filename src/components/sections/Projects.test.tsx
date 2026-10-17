@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { StrictMode } from 'react';
 import { ExplorerProvider } from '@/providers/ExplorerProvider';
 import { setMediaQuery } from '@/test/media';
-import { contributions } from '@/lib/data';
+import { contributions, projects } from '@/content';
 import { Projects } from './Projects';
 
 function renderProjects() { return render(<ExplorerProvider><Projects /></ExplorerProvider>); }
@@ -521,7 +521,7 @@ describe('Project carousel', () => {
     } finally { view.unmount(); clock.restore(); }
   });
 
-  it('normalizes project links, features the three selected requests and folds the remaining twelve', () => {
+  it('orders project links, features the three selected requests and folds the remaining twelve', () => {
     renderProjects();
     const luma = document.querySelector('[data-project-id="luma"]') as HTMLElement;
     expect(within(luma).getAllByRole('link').map(link => link.textContent)).toEqual(['Source', 'Releases', 'Website']);
@@ -549,5 +549,25 @@ describe('Project carousel', () => {
     expect(disclosure).toHaveAttribute('open');
     expect(remaining[0]).toBeVisible();
     expect(within(contribution).getByText(`${requests.length} merged pull requests`)).toBeInTheDocument();
+  });
+
+  it('keeps project link icons and order independent of their display labels', () => {
+    const baseline = renderProjects();
+    const card = document.querySelector<HTMLElement>('[data-project-id="luma"]')!;
+    const links = within(card).getAllByRole('link');
+    const destinations = links.map(link => link.getAttribute('href'));
+    const icons = links.map(link => link.querySelector('svg')?.innerHTML);
+    baseline.unmount();
+    const project = projects.find(item => item.id === 'luma')!;
+    const original = project.links;
+    try {
+      const labels = { source: 'Code', releases: 'Downloads', website: 'Live page' };
+      project.links = [...original].reverse().map(link => ({ ...link, name: labels[link.kind] }));
+      renderProjects();
+      const renamed = within(document.querySelector<HTMLElement>('[data-project-id="luma"]')!).getAllByRole('link');
+      expect(renamed.map(link => link.textContent)).toEqual(['Code', 'Downloads', 'Live page']);
+      expect(renamed.map(link => link.getAttribute('href'))).toEqual(destinations);
+      expect(renamed.map(link => link.querySelector('svg')?.innerHTML)).toEqual(icons);
+    } finally { project.links = original; }
   });
 });

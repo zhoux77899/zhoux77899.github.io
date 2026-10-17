@@ -65,9 +65,10 @@ The development configuration excludes `.tools/`, coverage output, and local doc
 
 ## Project structure and content
 
-- `src/lib/data.ts`: Personal details, skills, projects, travel, and experience.
-- `src/lib/navigation.ts`: Section anchors and navigation labels.
-- `src/components/sections/`: The six page sections. Contact links to GitHub, X, and ORCID.
+- `src/content/en.ts`: The single source for English copy, content records, accessible labels, and SEO metadata.
+- `src/content/index.ts`: The typed content entry point and locale registry. `src/content/types.ts` defines the shared content contract.
+- `src/lib/navigation.ts`: Stable section anchors paired with labels from the content module.
+- `src/components/sections/`: The seven page sections. Contact links to GitHub, X, and ORCID.
 - `src/components/base/`: Local BoardUI component source.
 - `src/providers/` and `src/hooks/`: Shared themes, exploration state, and motion preferences.
 - `src/styles/globals.css`: Fonts, brand colors, responsive behavior, and reduced motion. `src/styles/boardui/` contains the base design tokens.
@@ -77,6 +78,10 @@ The development configuration excludes `.tools/`, coverage output, and local doc
 - `public/hairline/`: The unmodified Hairline kernel, project and country figures, and light/dark rest previews. Earlier figure definitions remain available for compatibility.
 - `scripts/anatomy/`: Original case geometry and the MIT Anatomy kit. Development and production builds regenerate its static assets and run the geometry audit.
 - `public/anatomy/`: Generated case paths, both theme previews, and the Anatomy license.
+
+Edit website text in `src/content/en.ts`, including section copy, dynamic labels, social handles, project links, and illustration descriptions. Vite fills the HTML metadata template from the same source in development and production, so the initial static HTML includes the site's SEO. Anatomy generation also reads this content module for labels and preview metadata; generated files should not be edited directly.
+
+The current default locale is English. To prepare another language, add a content file matching `SiteContent` and register it in `src/content/index.ts`. Identifiers, anchors, and icon keys remain stable independently of displayed labels. This structure reserves an i18n boundary; the site currently has no language selector, browser-language detection, or persisted locale preference.
 
 Theme preferences are stored in `localStorage.theme` as `light`, `dark`, or `system`. The startup script applies `.dark`, `data-theme`, and `color-scheme` before React renders. Theme selection remains available when browser storage is disabled.
 
@@ -94,7 +99,7 @@ The CLI may write helper rule files or add an upstream icon package. Review gene
 
 ## Testing and deployment
 
-Bun preloads Happy DOM before loading Testing Library matchers, browser API mocks, and test cleanup. Tests cover themes, shared exploration state, project deep links and history, carousel autoplay and pause conditions, keyboard controls and interrupted transitions, country selection, both navigation menus, technology tabs, touch-tap cancellation, illustration loading and cleanup, and motion preferences. The production build also audits the case's physical geometry and depth order. The latest local revision passed 68 tests and 410 assertions; its implementation and verification record is in [docs/surface-home.md](docs/surface-home.md).
+Bun preloads Happy DOM before loading Testing Library matchers, browser API mocks, and test cleanup. Tests cover themes, shared exploration state, project deep links and history, carousel autoplay and pause conditions, keyboard controls and interrupted transitions, country selection, both navigation menus, technology tabs, touch-tap cancellation, illustration loading and cleanup, and motion preferences. Content tests cover locale completeness, display-independent identities, rich-text order, and static SEO generation. The production build also audits the case's physical geometry and depth order. Run `bun run check` for current validation results; the original surface implementation record is in [docs/surface-home.md](docs/surface-home.md).
 
 GitHub Actions is configured to run frozen-lockfile installation and `bun run check` on Ubuntu and Windows. Pull requests run checks only. On a push to `main`, the Ubuntu job uploads the build artifact; deployment starts after both platform checks pass. Set the repository's Pages publishing source to **GitHub Actions**.
 

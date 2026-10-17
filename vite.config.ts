@@ -1,11 +1,21 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
+import { content } from './src/content/index.ts'
+import { renderSiteHtml } from './src/content/html.ts'
+
+export const siteMetadataPlugin = {
+  name: 'site-metadata',
+  transformIndexHtml: {
+    order: 'pre',
+    handler: (html: string) => renderSiteHtml(html, content.metadata),
+  },
+} satisfies Plugin
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(), react()],
+  plugins: [siteMetadataPlugin, tailwindcss(), react()],
   server: {
     watch: {
       ignored: ['**/.tools/**', '**/coverage/**', '**/docs/**'],

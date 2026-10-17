@@ -3,6 +3,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { ExplorerProvider } from '@/providers/ExplorerProvider';
 import { useExplorer } from '@/hooks/useExplorer';
 import { setMediaQuery } from '@/test/media';
+import { travelItems } from '@/content';
 import { Travel } from './Travel';
 
 beforeEach(() => { window.history.replaceState({}, '', '/'); });
@@ -74,6 +75,23 @@ function countryCopy(country: string) {
 }
 
 describe('Travel', () => {
+  it('reads the displayed story and illustration label from the country content', async () => {
+    const country = travelItems.find(item => item.id === 'japan')!;
+    const description = country.description;
+    const illustrationLabel = country.illustrationLabel;
+    try {
+      country.description = 'A different story beside the railway.';
+      country.illustrationLabel = 'A railway illustration with a new description.';
+      await showTravel();
+      const article = screen.getByRole('article', { name: country.country });
+      expect(within(article).getByText(country.description)).toBeInTheDocument();
+      expect(within(article).getByRole('img', { name: country.illustrationLabel })).toBeInTheDocument();
+    } finally {
+      country.description = description;
+      country.illustrationLabel = illustrationLabel;
+    }
+  });
+
   it('shows country headings and known years without city or region metadata', async () => {
     await showTravel();
     const countries = screen.getAllByRole('article');
