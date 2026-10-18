@@ -1,0 +1,23 @@
+.country-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+.country-reveal { min-width: 0; }
+.country-card { position: relative; min-width: 0; scroll-margin-top: var(--anchor-offset); }
+.country-card .hairline-figure { margin-bottom: 20px; }
+/* Rebind the kernel's inherited palette inside the actual moving group.
+   Its opaque faces and painter's order stay intact; the landscape stays monochrome. */
+.country-card .hairline-stage :is([data-part='suv'], [data-part='train'], [data-part^='shutter-']) {
+  --hl-hi: var(--accent);
+  --hl-edge: var(--accent);
+  --hl-mid: color-mix(in oklch, var(--accent) 84%, var(--drawing-ground));
+  --hl-lo: color-mix(in oklch, var(--accent) 62%, var(--drawing-ground));
+}
+.country-copy { position: relative; border-top: 1px solid var(--border); padding-top: 20px; transition: border-color 180ms ease; }
+.country-copy[data-reading='true'] { border-color: var(--accent); }
+.country-reading-marker { position: absolute; top: 0; inset-inline: 0; height: 1px; pointer-events: none; }
+.country-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 10px; }
+.country-copy h3 { color: var(--foreground); font-size: 28px; line-height: 1.3; letter-spacing: -.025em; font-weight: 550; margin: 0; }
+.country-year { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.country-copy p { color: var(--muted); font-size: 15px; line-height: 1.8; margin: 0; }
+.country-legacy-anchor { position: absolute; inset: 0 auto auto 0; scroll-margin-top: var(--anchor-offset); }
+@media (max-width: 1023px) { .country-grid { gap: 24px; } .country-copy h3 { font-size: 24px; } }
+@media (max-width: 767px) { .country-grid { grid-template-columns: 1fr; gap: 38px; } .country-card .hairline-figure { width: min(100%, 390px); margin: 0 auto 12px; } .country-copy { padding-top: 18px; } .country-copy h3 { font-size: 26px; } }
+@media (prefers-reduced-motion: reduce) { .country-copy { transition: none; } }
