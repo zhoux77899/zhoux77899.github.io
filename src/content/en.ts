@@ -285,7 +285,6 @@ export const en = {
     groupLabel: 'Explore the toolbox',
     illustrationLabel: 'An open precision case carrying a model workstation, terminal, optical instrument, folio, map and connection panel.',
     previewIllustrationLabel: 'An open precision case carrying six objects for projects, skills, background, open source, travel and contact',
-    previewTitle: theme => `Precision exploration case — ${theme}`,
     hotspotLabel: (label, object) => `${label} — ${object}`,
     open: 'Explore',
     close: 'Close explorer',

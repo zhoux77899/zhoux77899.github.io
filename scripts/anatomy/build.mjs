@@ -275,7 +275,6 @@ for (const theme of ['light', 'dark']) {
   const accent = siteThemeValue(theme, 'accent');
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="iso iso-svg anatomy-explorer-art" data-theme="${theme}" style="--background:${paper};--accent:${accent}" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="${escapeHtml(content.explorer.previewIllustrationLabel)}"><style>${css}</style>${body}</svg>`;
   writeFileSync(resolve(OUT, `explorer-${theme}.svg`), svg);
-  writeFileSync(resolve(OUT, `explorer-${theme}.html`), `<!doctype html><html lang="${escapeHtml(content.metadata.lang)}"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(content.explorer.previewTitle(theme))}</title><style>body{margin:0;background:${paper}}.iso-plate{max-width:800px;margin:32px auto}</style><body><main class="iso-plate">${svg}</main></body></html>`);
 }
 console.log(`Anatomy explorer: ${solids} actual solids, ${items.length} sorted items, ${states.length} depth states, ${replay.length} replayed 60fps frames.`);
 const result = A.auditOrExit(R, P, { frames: [...states.slice(1), ...replay], apart: true });

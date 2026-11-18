@@ -49,7 +49,6 @@ export interface SiteContent {
     groupLabel: string;
     illustrationLabel: string;
     previewIllustrationLabel: string;
-    previewTitle: (theme: 'light' | 'dark') => string;
     hotspotLabel: (label: string, object: string) => string;
     open: string;
     close: string;

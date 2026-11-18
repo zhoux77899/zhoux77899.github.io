@@ -88,7 +88,7 @@ and `coverage/`. Keep Flawless analysis JSON, generated README outlines,
 validation reports, and logs in a task-specific system temporary directory.
 
 Some illustration outputs are intentionally versioned. Changes to Anatomy
-sources can require regenerated scene JSON, SVG and HTML previews, and the audit
+sources can require regenerated scene JSON, SVG previews, and the audit
 record under `public/anatomy/`. Hairline figure changes can require matching rest
 previews under `public/hairline/`. Regenerate them from their tracked sources and
 review the differences alongside the source change. See the development guide

@@ -1,0 +1,11 @@
+# Generated illustration outputs remain available for diff review.
+/public/anatomy/explorer-*.svg linguist-detectable=false
+/public/anatomy/explorer.json linguist-detectable=false
+/public/anatomy/audit.json linguist-detectable=false
+/public/hairline/previews/*.svg linguist-detectable=false
+/src/lib/anatomy/hotspots.ts linguist-detectable=false
+
+# Unmodified upstream implementations.
+/scripts/anatomy/kit/** linguist-vendored=true
+/scripts/anatomy/verify/** linguist-vendored=true
+/public/hairline/kernel.js linguist-vendored=true

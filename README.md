@@ -37,7 +37,7 @@ The build goes into `dist/`; the preview server defaults to port 4173.
 | `bun run test:run` | Run the tests once |
 | `bun run test:coverage` | Run tests and produce console and LCOV coverage reports |
 | `bun run build` | Generate the Anatomy assets, audit their geometry, and build the static site |
-| `bun run anatomy:build` | Generate and audit the case geometry and both theme previews |
+| `bun run anatomy:build` | Generate and audit the case geometry and SVG previews for both themes |
 | `bun run anatomy:audit` | Run the physical-part audit across resting and moving poses |
 | `bun run preview` | Preview the production build |
 | `bun run check` | Run type checking, lint, coverage tests, and the production build |
@@ -59,7 +59,7 @@ The project gallery advances every six seconds while visible and idle. Hover, ke
 | [`src/styles/`](src/styles/) | Fonts, brand tokens, responsive layout, and reduced-motion styles |
 | [`public/hairline/`](public/hairline/) | Hairline kernel, figure source, and static previews |
 | [`scripts/anatomy/`](scripts/anatomy/) | Exploration-case geometry, generation scripts, and audit tools |
-| [`public/anatomy/`](public/anatomy/) | Generated case assets and theme previews |
+| [`public/anatomy/`](public/anatomy/) | Generated case assets and SVG theme previews |
 
 Edit website text in [`src/content/en.ts`](src/content/en.ts). The same content supplies static HTML metadata and illustration labels. Keep factual changes tied to the evidence in [`docs/content-sources.md`](docs/content-sources.md).
 
