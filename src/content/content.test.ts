@@ -28,8 +28,6 @@ describe('site content', () => {
     expect(content.sections.travel.yearRange(2025, 2025)).toBe('2025');
     expect(content.sections.travel.yearRange(2018, 2022)).toBe('2018–2022');
     expect(content.ui.footer.copyright(2026)).toBe('© 2026 ');
-    expect(content.explorer.previewTitle('light')).toBe('Precision exploration case — light');
-    expect(content.explorer.previewTitle('dark')).toBe('Precision exploration case — dark');
   });
 
   it('provides navigation and explorer labels for every stable destination', () => {

@@ -87,7 +87,7 @@ Original geometry and the MIT Anatomy kit live in [`scripts/anatomy/`](../script
 bun run anatomy:build
 ```
 
-The script generates the JSON scene, projected hotspots, light/dark SVG and HTML previews, and audit report from tracked source. It checks resting geometry, 581 depth states, and 159 replayed frames from the browser's shared motion model. `bun run anatomy:audit` invokes the same build script with `--audit`.
+The script generates the JSON scene, projected hotspots, light/dark SVG previews, and audit report from tracked source. The SVG previews supply the loading and error fallbacks and the Explore button thumbnail. It checks resting geometry, 581 depth states, and 159 replayed frames from the browser's shared motion model. `bun run anatomy:audit` invokes the same build script with `--audit`.
 
 Review generated differences in `public/anatomy/` and `src/lib/anatomy/hotspots.ts` with the source change. These deployed assets and the geometry audit report are intentionally versioned. Keep the [Anatomy license](../public/anatomy/LICENSE.txt) with the public assets.
 
@@ -100,6 +100,12 @@ The BoardUI carousel centers one project with neighboring cards visible on both 
 Rotation advances every six seconds while visible and idle. Hover, focus, gestures, hidden/offscreen state, and reduced motion suspend it. Keyboard commands, indicators, and native swipes remain available. Manual interaction restarts the interval.
 
 Automatic selection and native scrolling do not add browser history. Explicit deep links and browser Back reveal and center the target card. Project links use Source, Releases, and Website labels.
+
+## GitHub language statistics
+
+[`.gitattributes`](../.gitattributes) excludes generated illustration outputs from language statistics with `linguist-detectable=false`, preserving their existing diff visibility. The unmodified Anatomy kit, verification scripts, and Hairline engine use `linguist-vendored=true`.
+
+Project scripts, tests, figure definitions, and locally adapted BoardUI code remain eligible for language statistics. Add specific path rules for new generated outputs rather than excluding entire source directories. These attributes do not change which assets are versioned or deployed; review regenerated outputs with their source changes.
 
 ## Validation
 
