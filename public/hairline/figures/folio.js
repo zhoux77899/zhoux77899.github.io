@@ -1,5 +1,5 @@
 // Rounded paper geometry follows @lucasmarkes/hairline Riffle and Stack, Lucas Marques (MIT).
-const { Cam, clamp, facing, fit, hull, open, poly, proj, ringAt, rings, prism, rrect, run, seg, circ, rad, solid, put, mk, tween, tset, tval, tdone, pointer, register, disposer } = HL;
+const { Cam, clamp, facing, fit, hull, open, poly, proj, ringAt, rings, prism, rrect, run, circ, rad, solid, put, mk, tween, tset, tval, tdone, pointer, register, disposer } = HL;
 function mount({ stage, svg, read }, value) {
   const bag = disposer(), C = Cam(45, 0.5, 1.58);
   fit(C, [[-91, -10, 0], [92, 117, 0], [-91, 117, 0], [92, -10, 0], [26, -2, 99]], 200, 166);
@@ -18,54 +18,107 @@ function mount({ stage, svg, read }, value) {
   for (const y of [7, 100]) {
     mk("path", { d: poly(circ(1.4, 24).map((q) => P(0.5 + q.u, y + q.v, 7.1))), class: "nf lo" }, g);
   }
-  const metal = (y, from, to) => {
-    const outer = [], inner = [], count = 32;
-    for (let j = 0; j <= count; j++) {
-      const a = from + (to - from) * j / count;
-      outer.push(P(7 + 9.5 * Math.cos(a), y, 14 + 11.5 * Math.sin(a)));
-      inner.push(P(7 + 8.5 * Math.cos(a), y, 14 + 10.5 * Math.sin(a)));
-    }
-    return poly([...outer, ...inner.reverse()]);
-  };
-  for (const y of [21, 53, 85]) mk("path", { d: metal(y, Math.PI / 2, Math.PI * 1.5), class: "sil" }, g);
+  const stations = [21, 53, 85];
+  const ringPoint = (angle, thickness = 0) => [7 + (9 + thickness) * Math.cos(angle), 14 + (11 + thickness) * Math.sin(angle)];
   const leaves = mk("g", {}, g), pages = [];
   for (let i = 0; i < 6; i++) {
     const y0 = -0.6 + i * 0.8, y1 = 106 + i * 0.4;
     const outline = rrect(10, y0, 81 + i * 0.3, y1, 2.6, 10);
     const inner = rrect(11, y0 + 1, 80 + i * 0.3, y1 - 1, 1.6, 10);
     const group = mk("g", {}, leaves), plate = solid(group);
-    const holes = [21, 53, 85].map(() => mk("path", { class: "nf lo" }, group));
-    const grooves = [0.35, 0.7, 1.05].map(() => mk("path", { class: "nf lo" }, group));
-    pages.push({ i, group, plate, holes, grooves, outline, inner, y1,
-      z: 7 + i * 1.7, rest: 3 + i * 1.5, tw: tween(3 + i * 1.5), last: NaN });
+    const holes = stations.map(() => mk("path", { class: "nf lo" }, group));
+    pages.push({ i, group, plate, holes, outline, inner, y0, y1,
+      binding: Math.asin((7 + i * 1.7 - 14) / 11), rest: 3 + i * 1.5, tw: tween(3 + i * 1.5), last: NaN });
   }
-  for (const y of [21, 53, 85]) mk("path", { d: metal(y, -Math.PI / 2, Math.PI / 2), class: "sil" }, g);
+  const hoops = stations.map(() => mk("path", { class: "sil" }, g));
   let active = -1, angle = value, lastOrder = "";
+  const rayX = Math.sqrt(3 / 8), rayZ = .5, paperThickness = .8;
   const posed = (page, a) => {
     const c = Math.cos(rad(a)), s = Math.sin(rad(a));
-    return (x, y, thickness = 0) => P(8 + (x - 8) * c - thickness * s, y, page.z + (x - 8) * s + thickness * c);
+    const [hx, hz] = ringPoint(page.binding + rad(a - page.rest));
+    return (x, y, thickness = 0) => P(hx + (x - 17) * c - thickness * s, y, hz + (x - 17) * s + thickness * c);
   };
   function draw(page, a) {
     if (a === page.last) return;
     page.last = a;
-    const Q = posed(page, a), top = page.outline.map((q) => Q(q.u, q.v)), bottom = page.outline.map((q) => Q(q.u, q.v, -1.4));
-    put(page.plate, { sil: poly(hull([...top, ...bottom])), crease: open(run(page.inner, front).map((q) => Q(q.u, q.v))) });
-    page.holes.forEach((hole, j) => hole.setAttribute("d", poly(circ(2.2, 24).map((q) => Q(17 + q.u, 21 + j * 32 + q.v)))));
-    page.grooves.forEach((line, j) => line.setAttribute("d", seg(Q(13, page.y1 - 0.3, -(j + 1) * 0.35), Q(79, page.y1 - 0.3, -(j + 1) * 0.35))));
+    const Q = posed(page, a), top = page.outline.map((q) => Q(q.u, q.v)), bottom = page.outline.map((q) => Q(q.u, q.v, -paperThickness));
+    const c = Math.cos(rad(a)), s = Math.sin(rad(a));
+    page.anchor = ringPoint(page.binding + rad(a - page.rest));
+    page.cos = c; page.sin = s; page.normal = rayZ * c - rayX * s;
+    const face = page.normal > 0 ? 0 : -paperThickness;
+    // Include the exact wire crossing even when a punch is viewed almost edge-on.
+    let contact = page.binding + rad(a - page.rest);
+    for (let step = 0; step < 4; step++) {
+      const [x, z] = ringPoint(contact);
+      const offset = (z - page.anchor[1]) * c - (x - page.anchor[0]) * s - face;
+      contact -= offset / (11 * Math.cos(contact) * c + 9 * Math.sin(contact) * s);
+    }
+    page.contact = contact;
+    const edge = run(page.inner, q => q.nu * (rayX * c + rayZ * s) + q.nv * rayX > 0);
+    put(page.plate, { sil: poly(hull([...top, ...bottom])), crease: open(edge.map(q => Q(q.u, q.v, face))) });
+    page.holes.forEach((hole, j) => hole.setAttribute("d", poly(circ(2.2, 24).map(q => Q(17 + q.u, stations[j] + q.v, face)))));
   }
-  function depth(page) {
-    const a = rad(page.last), x = 8 + 37 * Math.cos(a), z = page.z + 37 * Math.sin(a);
-    return 0.612 * (x + page.y1 / 2) + 0.5 * z;
+  // Test each wire against the actual paper planes so the ring disappears behind a leaf and emerges at its punch.
+  function wireHidden(x, y, z) {
+    return pages.some(page => {
+      const [hx, hz] = page.anchor, c = page.cos, s = page.sin;
+      const offset = (z - hz) * c - (x - hx) * s;
+      const distance = ((page.normal > 0 ? 0 : -paperThickness) - offset) / page.normal;
+      if (distance <= 0 || !Number.isFinite(distance)) return false;
+      const u = (x - hx + distance * rayX) * c + (z - hz + distance * rayZ) * s;
+      const v = y + distance * rayX;
+      return u >= -7 && u <= 64 + page.i * .3 && v >= page.y0 && v <= page.y1
+        && !stations.some(station => Math.hypot(u, v - station) <= 2.2);
+    });
+  }
+  function drawHoops() {
+    const angles = Array.from({ length: 81 }, (_, j) => -Math.PI / 2 + j * Math.PI / 40)
+      .concat(pages.map(page => page.contact)).sort((a, b) => a - b);
+    stations.forEach((y, index) => {
+      let outer = [], inner = [], path = "";
+      function append(a) {
+        const [ox, oz] = ringPoint(a, .55), [ix, iz] = ringPoint(a, -.55);
+        outer.push(P(ox, y, oz)); inner.push(P(ix, y, iz));
+      }
+      function visible(a) {
+        const [x, z] = ringPoint(a);
+        return z >= 5 && !wireHidden(x, y, z);
+      }
+      let previous = angles[0], exposed = false;
+      for (const a of angles) {
+        const current = visible(a);
+        if (current !== exposed) {
+          let lo = previous, hi = a;
+          for (let j = 0; j < 9; j++) {
+            const middle = (lo + hi) / 2;
+            if (visible(middle) === exposed) lo = middle; else hi = middle;
+          }
+          append((lo + hi) / 2);
+          if (!current) { path += poly([...outer, ...inner.reverse()]); outer = []; inner = []; }
+        }
+        if (current) append(a);
+        previous = a; exposed = current;
+      }
+      hoops[index].setAttribute("d", path);
+    });
   }
   function paintOrder() {
-    const sorted = pages.slice().sort((a, b) => depth(a) - depth(b)), stamp = sorted.map((page) => page.i).join();
+    // Once a leaf turns past the sightline its underside faces us and its neighbour order reverses.
+    const flat = pages.filter(page => page.normal > 0), turned = pages.filter(page => page.normal <= 0);
+    const sorted = flat.concat(turned.reverse()), stamp = sorted.map(page => page.i).join();
     if (stamp === lastOrder) return;
     lastOrder = stamp; sorted.forEach((page) => leaves.append(page.group));
   }
-  pages.forEach((page) => draw(page, page.rest)); paintOrder(); pages[5].plate.sil.classList.add("hi");
+  pages.forEach(page => draw(page, page.rest)); paintOrder(); drawHoops(); pages[5].plate.sil.classList.add("hi");
   const loop = register(stage, (_dt, now) => {
-    let moving = false;
-    pages.forEach((page) => { draw(page, tval(page.tw, now)); if (!tdone(page.tw, now)) moving = true; }); paintOrder(); return moving;
+    let moving = false, changed = false, lower = 0;
+    pages.forEach(page => {
+      lower = Math.max(lower, tval(page.tw, now));
+      if (page.last !== lower) { draw(page, lower); changed = true; }
+      if (!tdone(page.tw, now)) moving = true;
+    });
+    if (changed) { paintOrder(); drawHoops(); }
+    return moving;
   }); bag.add(loop.unregister);
   const centers = pages.map((page) => posed(page, page.rest)(67, 14 + page.i * 17));
   const hitFaces = pages.map((page) => page.outline.map((q) => posed(page, page.rest)(q.u, q.v)));

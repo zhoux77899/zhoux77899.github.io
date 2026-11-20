@@ -138,6 +138,20 @@ describe('Anatomy explorer lifecycle and navigation', () => {
     expect(drawing.getByRole('link', { name: /^Travel —/ })).toHaveAttribute('aria-current', 'location');
     expect(view.container.querySelectorAll('svg')).toHaveLength(1);
   });
+  it('returns the preview to the focused tool when the pointer leaves a different one', async () => {
+    setMediaQuery('(prefers-reduced-motion: reduce)', true);
+    const view = render(<AnatomyExplorer activeDestination={null} />);
+    await loaded();
+    act(() => { visibility(true); });
+    const optics = view.getByRole('link', { name: /^Background —/ });
+    const terminal = view.getByRole('link', { name: /^Stack —/ });
+    const caseRoot = view.container.querySelector('.anatomy-explorer');
+    act(() => { optics.focus(); fireEvent.pointerEnter(terminal); });
+    expect(caseRoot).toHaveAttribute('data-preview', 'skills');
+    act(() => { fireEvent.pointerLeave(terminal); });
+    expect(caseRoot).toHaveAttribute('data-preview', 'experience');
+    expect(optics).toHaveFocus();
+  });
   it('activates a drawing destination with Enter or Space after previewing', async () => {
     const view = render(<AnatomyExplorer activeDestination="projects" />);
     const link = view.getByRole('link', { name: /^Travel —/ });

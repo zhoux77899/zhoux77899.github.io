@@ -15,10 +15,10 @@ function mount({ stage, svg, read }, value) {
   path(g,poly(hull(ringAt(P,outer,0).concat(ringAt(P,outer,H)))),'sil');
   path(g,poly(ringAt(P,inner,H)),'nf');
   path(g,open(ringAt(P,run(inner,q=>!front(q)),7)));
-  // The floating lid is behind the modules, not an opaque sheet painted over them.
-  const lid=mk('g',{},g);block(lid,-8,-31,W+8,D+8,102,3.5,13,1.4);
   for(const x of [58,114]) block(g,x,3,1.4,D-6,7,14,.5,.3);
-  const modules=[], rest=[1.5,3,0,1,0,2], top=[66,69,61,35,38,51];
+  const modules=[], rest=[1.5,3,0,1,0,2];
+  // Aim at an exposed face of each resting insert, including the front circuit board.
+  const targets=[[25,27,44],[24,31,48],[24,34,35],[25,23,24],[25,23,28],[25,21,44.2]];
   for(let i=0;i<6;i++) {
     const col=i%3, row=Math.floor(i/3), x=6+col*56, y=7+row*47;
     const group=mk('g',{},g), marks=[];let focal=null;
@@ -76,7 +76,8 @@ function mount({ stage, svg, read }, value) {
         const part=solid(group);put(part,prism(P,front,contour,inset,16+j*4.7,16+(j+1)*4.7));marks.push(part.sil);if(j===5)focal=part.sil;
       }
     }
-    const tw=tween(rest[i]);modules.push({group,marks,focal:focal||marks.at(-1),tw,last:NaN,c:P(x+25,y+23,top[i]+rest[i])});
+    const [tx,ty,tz]=targets[i], tw=tween(rest[i]);
+    modules.push({group,marks,focal:focal||marks.at(-1),tw,last:NaN,c:P(x+tx,y+ty,tz+rest[i])});
   }
   // The near wall occludes the feet of the inserts, as a real enclosure does.
   const lr=pts=>pts[0][0]<=pts.at(-1)[0]?pts:pts.slice().reverse();
@@ -87,6 +88,13 @@ function mount({ stage, svg, read }, value) {
   path(g,face(rr(56,6,76,10,4)),'nf');path(g,face(rr(58,8,72,6,2)),'nf lo');
   path(g,poly(circ(5.2,80).map(q=>P(23+q.u,D+4,12+q.v))),'nf sil');
   path(g,poly(circ(3.8,80).map(q=>P(23+q.u,D+4.01,12+q.v))));
+  // The exploded lid is above even a fully lifted insert. Its opaque footprint
+  // both masks the drawing and keeps the pointer from selecting through it.
+  const lidZ=116, lidTop=lidZ+3.5;
+  const lidRing=rr(-8,-31,W+8,D+8,13);
+  const lidInset=rr(-6.6,-29.6,W+5.2,D+5.2,11.6);
+  const lidOutline=hull([...ringAt(P,lidRing,lidZ),...ringAt(P,lidRing,lidTop)]);
+  put(solid(g),{sil:poly(lidOutline),crease:open(ringAt(P,run(lidInset,front),lidTop))});
   let active=-1;
   const light=()=>modules.forEach((m,i)=>m.focal.classList.toggle('hi',i===(active<0?0:active)));
   light();
@@ -103,6 +111,11 @@ function mount({ stage, svg, read }, value) {
     light();read.textContent=next<0?'rest':'module '+(next+1);B.wake();
   }
   bag.add(pointer(stage,{move:p=>{
+    const onLid=lidOutline.every(([x,y],i)=>{
+      const [nx,ny]=lidOutline[(i+1)%lidOutline.length];
+      return (nx-x)*(p[1]-y)-(ny-y)*(p[0]-x)>=0;
+    });
+    if(onLid){choose(-1);return;}
     let nearest=-1,dist=Infinity;modules.forEach((m,i)=>{const d=Math.hypot((p[0]-m.c[0]),(p[1]-m.c[1])*.85);if(d<dist&&d<32){nearest=i;dist=d;}});
     choose(nearest);
   },leave:()=>choose(-1)}));

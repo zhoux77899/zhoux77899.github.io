@@ -67,7 +67,7 @@ Figure source lives in [`public/hairline/figures/`](../public/hairline/figures/)
 
 [`src/lib/hairline.ts`](../src/lib/hairline.ts) loads the kernel once and shares figure-module promises. [`HairlineFigure`](../src/components/common/HairlineFigure.tsx) mounts only the drawing stage, without sliders, readouts, or visible labels. It starts loading near the viewport, destroys each mounted handle on cleanup, and removes the mounted drawing. CSS maps the engine's exposed monochrome palette variables to the current surface and theme.
 
-Light and dark SVG rest previews provide loading and error fallbacks. Project highlight edges use the shared accent while resting contours remain monochrome. Country scenes reserve the accent for the SUV, train, and opening shutters, including their static fallbacks.
+Light and dark SVG rest previews provide loading and error fallbacks. After editing a project or country figure, run `bun run hairline:previews` to rebuild both themes from the live geometry and site palette. Project highlight edges use the shared accent while resting contours remain monochrome. Country scenes reserve the accent for the SUV, train, and opening shutters, including their static fallbacks.
 
 Touch handling stays outside the original kernel. A confirmed single tap calls the figure's optional `activate(point)` method; `activate(null)` restores its resting pose. Dragging scrolls the gallery or page, and cancelled or multi-finger gestures do not activate a part.
 
@@ -75,7 +75,7 @@ Build and look artifacts are excluded from version control. Figure source and de
 
 ## Anatomy exploration case
 
-The case contains 113 recorded physical solids. Its six objects link to Projects, Stack, Background, Open source, Travel, and Contact. Open source targets the contribution block within Projects; Publications remains a separate page section.
+The case contains 123 recorded physical solids. Its six objects link to Projects, Stack, Background, Open source, Travel, and Contact. Open source targets the contribution block within Projects. Publications remains a separate page section.
 
 Pointer and keyboard focus preview a module; clicking or pressing Enter on its hotspot selects the destination. The Hero presents identity, the full case, biography, actions, and social links on one centered axis. Its tighter projection frame preserves the drawing and hotspot alignment while making room for the full cover. Shorter or zoomed windows retain normal vertical flow.
 
@@ -87,7 +87,7 @@ Original geometry and the MIT Anatomy kit live in [`scripts/anatomy/`](../script
 bun run anatomy:build
 ```
 
-The script generates the JSON scene, projected hotspots, light/dark SVG previews, and audit report from tracked source. The SVG previews supply the loading and error fallbacks and the Explore button thumbnail. It checks resting geometry, 581 depth states, and 159 replayed frames from the browser's shared motion model. `bun run anatomy:audit` invokes the same build script with `--audit`.
+The script generates the JSON scene, projected hotspots, light/dark SVG previews, and audit report from tracked source. The SVG previews supply the loading and error fallbacks and the Explore button thumbnail. It checks resting geometry, a grid of depth states, and replayed frames from the browser's shared motion model. The [audit report](../public/anatomy/audit.json) gives the counts for the current model. `bun run anatomy:audit` invokes the same build script with `--audit`.
 
 Review generated differences in `public/anatomy/` and `src/lib/anatomy/hotspots.ts` with the source change. These deployed assets and the geometry audit report are intentionally versioned. Keep the [Anatomy license](../public/anatomy/LICENSE.txt) with the public assets.
 

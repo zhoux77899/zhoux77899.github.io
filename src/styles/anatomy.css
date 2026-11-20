@@ -11,7 +11,7 @@
   --anatomy-shade-2: #eeede5;
   --anatomy-shade-3: #f5f4ec;
   --anatomy-lit-top: color-mix(in oklch, var(--accent) 12%, var(--anatomy-top));
-  --anatomy-lit-shade: color-mix(in oklch, var(--accent) 14%, var(--anatomy-shade-3));
+  --anatomy-side-tint: 14%;
   --anatomy-hi: #605d57;
   --anatomy-mid: #827e75;
   --anatomy-lo: #aaa69c;
@@ -32,7 +32,7 @@
   --anatomy-shade-2: #292a25;
   --anatomy-shade-3: #30312b;
   --anatomy-lit-top: color-mix(in oklch, var(--accent) 16%, var(--anatomy-top));
-  --anatomy-lit-shade: color-mix(in oklch, var(--accent) 18%, var(--anatomy-shade-3));
+  --anatomy-side-tint: 18%;
   --anatomy-hi: #b9b9ad;
   --anatomy-mid: #898b7f;
   --anatomy-lo: #5b5e52;
@@ -47,7 +47,7 @@
   --anatomy-shade-0: #dddcd4; --anatomy-shade-1: #e6e5dd;
   --anatomy-shade-2: #eeede5; --anatomy-shade-3: #f5f4ec;
   --anatomy-lit-top: color-mix(in oklch, var(--accent) 12%, var(--anatomy-top));
-  --anatomy-lit-shade: color-mix(in oklch, var(--accent) 14%, var(--anatomy-shade-3));
+  --anatomy-side-tint: 14%;
   --anatomy-lit: var(--accent);
   --anatomy-hi: #605d57; --anatomy-mid: #827e75; --anatomy-lo: #aaa69c;
   --anatomy-faint: #c7c3b9; --anatomy-halo: #b6ad9a;
@@ -66,10 +66,11 @@
 .anatomy-explorer path { vector-effect: non-scaling-stroke; }
 .anatomy-explorer .iso-fill { fill: var(--anatomy-paper); stroke: none; }
 .anatomy-explorer .iso-shade, .anatomy-explorer .iso-top { stroke: none; }
-.anatomy-explorer .iso-shade[data-shade='0'] { fill: var(--anatomy-shade-0); }
-.anatomy-explorer .iso-shade[data-shade='1'] { fill: var(--anatomy-shade-1); }
-.anatomy-explorer .iso-shade[data-shade='2'] { fill: var(--anatomy-shade-2); }
-.anatomy-explorer .iso-shade[data-shade='3'] { fill: var(--anatomy-shade-3); }
+:is(.anatomy-explorer, .anatomy-explorer-art) .iso-shade[data-shade='0'] { --facet: var(--anatomy-shade-0); }
+:is(.anatomy-explorer, .anatomy-explorer-art) .iso-shade[data-shade='1'] { --facet: var(--anatomy-shade-1); }
+:is(.anatomy-explorer, .anatomy-explorer-art) .iso-shade[data-shade='2'] { --facet: var(--anatomy-shade-2); }
+:is(.anatomy-explorer, .anatomy-explorer-art) .iso-shade[data-shade='3'] { --facet: var(--anatomy-shade-3); }
+.anatomy-explorer .iso-shade { fill: var(--facet); }
 .anatomy-explorer .iso-top { fill: var(--anatomy-top); }
 .anatomy-explorer .iso-line { fill: none; stroke: var(--anatomy-lo); stroke-width: var(--anatomy-weight); stroke-linecap: round; stroke-linejoin: round; }
 .anatomy-explorer .iso-line[data-tone='hi'] { stroke: var(--anatomy-hi); }
@@ -82,7 +83,7 @@
 :is(.anatomy-explorer, .anatomy-explorer-art) [data-on] { --anatomy-dot: var(--accent); }
 :is(.anatomy-explorer, .anatomy-explorer-art) [data-on] .iso-edge { stroke: var(--anatomy-lit); }
 :is(.anatomy-explorer, .anatomy-explorer-art) [data-on] .iso-top { fill: var(--anatomy-lit-top); }
-:is(.anatomy-explorer, .anatomy-explorer-art) [data-on] .iso-shade { fill: var(--anatomy-lit-shade); }
+:is(.anatomy-explorer, .anatomy-explorer-art) [data-on] .iso-shade { fill: color-mix(in oklch, var(--accent) var(--anatomy-side-tint), var(--facet)); }
 .anatomy-hotspot-link { position: absolute; display: block; min-width: 44px; min-height: 44px; transform: translate(-50%, -50%); border-radius: 50%; cursor: pointer; }
 .anatomy-hotspot-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .anatomy-hotspot-label { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; background: var(--background); box-shadow: 0 3px 10px oklch(0 0 0 / .08); color: var(--foreground); font-size: 12px; font-weight: 500; line-height: 1.4; white-space: nowrap; pointer-events: none; visibility: hidden; opacity: 0; transition: opacity 120ms ease; }

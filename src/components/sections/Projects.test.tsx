@@ -445,9 +445,10 @@ describe('Project carousel', () => {
       expect(clock.timers.size).toBe(0);
       act(() => { gallery.blur(); });
       expect(clock.timers.size).toBe(1);
-      act(() => { fireEvent.pointerDown(gallery, { pointerType: 'touch', pointerId: 1 }); });
+      const stage = gallery.querySelector('[data-hairline="cardputer"]')!;
+      act(() => { fireEvent.pointerDown(stage, { pointerType: 'touch', pointerId: 1, isPrimary: true }); });
       expect(clock.timers.size).toBe(0);
-      act(() => { fireEvent.pointerUp(window, { pointerType: 'touch', pointerId: 1 }); });
+      act(() => { fireEvent.pointerUp(stage, { pointerType: 'touch', pointerId: 1, isPrimary: true }); });
       expect(clock.timers.size).toBe(1);
       act(() => { clock.hidden(true); });
       expect(clock.timers.size).toBe(0);

@@ -22,6 +22,8 @@ interface ExplorerController {
 export function AnatomyExplorer({ activeDestination, className = '', compactFrame = false }: AnatomyExplorerProps) {
   const [asset, setAsset] = useState<ExplorerAsset>();
   const preview = useRef<ExplorerDestination | null>(null);
+  const pointed = useRef<ExplorerDestination | null>(null);
+  const focused = useRef<ExplorerDestination | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const art = useRef<SVGGElement>(null);
   const controller = useRef<ExplorerController | null>(null);
@@ -59,6 +61,7 @@ export function AnatomyExplorer({ activeDestination, className = '', compactFram
     let touring = false;
     let started = 0;
     let previousOrder = entries.map(entry => entry.item.id).join('|');
+    let paintedTarget: ExplorerDestination | null = null;
     let disposed = false;
     const canRun = () => visible && !document.hidden && !disposed;
     const stop = () => {
@@ -72,29 +75,38 @@ export function AnatomyExplorer({ activeDestination, className = '', compactFram
     };
     const paint = (target: ExplorerDestination | null, dt: number, reduced = media.matches) => {
       let moving = false;
+      const changed = new Set<ExplorerDestination>();
       for (const m of asset.modules) {
         const was = lift.get(m.id) ?? 0;
         const next = followLift(was, m.id === target ? 1 : 0, dt, reduced);
         lift.set(m.id, next);
+        if (next !== was) changed.add(m.id);
         moving = moving || next !== (m.id === target ? 1 : 0);
       }
       for (const { item, node: part } of entries) {
-        if (!part) continue;
-        const amount = item.piece === 'stand' ? 0 : lift.get(item.piece) ?? 0;
-        if (amount) part.setAttribute('transform', `translate(${item.offset[0] * amount} ${item.offset[1] * amount})`);
-        else part.removeAttribute('transform');
-        if (item.piece === target) part.dataset.on = '';
-        else delete part.dataset.on;
+        if (!part || item.piece === 'stand') continue;
+        if (changed.has(item.piece)) {
+          const amount = lift.get(item.piece) ?? 0;
+          if (amount) part.setAttribute('transform', `translate(${item.offset[0] * amount} ${item.offset[1] * amount})`);
+          else part.removeAttribute('transform');
+        }
+        if (target !== paintedTarget) {
+          if (item.piece === target) part.dataset.on = '';
+          else if (item.piece === paintedTarget) delete part.dataset.on;
+        }
       }
-      const sorted = entries.slice().sort((a, b) =>
-        a.item.key + a.item.lift * (lift.get(a.item.piece as ExplorerDestination) ?? 0)
-        - b.item.key - b.item.lift * (lift.get(b.item.piece as ExplorerDestination) ?? 0));
-      const order = sorted.map(entry => entry.item.id).join('|');
-      if (order !== previousOrder) {
-        const fragment = document.createDocumentFragment();
-        sorted.forEach(entry => { if (entry.node) fragment.append(entry.node); });
-        group.append(fragment);
-        previousOrder = order;
+      paintedTarget = target;
+      if (changed.size) {
+        const sorted = entries.slice().sort((a, b) =>
+          a.item.key + a.item.lift * (lift.get(a.item.piece as ExplorerDestination) ?? 0)
+          - b.item.key - b.item.lift * (lift.get(b.item.piece as ExplorerDestination) ?? 0));
+        const order = sorted.map(entry => entry.item.id).join('|');
+        if (order !== previousOrder) {
+          const fragment = document.createDocumentFragment();
+          sorted.forEach(entry => { if (entry.node) fragment.append(entry.node); });
+          group.append(fragment);
+          previousOrder = order;
+        }
       }
       node.dataset.preview = target ?? '';
       node.dataset.touring = touring ? 'true' : 'false';
@@ -140,7 +152,7 @@ export function AnatomyExplorer({ activeDestination, className = '', compactFram
     };
     controller.current = {
       takeOver, release,
-      preview(destination) { takeOver(); hovered = destination; wake(); },
+      preview(destination) { hovered = destination; takeOver(); },
       update(destination) { current = destination; touring = false; wake(); if (!held) scheduleTour(); },
     };
     const observer = typeof IntersectionObserver !== 'undefined'
@@ -183,15 +195,15 @@ export function AnatomyExplorer({ activeDestination, className = '', compactFram
     preview.current = destination;
     controller.current?.preview(destination);
   };
-  const leave = () => {
-    if (root.current?.contains(document.activeElement)) return;
-    preview.current = null;
-    controller.current?.release();
+  const restorePreview = (destination: ExplorerDestination | null) => {
+    if (destination) previewTo(destination);
+    else { preview.current = null; controller.current?.release(); }
   };
+  const leave = () => { pointed.current = null; restorePreview(focused.current); };
   const blur = (event: FocusEvent<HTMLDivElement>) => {
     if (event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) return;
-    preview.current = null;
-    controller.current?.release();
+    focused.current = null;
+    restorePreview(pointed.current);
   };
   const keydown = (event: KeyboardEvent<HTMLAnchorElement>) => {
     const links = Array.from(root.current?.querySelectorAll<HTMLAnchorElement>('.anatomy-hotspot-link') ?? []);
@@ -218,8 +230,8 @@ export function AnatomyExplorer({ activeDestination, className = '', compactFram
   return (
     <div ref={root} className={`anatomy-explorer ${compactFrame ? 'anatomy-explorer-cover' : ''} ${className}`} onBlur={blur}>
       <div className="anatomy-explorer-stage" role="group" aria-label={content.explorer.groupLabel} onPointerEnter={() => controller.current?.takeOver()} onPointerLeave={leave} onPointerUp={event => {
-        if (event.pointerType === 'touch') { preview.current = null; controller.current?.release(); }
-      }} onPointerCancel={() => { preview.current = null; controller.current?.release(); }}>
+        if (event.pointerType === 'touch') leave();
+      }} onPointerCancel={leave}>
         <img className={`anatomy-explorer-preview anatomy-explorer-preview-light ${asset ? 'anatomy-explorer-preview-hidden' : ''}`} src={`${import.meta.env.BASE_URL}anatomy/explorer-light.svg`} alt="" aria-hidden="true" width="800" height="640" fetchPriority="high" />
         <img className={`anatomy-explorer-preview anatomy-explorer-preview-dark ${asset ? 'anatomy-explorer-preview-hidden' : ''}`} src={`${import.meta.env.BASE_URL}anatomy/explorer-dark.svg`} alt="" aria-hidden="true" width="800" height="640" />
         <svg viewBox={`${viewport.x} ${viewport.y} ${viewport.width} ${viewport.height}`} role="img" aria-label={content.explorer.illustrationLabel}>
@@ -228,8 +240,8 @@ export function AnatomyExplorer({ activeDestination, className = '', compactFram
         {hotspots.map(item => <a key={item.id} className="anatomy-hotspot-link" data-hotspot={item.id} href={item.href} aria-label={content.explorer.hotspotLabel(item.label, item.object)}
           aria-current={activeDestination === item.id ? 'location' : undefined}
           style={{ left: `${(item.x - viewport.x) / viewport.width * 100}%`, top: `${(item.y - viewport.y) / viewport.height * 100}%`, width: `${item.rx * 2 / viewport.width * 100}%`, height: `${item.ry * 2 / viewport.height * 100}%` }}
-          onFocus={() => previewTo(item.id)} onKeyDown={keydown}
-          onPointerEnter={() => previewTo(item.id)} onPointerLeave={leave} onPointerDown={() => previewTo(item.id)}>
+          onFocus={() => { focused.current = item.id; previewTo(item.id); }} onKeyDown={keydown}
+          onPointerEnter={() => { pointed.current = item.id; previewTo(item.id); }} onPointerLeave={leave} onPointerDown={() => previewTo(item.id)}>
           <span className="anatomy-hotspot-label" aria-hidden="true">{item.label}</span>
         </a>)}
       </div>

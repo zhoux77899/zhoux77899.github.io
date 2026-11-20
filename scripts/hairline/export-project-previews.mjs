@@ -9,9 +9,15 @@ import { Window } from 'happy-dom';
 // Static fallbacks use the real rest geometry and the site's complete CSS cascade.
 // Happy DOM supplies CSS values; no browser, image rasterizer, or rewritten kernel is needed.
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const names = ['cfgan', 'cardputer', 'index-box', 'folio', 'fridge', 'patch-panel'];
+const countries = new Map([
+  ['new-zealand', '[data-part="suv"]'],
+  ['japan', '[data-part="train"]'],
+  ['china', '[data-part^="shutter-"]'],
+]);
+const names = ['cfgan', 'cardputer', 'index-box', 'folio', 'fridge', 'patch-panel', ...countries.keys()];
 const kernel = readFileSync(resolve(root, 'public/hairline/kernel.js'), 'utf8');
 const brandCss = readFileSync(resolve(root, 'src/styles/globals.css'), 'utf8');
+const travelCss = readFileSync(resolve(root, 'src/styles/travel.css'), 'utf8');
 const kernelSha256 = createHash('sha256').update(kernel).digest('hex');
 const output = resolve(root, 'public/hairline/previews');
 const shapeSelector = 'path,polygon,ellipse,line,circle,polyline,rect';
@@ -27,17 +33,19 @@ for (const name of names) {
   assert.notEqual(instrumented, source, `${name}: the figure must consume the public HL API.`);
 
   for (const theme of ['light', 'dark']) {
+    const subject = countries.get(name);
     const window = new Window();
     const document = window.document;
     const brandStyle = document.createElement('style');
     // @import is the bundler's job. The local site overrides provide all color values.
-    brandStyle.textContent = brandCss.replace(/^@(?:import|source)[^;]+;/gm, '');
+    brandStyle.textContent = brandCss.replace(/^@(?:import|source)[^;]+;/gm, '') + '\n' + travelCss;
     document.head.append(brandStyle);
     document.documentElement.dataset.theme = theme;
     document.documentElement.classList.toggle('dark', theme === 'dark');
     const stage = document.createElement('div');
     stage.className = 'hairline-stage';
     stage.dataset.hairline = name;
+    if (subject) document.body.classList.add('travel-section', 'country-card');
     document.body.append(stage);
     let definition;
     const ticks = [];
@@ -70,18 +78,25 @@ for (const name of names) {
     clone.setAttribute('width', '400'); clone.setAttribute('height', '320');
     clone.setAttribute('data-theme', theme); clone.setAttribute('data-hairline', name);
     clone.setAttribute('focusable', 'false');
-    clone.setAttribute('style', `display:block;background:${palette.background};color:${palette.foreground}`);
+    const ground = subject ? window.getComputedStyle(document.body).getPropertyValue('--drawing-ground').trim() : palette.background;
+    assert.ok(ground.startsWith('oklch('), `${name}: the fallback must match its section background.`);
+    clone.setAttribute('style', `display:block;background:${ground};color:${palette.foreground}`);
     const originalShapes = [...svg.querySelectorAll(shapeSelector)];
     const copiedShapes = [...clone.querySelectorAll(shapeSelector)];
     let highlights = 0;
     originalShapes.forEach((shape, index) => {
       if (shape.closest('defs')) return;
       const css = window.getComputedStyle(shape);
+      if (subject && !shape.closest(subject)) {
+        assert.notEqual(css.stroke, palette.accent, `${name}: only the moving subject may carry the accent.`);
+      }
       const properties = styleProperties.flatMap((key) => {
         const value = css.getPropertyValue(key).trim();
         return value ? [`${key}:${value}`] : [];
       });
       copiedShapes[index].setAttribute('style', properties.join(';'));
+      // Happy DOM misses the kernel's :where(.ghost path) descendant rule.
+      if (shape.matches('.ghost path')) copiedShapes[index].style.fill = 'none';
       if (shape.classList.contains('hi')) {
         assert.equal(css.stroke, palette.accent, `${name}: highlighted strokes must use the site's accent.`);
         assert.equal(copiedShapes[index].style.stroke, palette.accent);
@@ -97,7 +112,7 @@ for (const name of names) {
     for (const [, id] of content.matchAll(/url\(["']?#([^"')]+)["']?\)/g)) assert(ids.has(id), `${name}: unresolved SVG resource ${id}.`);
     const file = `${name}-${theme}.svg`;
     writeFileSync(resolve(output, file), content);
-    const geometrySha256 = createHash('sha256').update(originalShapes.map((shape) => shape.getAttribute('d') ?? shape.outerHTML).join('\n')).digest('hex');
+    const geometrySha256 = createHash('sha256').update(svg.innerHTML).digest('hex');
     report.push({ name, theme, file, paths: svg.querySelectorAll('path').length, highlights, frames, palette, figureSha256, geometrySha256 });
     controller.destroy();
     assert.equal(svg.childNodes.length, 0, `${name}: destruction must clear the figure.`);

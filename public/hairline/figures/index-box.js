@@ -7,7 +7,7 @@
  * card is pulled. The slider is the stagger, in ms.
  *
  * The pattern: discrete items. Tweens, a stagger by distance, identity carried
- * by geometry, and a hit test on static bands along the resting top edges, so
+ * by geometry, and a hit test on the visible faces of the resting cards, so
  * a card moving out from under the pointer cannot flip the choice.
  */
 const {
@@ -17,7 +17,7 @@ const {
 
 const N = 8, W = 84, H = 54, G = 13, TW = 22, TH = 7, TABS = [6, 31, 56], TK = 1.4;
 const REST = -12, BACK = -24, FWD = 20, LIFT = 16;
-const X0 = -5, X1 = W + 5, Y0 = -9, Y1 = (N - 1) * G + 9, WH = 20, WR = 6, WT = 2.4;
+const X0 = -5, X1 = W + 5, Y0 = -14, Y1 = (N - 1) * G + 11, WH = 20, WR = 6, WT = 2.4;
 
 /** A run of points ordered left to right on screen. */
 const LR = (pts) => (pts[0][0] <= pts[pts.length - 1][0] ? pts : pts.slice().reverse());
@@ -34,15 +34,16 @@ function tray(P, front, outer, inner) {
   const iF = LR(ringAt(P, run(inner, front), WH)), oT = LR(ringAt(P, run(outer, front), WH)), oB = LR(ringAt(P, run(outer, front), 0));
   // a finger pull, set into the front
   const hx = (X0 + X1) / 2, onFront = (ring) => ring.map((q) => P(q.u, Y1, q.v));
+  const nearWall = [...iF, oT[oT.length - 1], ...oB.slice().reverse(), oT[0]];
   const near = [
-    [poly([...iF, oT[oT.length - 1], ...oB.slice().reverse(), oT[0]]), "fo"],
+    [poly(nearWall), "fo"],
     [open(oT), "nf lo"],
     [open(iF), "nf"],
     [open([oT[0], ...oB, oT[oT.length - 1]]), "nf sil"],
     [poly(onFront(rrect(hx - 11, 6.5, hx + 11, 12.5, 3, 5))), "nf"],
     [poly(onFront(rrect(hx - 9.4, 8, hx + 9.4, 11, 1.5, 5))), "nf lo"],
   ];
-  return { far, near };
+  return { far, near, nearWall };
 }
 
 /** Card i, back to front: its number (8 at the back), which of three tab positions it takes, and its filleted outline, upright in its own plane. */
@@ -64,7 +65,7 @@ function pose(P, i, t0, shape, th, lift) {
   for (let k = 0; k < 8; k++) punch.push(w(t0 + TW / 2 + ((k % 4) - 1.5) * 3.6, H + TH / 2 + (0.5 - Math.floor(k / 4)) * 2.8));
   return {
     back: poly(shape.map((p) => wb(p[0], p[1]))),
-    face: poly(shape.map((p) => w(p[0], p[1]))),
+    face: shape.map(([x, z]) => w(x, z)),
     head: seg(w(6, H - 11), w(W - 6, H - 11)),
     rules: [H - 18, H - 25, H - 32, H - 39].map((v) => seg(w(6, v), w(W - 6, v))).join(""),
     punch,
@@ -95,32 +96,32 @@ function mount({ stage, svg, read }, value) {
     // the card's number, punched in a 4 × 2 grid on its tab
     const punch = [];
     for (let k = 0; k < 8; k++) punch.push(mk("circle", { r: 1.05, class: "dot " + (k === n - 1 ? "m" : "off") }, grp));
-    cards.push({ n, t0, shape, back, face, head, rules, punch, a: tween(REST), z: tween(0), drawn: "" });
+    const restFace = pose(P, i, t0, shape, REST, 0).face;
+    cards.push({ n, t0, shape, back, face, head, rules, punch, restFace, a: tween(REST), z: tween(0), lastAngle: NaN, lastLift: NaN });
   }
 
   for (const [d, cls] of paths.near) mk("path", { d, class: cls }, g);
 
-  // hit bands: oblique strips along the RESTING top edges. They never move, and nothing draws them.
-  const top = (i) => P(W / 2, i * G + H * Math.sin(rad(REST)), H * Math.cos(rad(REST)));
-  const c0 = top(0), c1 = top(1), d = [c1[0] - c0[0], c1[1] - c0[1]];
-  const px0 = P(0, 0, 0), px1 = P(1, 0, 0), ex = [px1[0] - px0[0], px1[1] - px0[1]];
-  const HALF = W / 2 + 6, det = d[0] * ex[1] - d[1] * ex[0];
-
-  /** The card whose band holds the point, in the band's own (s, r) coordinates; -1 outside. */
-  function hit([x, y]) {
-    const qx = x - c0[0], qy = y - c0[1];
-    const s = (qx * ex[1] - qy * ex[0]) / det, r = (d[0] * qy - d[1] * qx) / det;
-    if (Math.abs(r) > HALF || s < -0.5 || s > N + 1) return -1;
-    return clamp(Math.round(s), 0, N - 1);
+  function contains(ring, [x, y]) {
+    let inside = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const a = ring[i], b = ring[j];
+      if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) inside = !inside;
+    }
+    return inside;
+  }
+  function hit(point) {
+    if (contains(paths.nearWall, point)) return -1;
+    return cards.findLastIndex(card => contains(card.restFace, point));
   }
 
   function draw(i, th, lift) {
-    const cd = cards[i], stamp = th.toFixed(4) + "," + lift.toFixed(4);
-    if (stamp === cd.drawn) return;
-    cd.drawn = stamp;
+    const cd = cards[i];
+    if (th === cd.lastAngle && lift === cd.lastLift) return;
+    cd.lastAngle = th; cd.lastLift = lift;
     const q = pose(P, i, cd.t0, cd.shape, th, lift);
     cd.back.setAttribute("d", q.back);
-    cd.face.setAttribute("d", q.face);
+    cd.face.setAttribute("d", poly(q.face));
     cd.head.setAttribute("d", q.head);
     cd.rules.setAttribute("d", q.rules);
     cd.punch.forEach((el, k) => place(el, q.punch[k]));

@@ -28,27 +28,30 @@ function mount({stage,svg,read},value) {
   put(solid(g),{sil:poly(hull(atDial(10,-32).concat(atDial(10,-26)))),crease:poly(atDial(8.4,-26))});
   path(poly(atDial(5.2,-25.9)),'nf');
   for(let i=0;i<7;i++){const a=(-.6+i*.32);path(seg(P(-25.8,8.2*Math.cos(a),63+8.2*Math.sin(a)),P(-25.8,9.2*Math.cos(a),63+9.2*Math.sin(a))));}
+  // The table hides the lamp below it, and the objectives hide the slides.
+  cylinder(8,18,14,8,15);cylinder(8,18,13,15,22);cylinder(8,18,10,22,26);
+  path(poly(circ(7,96).map(q=>P(8+q.u,18+q.v,26))),'nf');
+  block(-48,1,-29,19,43,47,4);
+  block(-34,-2,39,38,46,50.5,6);
+  path(poly(circ(10,96).map(q=>P(8+q.u,18+q.v,50.5))),'nf');
+  const clips=[-20,25].map(x=>{const ring=rr(x,8,x+3,27,1.5);return path(poly(ring.map(q=>P(q.u,q.v,53))),'sil');});
+  const slides=Array.from({length:3},()=>({s:solid(g),edge:path(''),sp:spring(0),last:NaN}));
+  // Seat the two objectives against the underside of the nosepiece. The collar
+  // covers the joined portions of their upper faces at z=88.
+  cylinder(-2,22,4,69,74);cylinder(-2,22,5.5,74,88);
+  cylinder(15,24,5.1,61,67);cylinder(15,24,6.9,67,88);
+  cylinder(8,16,10.6,88,93);cylinder(8,16,14,93,101);
   block(-40,2,-9,19,102,111,4);
   block(-12,2,13,21,101,115,5);
   cylinder(0,10,8,114,130);cylinder(0,10,10,128,133);
   path(poly(circ(7.6,96).map(q=>P(q.u,10+q.v,133))),'nf');
   path(open(circ(5.3,96).slice(54,75).map(q=>P(q.u,10+q.v,133))));
-  cylinder(8,16,14,93,101);
-  cylinder(8,16,10.6,88,94);
-  cylinder(15,24,6.9,67,91);cylinder(15,24,5.1,61,69);
-  cylinder(-2,22,5.5,74,92);cylinder(-2,22,4,69,76);
-  block(-48,1,-29,19,43,47,4);
-  block(-34,-2,39,38,46,50.5,6);
-  path(poly(circ(10,96).map(q=>P(8+q.u,18+q.v,50.5))),'nf');
-  cylinder(8,18,14,8,15);cylinder(8,18,13,15,22);cylinder(8,18,10,22,26);
-  path(poly(circ(7,96).map(q=>P(8+q.u,18+q.v,26))),'nf');
-  const clips=[-20,25].map(x=>{const ring=rr(x,8,x+3,27,1.5);return path(poly(ring.map(q=>P(q.u,q.v,53))),'sil');});
-  const slides=Array.from({length:3},()=>({s:solid(g),edge:path(''),sp:spring(0),last:NaN}));
   const rest=[-4,0,5];slides.forEach((s,i)=>{s.sp.x=s.sp.t=rest[i];});
   function draw() {
     slides.forEach((s,i)=>{
       if(s.sp.x===s.last)return;s.last=s.sp.x;
-      const x=s.sp.x,z=51.6+i*1.5+Math.abs(x-rest[i])*.12,ring=rr(-14+x,7,27+x,29,2.3),inner=rr(-13.3+x,7.7,26.3+x,28.3,1.6);
+      // The lower slide travels flat beneath the fixed middle slide; the top one can lift.
+      const x=s.sp.x,z=51.6+i*1.5+Math.max(0,x-rest[i])*.12,ring=rr(-14+x,7,27+x,29,2.3),inner=rr(-13.3+x,7.7,26.3+x,28.3,1.6);
       put(s.s,prism(P,front,ring,inner,z,z+1.1));
       s.edge.setAttribute('d',seg(P(-8+x,11,z+1.1),P(-8+x,25,z+1.1)));
       s.s.sil.classList.toggle('hi',i===1);
