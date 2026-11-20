@@ -211,7 +211,7 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
     };
     root.addEventListener('pointerenter', enter);
     root.addEventListener('pointerleave', leave);
-    root.addEventListener('pointerdown', press, { passive: true });
+    root.addEventListener('pointerdown', press, { passive: true, capture: true });
     root.addEventListener('focusin', focus);
     root.addEventListener('focusout', blur);
     root.addEventListener('scroll', restart, true);
@@ -228,7 +228,7 @@ export function Carousel({ children, labels, selectedIndex, onIndexChange, rende
       observer?.disconnect();
       root.removeEventListener('pointerenter', enter);
       root.removeEventListener('pointerleave', leave);
-      root.removeEventListener('pointerdown', press);
+      root.removeEventListener('pointerdown', press, true);
       root.removeEventListener('focusin', focus);
       root.removeEventListener('focusout', blur);
       root.removeEventListener('scroll', restart, true);

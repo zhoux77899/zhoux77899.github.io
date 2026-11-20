@@ -56,8 +56,11 @@ describe('HairlineFigure lifecycle',()=>{
     const down = new PointerEvent('pointerdown', { bubbles: true, cancelable: true, pointerType: 'touch', pointerId: 1, isPrimary: true, clientX: 70, clientY: 80 });
     fireEvent(wrapper, down);
     expect(down.defaultPrevented).toBe(false);
+    expect(activate).not.toHaveBeenCalled();
     fireEvent.pointerUp(wrapper, { pointerType: 'touch', pointerId: 1, isPrimary: true, clientX: 70, clientY: 80 });
-    expect(activate).toHaveBeenLastCalledWith([100, 80]);
+    fireEvent.pointerDown(wrapper, { pointerType: 'touch', pointerId: 2, isPrimary: true, clientX: 70, clientY: 80 });
+    fireEvent.pointerUp(wrapper, { pointerType: 'touch', pointerId: 2, isPrimary: true, clientX: 70, clientY: 80 });
+    expect(activate.mock.calls).toEqual([[[100, 80]], [[100, 80]]]);
   });
   it('does not activate after a swipe, cancellation, gallery scrolling or a second finger', async () => {
     const view = render(<div data-project-gallery><HairlineFigure name="cfgan" label="Reconstruction workbench" eager /></div>);
@@ -80,7 +83,10 @@ describe('HairlineFigure lifecycle',()=>{
     start();
     fireEvent.pointerDown(wrapper, { pointerType: 'touch', pointerId: 2, isPrimary: false, clientX: 70, clientY: 50 });
     end();
-    expect(activate.mock.calls.every(([point]) => point === null)).toBe(true);
+    start();
+    fireEvent.pointerDown(document.body, { pointerType: 'touch', pointerId: 2, isPrimary: false, clientX: 405, clientY: 50 });
+    end();
+    expect(activate).not.toHaveBeenCalled();
   });
   it('keeps the static preview if mounting the interactive figure fails', async () => {
     const view = render(<HairlineFigure name="cfgan" label="Reconstruction workbench" eager />);

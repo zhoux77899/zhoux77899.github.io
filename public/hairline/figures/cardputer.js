@@ -31,12 +31,14 @@ function mount({ stage, svg, read }, value) {
     mk("path", { d: poly(circ(1.2, 24).map((q) => P(x + q.u, y + q.v, 9.5))), class: "nf lo" }, g);
   }
   const keyLayer = mk("g", {}, g), keys = [];
+  // Paint back rows first, then left to right within each row. Keys rise vertically
+  // within these fixed footprints, so even the wide spacebar keeps this order.
   rows.forEach((row, r) => {
     let x = 0;
     row.forEach((width, col) => {
       const x0 = x * U, x1 = (x + width) * U, y0 = Y + r * U, y1 = y0 + U;
       const pad = 0.6, taper = 1.1, inner = pad + taper + 0.65, el = solid(keyLayer);
-      keys.push({ id: keys.length, r, col, x0, x1, y0, y1, h: Z + H[r], el,
+      keys.push({ r, col, x0, x1, y0, y1, h: Z + H[r], el,
         foot: rrect(x0 + pad, y0 + pad, x1 - pad, y1 - pad, 1.7, 6),
         top: rrect(x0 + pad + taper, y0 + pad + taper, x1 - pad - taper, y1 - pad - taper, 1.3, 6),
         inner: rrect(x0 + inner, y0 + inner, x1 - inner, y1 - inner, 0.7, 6),
@@ -70,18 +72,13 @@ function mount({ stage, svg, read }, value) {
       key.bump.setAttribute("d", seg(P(x - 1.6, y, z), P(x + 1.6, y, z)));
     }
   }
-  let lastOrder = "";
-  function paintOrder() {
-    const depth = (key) => .612372 * (key.x0 + key.x1 + key.y0 + key.y1) / 2 + .5 * (Z + key.sp.x) / 2;
-    const order = keys.slice().sort((a, b) => depth(a) - depth(b)), stamp = order.map((key) => key.id).join();
-    if (stamp === lastOrder) return;
-    lastOrder = stamp; order.forEach((key) => keyLayer.append(key.el.g));
-  }
   aim(restPoint, enter, 1.4, 2.2);
-  keys.forEach((key) => { key.sp.x = key.sp.t; draw(key); }); paintOrder(); highlight(enter);
+  keys.forEach((key) => { key.sp.x = key.sp.t; draw(key); });
+  highlight(enter);
   const loop = register(stage, (dt) => {
     let moving = false;
-    keys.forEach((key) => { if (stepS(key.sp, dt)) moving = true; draw(key); }); paintOrder(); return moving;
+    keys.forEach((key) => { if (stepS(key.sp, dt)) moving = true; draw(key); });
+    return moving;
   }); bag.add(loop.unregister);
   function hit(point) {
     for (let r = rows.length - 1; r >= 0; r--) {

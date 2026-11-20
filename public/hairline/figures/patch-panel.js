@@ -54,6 +54,10 @@ const mount = ({ stage, svg, read }, value) => {
     for (const pt of ports) {
         const { cx, cz } = pt, d = JD;
         pt.jack = face(jack.map(([u, v]) => [cx + u, cz + v]), "nf");
+        if (!pt.full) {
+            for (const u of [-2.4, -.8, .8, 2.4])
+                mk("path", { d: seg(P(cx + u, 0, cz - 3), P(cx + u, 0, cz - 1.4)), class: "nf lo" }, g);
+        }
         mk("path", { d: open([[-JW + d, JH], [-JW + d, -JH + 0.816 * d], [JW, -JH + 0.816 * d]].map(([u, v]) => P(cx + u, 0, cz + v))), class: "lo nf" }, g); }
     const plugG = mk("g", {}, g), cabG = mk("g", {}, g);
     const plug = rrect(-PW, -PH, PW, PH, 1.2, 3), plugIn = rrect(-PW + 0.7, -PH + 0.7, PW - 0.7, PH - 0.7, 0.6, 3);
@@ -65,9 +69,11 @@ const mount = ({ stage, svg, read }, value) => {
         pt.lz = spring(0, { eps: 0.01 });
         if (!pt.full)
             continue;
+        pt.nose = solid(plugG);
         pt.plug = solid(plugG);
         pt.latch = mk("path", { class: "lo nf" }, pt.plug.g);
         pt.boot = solid(plugG);
+        pt.rib = mk("path", { class: "nf lo" }, pt.boot.g);
         pt.cable = mk("path", { class: "sil" }, cabG);
         pt.drawn = ""; }
     function drawPort(pt) {
@@ -76,9 +82,13 @@ const mount = ({ stage, svg, read }, value) => {
             return;
         pt.drawn = key;
         const { cx, cz, r, p } = pt, y1 = PL + OUT * k, y2 = y1 + BL, up = r ? -1 : 1, [jx, jz] = JIT(p);
-        put(pt.plug, slab(plug, plugIn, cx, cz, 0, y1));
-        pt.latch.setAttribute("d", seg(P(cx, 0.6, cz + PH), P(cx, y1 - 0.8, cz + PH)));
+        // The rigid plug translates; its narrower nose emerges from the jack as the boot pulls away.
+        const shoulder = OUT * k;
+        put(pt.nose, slab(bootA, bootB, cx, cz, 0, shoulder));
+        put(pt.plug, slab(plug, plugIn, cx, cz, shoulder, y1));
+        pt.latch.setAttribute("d", open([P(cx, shoulder + .4, cz + PH), P(cx, y1 - 1.2, cz + PH + 1), P(cx, y1, cz + PH + 1)]));
         put(pt.boot, { sil: poly(hull(at(bootA, cx, y1, cz).concat(at(bootB, cx, y2, cz)))), crease: "" });
+        pt.rib.setAttribute("d", open(at(run(bootB, seen), cx, y2 - 1.3, cz)));
         const out = r ? 6 : 2, lean = r ? 2 : 3;
         const p0 = [cx, y2 - 1.5, cz], p1 = r ? [cx + 0.5, y2 + out + 4 * k, cz] : [cx, y2 + 1 + 2 * k, cz + 6];
         const p3 = [cx + lean + jx + lx, y2 + out + 1 + LIFT * k, cz + up * (24 + jz) + lz + LIFT * k], p2 = [p3[0] - 0.6, p3[1] - 1, p3[2] - up * 12];

@@ -18,10 +18,17 @@ export function HairlineFigure({ name, label, eager = false, className = '' }: H
     const host = hostRef.current;
     if (!host) return;
     const wrapper = host.parentElement;
-    const stopTouchLeave = (event: PointerEvent) => {
-      if (event.pointerType === 'touch') event.stopImmediatePropagation();
+    // Keep touch from driving the stage's hover handlers while the browser
+    // decides whether this contact is a tap, a scroll, or a pinch.
+    const isolateTouch = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') event.stopPropagation();
     };
-    wrapper?.addEventListener('pointerleave', stopTouchLeave, true);
+    const hoverEvents = ['pointerenter', 'pointerdown', 'pointermove', 'pointerleave'] as const;
+    for (const type of hoverEvents) wrapper?.addEventListener(type, isolateTouch, true);
+    const cancelMultiTouch = (event: PointerEvent) => {
+      if (event.pointerType === 'touch' && !event.isPrimary) touchRef.current = null;
+    };
+    window.addEventListener('pointerdown', cancelMultiTouch, true);
     let cancelled = false;
     let started = false;
     let handle: HairlineHandle | undefined;
@@ -50,7 +57,8 @@ export function HairlineFigure({ name, label, eager = false, className = '' }: H
     if (observer) observer.observe(host); else start();
     return () => {
       cancelled = true;
-      wrapper?.removeEventListener('pointerleave', stopTouchLeave, true);
+      for (const type of hoverEvents) wrapper?.removeEventListener(type, isolateTouch, true);
+      window.removeEventListener('pointerdown', cancelMultiTouch, true);
       observer?.disconnect();
       handle?.destroy();
       handleRef.current = undefined;
@@ -59,27 +67,20 @@ export function HairlineFigure({ name, label, eager = false, className = '' }: H
     };
   }, [name, eager]);
 
-  const isolateTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== 'touch') return false;
-    event.stopPropagation();
-    return true;
-  };
   const startTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!isolateTouch(event)) return;
-    if (touchRef.current || !event.isPrimary) { touchRef.current = null; return; }
-    handleRef.current?.activate?.(null);
+    if (event.pointerType !== 'touch' || !event.isPrimary) return;
     touchRef.current = {
       id: event.pointerId, x: event.clientX, y: event.clientY, moved: 0,
       scrollLeft: event.currentTarget.closest<HTMLElement>('[data-project-gallery]')?.scrollLeft ?? 0,
     };
   };
   const moveTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!isolateTouch(event)) return;
+    if (event.pointerType !== 'touch') return;
     const touch = touchRef.current;
     if (touch?.id === event.pointerId) touch.moved = Math.max(touch.moved, Math.hypot(event.clientX - touch.x, event.clientY - touch.y));
   };
   const endTouch = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!isolateTouch(event)) return;
+    if (event.pointerType !== 'touch') return;
     const touch = touchRef.current;
     touchRef.current = null;
     const gallery = event.currentTarget.closest<HTMLElement>('[data-project-gallery]');
@@ -94,7 +95,7 @@ export function HairlineFigure({ name, label, eager = false, className = '' }: H
   return (
     <div className={`hairline-figure ${className}`} role="img" aria-label={label}
       onPointerDownCapture={startTouch} onPointerMoveCapture={moveTouch} onPointerUpCapture={endTouch}
-      onPointerCancelCapture={(event) => { if (isolateTouch(event)) touchRef.current = null; }}>
+      onPointerCancelCapture={(event) => { if (event.pointerType === 'touch') touchRef.current = null; }}>
       <div className={`hairline-rest ${ready ? 'hairline-rest-hidden' : ''}`} aria-hidden="true">
         <img className="hairline-preview-light" src={`${import.meta.env.BASE_URL}hairline/previews/${name}-light.svg`} alt="" loading={eager ? 'eager' : 'lazy'} width="400" height="320" />
         <img className="hairline-preview-dark" src={`${import.meta.env.BASE_URL}hairline/previews/${name}-dark.svg`} alt="" loading={eager ? 'eager' : 'lazy'} width="400" height="320" />

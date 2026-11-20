@@ -67,11 +67,22 @@ function mount({stage,svg,read},value) {
   const at=(ring,d)=>ring.map(q=>P(...doorPoint(q.u,d,q.v)));
   put(solid(door.group),prism(doorP,doorFront,doorRing,rr(.9,7.9,doorWidth-.9,H+4.1,5.1),-2,2));
   path(door.group,poly(at(rr(4,12,doorWidth-4,H,4),-2.1)),'nf lo');
-  path(door.group,poly(at(rr(8,18,doorWidth-8,39,3),-2.2)),'nf lo');
+  path(door.group,poly(at(rr(7,15,doorWidth-7,H-3,3),-2.15)),'nf lo');
   // The outside pull belongs to the free edge; its own solid sorts behind the open door.
   const handleRing=rr(doorWidth-10,72,doorWidth-5,108,2.5),handle=node([2,7].flatMap(d=>handleRing.map(q=>doorPoint(q.u,d,q.v))),doorSpace);
   for(const z of [72,103])put(solid(handle.group),prism(doorP,doorFront,rr(doorWidth-9.2,z,doorWidth-5.8,z+5,1.5),rr(doorWidth-8.8,z+.4,doorWidth-6.2,z+4.6,1.1),-5,-2));
   put(solid(handle.group),prism(doorP,doorFront,handleRing,rr(doorWidth-9.2,72.8,doorWidth-5.8,107.2,1.7),-7,-4));
+  // The door bins have a shallow floor attached to the liner and a retaining rail along the lip.
+  for(const z of [25,76]) {
+    const shelfP=(u,d,h)=>P(...doorPoint(u,-d,h));
+    const floor=rr(9,2,doorWidth-9,10,2);
+    const bin=node([z,z+2].flatMap(h=>floor.map(q=>doorPoint(q.u,-q.v,h))),doorSpace);
+    const shelfFront=q=>q.nu*(-direction[0]*Math.cos(A)+direction[1]*Math.sin(A))-q.nv*(direction[0]*Math.sin(A)+direction[1]*Math.cos(A))>0;
+    put(solid(bin.group),prism(shelfP,shelfFront,floor,rr(10,3,doorWidth-10,9,1),z,z+2));
+    const rail=rr(9,9,doorWidth-9,10.5,.7);
+    const lip=node([z+2,z+9].flatMap(h=>rail.map(q=>doorPoint(q.u,-q.v,h))),doorSpace);
+    put(solid(lip.group),prism(shelfP,shelfFront,rail,rr(9.3,9.3,doorWidth-9.3,10.2,.4),z+2,z+9));
+  }
   // Compare opaque silhouettes only where they overlap, on a camera ray through that overlap.
   const cross=(a,b,p)=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);
   function overlap(a,b) {
@@ -111,13 +122,21 @@ function mount({stage,svg,read},value) {
     if(changed)paintOrder();return moving;
   }
   draw(0);const B=register(stage,(_dt,now)=>draw(now));bag.add(B.unregister);
-  const centers=trays.map(t=>P(W/2,D+t.rest,21.2+t.i*35));
+  // Keep a resting pick map so pulling a shelf cannot change the target under a still pointer.
+  const pickOrder=Array.from(g.children,group=>{
+    const n=nodes.find(item=>item.group===group);
+    const tray=trays.find(t=>t.shelf===n || t.foods.includes(n));
+    return {shape:n.shape,tray:tray?tray.i:-1};
+  }).reverse();
   function choose(next) {
     if(next===active)return;const from=next<0?active:next,now=performance.now();active=next;
     trays.forEach(t=>{tset(t.tw,next<0?t.rest:t.i===next?value:3,now,Math.abs(t.i-from)*40);t.shelf.s.sil.classList.toggle('hi',t.i===(next<0?0:next));});
     read.textContent=next<0?'rest':'tray '+(next+1);B.wake();
   }
-  function hit(p){let best=-1,d=Infinity;centers.forEach((c,i)=>{const q=Math.hypot(p[0]-c[0],p[1]-c[1]);if(q<d&&q<32){d=q;best=i;}});return best;}
+  function hit(p) {
+    const part=pickOrder.find(({shape})=>shape.every((a,i)=>cross(a,shape[(i+1)%shape.length],p)>=-.01));
+    return part?part.tray:-1;
+  }
   trays[0].shelf.s.sil.classList.add('hi');read.textContent='rest';
   bag.add(pointer(stage,{move:p=>choose(hit(p)),leave:()=>choose(-1)}));bag.add(()=>svg.replaceChildren());
   return {set(v){value=clamp(v,20,42);const previous=active;active=-2;choose(previous);},activate(p){const next=p?hit(p):-1;choose(next===active?-1:next);},destroy:bag.dispose};

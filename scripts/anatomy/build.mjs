@@ -69,10 +69,24 @@ const inset = (plan, z, by = 3, tone = 'faint') => line(K.planOutline(K.insetPla
 const base = rectangle(-132, -70, 264, 168, 8);
 for (const [i, [x, y]] of K.corners(base, 15).entries()) cylinder('stand', `foot${i}`, x, y, 7, -11, 6, { tone: 'lo' });
 slab('stand', 'floor', base, -5, 5, { tone: 'lo', inner: inset(base, 0) + screws(base, 0, 12) });
-slab('stand', 'wall-back', rectangle(-126, -70, 252, 6, 0), 0, 19, { inner: line(K.sideSeam(rectangle(-126, -70, 252, 6, 0), 11, P, 12), 'faint') });
-slab('stand', 'wall-front', rectangle(-126, 92, 252, 6, 0), 0, 19, { inner: line(K.sideSeam(rectangle(-126, 92, 252, 6, 0), 11, P, 12), 'faint') });
-slab('stand', 'wall-left', rectangle(-132, -64, 6, 156, 0), 0, 19);
-slab('stand', 'wall-right', rectangle(126, -64, 6, 156, 0), 0, 19);
+for (const [name, wall] of [
+  ['back', rectangle(-124, -70, 248, 6, 0)], ['front', rectangle(-124, 92, 248, 6, 0)],
+  ['left', rectangle(-132, -62, 6, 152, 0)], ['right', rectangle(126, -62, 6, 152, 0)],
+]) {
+  slab('stand', `wall-${name}`, wall, 0, 19, { inner: line(K.sideSeam(wall, 11, P), 'faint') });
+}
+// Each six-unit wall meets the next at a quarter bend matching the floor radius.
+for (const [index, [cx, cy]] of [[124, 90], [-124, 90], [-124, -62], [124, -62]].entries()) {
+  const arc = radius => Array.from({ length: 13 }, (_, step) => {
+    const angle = (index + step / 12) * Math.PI / 2;
+    return [cx + radius * Math.cos(angle), cy + radius * Math.sin(angle)];
+  });
+  const wall = [...arc(8), ...arc(2).reverse()];
+  const [x, y] = arc(5)[6];
+  put('stand', `corner${index}`, [x, y, 9.5],
+    K.extrude(wall, 0, 19, P, { convex: false }), A.extruded(wall, 0, 19),
+    { inner: line(K.ringSeam(wall, 11, P), 'faint') + line(K.ring(x, y, 0.9, 19, P), 'lo') });
+}
 for (const [i, x] of [-45, 37].entries()) slab('stand', `divider${i}`, rectangle(x, -64, 4, 156, 0), 0, 5.5, { tone: 'lo' });
 slab('stand', 'divider-cross', rectangle(-126, 10, 81, 4, 0), 0, 5.5, { tone: 'lo' });
 slab('stand', 'divider-cross-centre', rectangle(-41, 10, 78, 4, 0), 0, 5.5, { tone: 'lo' });
@@ -95,10 +109,15 @@ const lidPockets = [-110, -37, 36].map(x => {
   const seam = rectangle(x + 3, 21, 60, 52, 2);
   const points = K.corners(pocket, 4).map(([px, pz]) => at([px, -69.3, 22.2 + pz]));
   return lidPocket(pocket, 'lo') + lidPocket(seam, 'faint')
-    + lidPocket(rectangle(x + 23, 15, 20, 8, 2), 'mid')
     + K.dotsSvg(points, { size: 0.5, tone: 'lo' });
 }).join('');
 prism('stand', 'lid-liner', lidFrame, liner, 4, 4.7, { tone: 'lo', inner: lidPockets });
+for (const [i, x] of [-110, -37, 36].entries()) {
+  const tab = K.roundedPlan(rectangle(x + 23, 15, 20, 8, 2), 8);
+  const rivets = [x + 26, x + 40].map(px => at([px, -67.7, 41.2]));
+  prism('stand', `pocket-tab${i}`, lidFrame, tab, 4.7, 6.3,
+    { inner: K.dotsSvg(rivets, { size: 0.6, tone: 'mid' }) });
+}
 for (const x of [-88, 76]) {
   const F = G.frameOf([x, -73.2, 19], [1, 0, 0], [0, 1, 0], [0, 0, 1]);
   disc('stand', `hinge${x}`, F, 0, 12, 3.2, { tone: 'mid' });
@@ -157,9 +176,16 @@ for (const m of modules) {
   slab(id, 'optics-foot', rectangle(x, y, 60, 48, 4), 3, 5, { inner: screws(rectangle(x, y, 60, 48, 4), 8, 5) });
   for (const py of [y + 9, y + 32]) slab(id, `lens-support${py}`, rectangle(x + 26, py, 6, 7, 1), 8, 16.5);
   const F = G.frameOf([x + 29, y + 9, 34], [0, 1, 0], [1, 0, 0], [0, 0, 1]);
-  disc(id, 'lens-barrel', F, 0, 30, 9.5, { tone: 'hi', inner: line(G.arcOf(F, 6, 9.5, P), 'faint') + line(G.arcOf(F, 22, 9.5, P), 'faint') });
-  disc(id, 'lens-retainer', F, 30, 32, 10.5, { tone: 'hi' });
-  disc(id, 'lens-glass', F, 32, 32.4, 7.4, { tone: 'lo', inner: line(G.circleOf(F, 32.4, 6, P), 'faint') });
+  disc(id, 'lens-barrel', F, 0, 10, 9.5, { tone: 'hi' });
+  const grip = G.ribsOf(F, 10, 18, 10.5, 30, P, { fade: [0.04, 0.4], seams: true });
+  disc(id, 'focus-collar', F, 10, 18, 10.5, { tone: 'hi', inner: K.fadedSvg(grip, { tone: 'lo' }) });
+  disc(id, 'lens-sleeve', F, 18, 30, 9.5, { tone: 'hi' });
+  disc(id, 'lens-cell', F, 30, 31, 10.5);
+  disc(id, 'lens-glass', F, 31, 31.4, 8.3, { tone: 'lo', inner: line(G.circleOf(F, 31.4, 6, P), 'faint') });
+  // A recessed optic sits behind the retaining lip. The rim's bore also
+  // belongs to the recorded shape, so its opening is real in the depth audit.
+  put(id, 'lens-retainer', G.add3(F.o, G.mul3(F.a, 32)), G.ringBand(31, 33, 8.3, 10.5, F, P,
+    { steps: 64, hole: [33, 8.3] }), A.ring(F, 31, 33, 8.3, 10.5), { tone: 'hi' });
   slab(id, 'stage', rectangle(x + 6, y + 41, 48, 6, 1), 8, 3, { inner: inset(rectangle(x + 6, y + 41, 48, 6, 1), 11, 1) });
   cylinder(id, 'focus-neck', x + 53, y + 15, 2, 8, 3);
   cylinder(id, 'focus-knob', x + 53, y + 15, 4, 11, 3, { inner: line(K.knurl(x + 53, y + 15, 4, 11, 14, 28, P, 0), 'lo') });
@@ -187,7 +213,9 @@ for (const m of modules) {
     slab(id, `map-fold${i}`, page, z, 1.1, { tone: 'hi', inner: line(K.planOutline(rectangle(page.x + 3, page.y + 6, 10, 20, 4), 8.1, P, 16), 'faint') + line(K.planOutline(rectangle(page.x + 5, page.y + 10, 6, 12, 2), 8.1, P, 16), 'lo') });
   }
   cylinder(id, 'compass-base', x + 45, y + 29, 10, 8.1, 3, { tone: 'mid', inner: line(K.knurl(x + 45, y + 29, 10, 8.1, 11.1, 48, P, 0), 'lo') });
-  cylinder(id, 'compass-bezel', x + 45, y + 29, 9, 11.1, 1.2, { tone: 'hi', inner: line(K.ring(x + 45, y + 29, 7.5, 12.3, P, 64), 'lo') });
+  const dial = K.radialTicks(x + 45, y + 29, 7.5, 16, 4, 12.3, [0.8, 1.6], P);
+  cylinder(id, 'compass-bezel', x + 45, y + 29, 9, 11.1, 1.2, { tone: 'hi',
+    inner: line(K.ring(x + 45, y + 29, 7.5, 12.3, P, 64), 'lo') + line(dial.minor, 'faint') + line(dial.major, 'mid') });
   const needle = [[x + 45, y + 22], [x + 47, y + 29], [x + 45, y + 35], [x + 43, y + 29]];
   prism(id, 'compass-needle', G.frameOf([0, 0, 12.3], [0, 0, 1], [1, 0, 0], [0, 1, 0]), needle, 0, 0.45, { tone: 'hi' });
   cylinder(id, 'compass-hub', x + 45, y + 29, 1.5, 12.75, 0.65, { tone: 'hi' });
